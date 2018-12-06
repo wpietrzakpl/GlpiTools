@@ -1,17 +1,29 @@
 <#
 .SYNOPSIS
-    Short description
+    Function based on GLPI User ID, returns Name and Surname of desired user.
 .DESCRIPTION
-    Long description
+    Function based on GLPI User ID, returns Name and Surname of desired user.
+.PARAMETER User
+    This parameter can take pipline input, either, you can use this function with -User keyword.
+    Provide to this param User ID from GLPI Users Bookmark.
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> 326 | Get-GlpiToolsUsers
+    Function gets UserID from GLPI from Pipline, and return Name and Surname
+.EXAMPLE
+    PS C:\Users\Wojtek> 326, 321 | Get-GlpiToolsUsers
+    Function gets UserID from GLPI from Pipline (u can pass many ID's like that), and return Name and Surname
+.EXAMPLE
+    PS C:\Users\Wojtek> Get-GlpiToolsUsers -User 326
+    Function gets UserID from GLPI which is provided through -User after Function type, and return Name and Surname
+.EXAMPLE 
+    PS C:\Users\Wojtek> Get-GlpiToolsUsers -User 326, 321
+    Function gets UserID from GLPI which is provided through -User keyword after Function type (u can provide many ID's like that), and return Name and Surname
 .INPUTS
-    Inputs (if any)
+    User ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
-    Output (if any)
+    Function returns PSCustomObject with two property's
 .NOTES
-    General notes
+    PSP 12/2018
 #>
 
 function Get-GlpiToolsUsers {
@@ -22,9 +34,6 @@ function Get-GlpiToolsUsers {
         [string[]]$User
     )
     begin {
-        . .\Set-GlpiToolsInitSession.ps1
-        . .\Set-GlpiToolsKillSession.ps1
-        . .\Get-GlpiToolsConfig.ps1
 
         $SessionToken = $Script:SessionToken
         $AppToken = $Script:AppToken
