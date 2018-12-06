@@ -14,7 +14,7 @@
     Wojtek 12/2018
 #>
 
-function Set-GlpiConfig {
+function Set-GlpiToolsConfig {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true,
@@ -35,9 +35,13 @@ function Set-GlpiConfig {
         # Linux Section 
         ## Code
         # Windows Section
+        # Add to module dependecies Install-Module -Name Get-Configuration
         $ConfigFile = "Configuration.json"
-        $ConfigPath = "$env:LOCALAPPDATA\GlpiConfig\"
+        $ConfigPath = "$env:LOCALAPPDATA\GlpiToolsConfig\"
         $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
+        
+
+        Set-Configuration -Key GlpiConfPath -Value $Config
 
         if (!(Test-Path $ConfigPath)) {
             New-Item -Path $ConfigPath -ItemType Directory | Out-Null
@@ -51,7 +55,7 @@ function Set-GlpiConfig {
             }
         }
     }
-    
+
     process {
         $AppTokenSS = ConvertTo-SecureString -String $AppToken -AsPlainText -Force 
         $UserTokenSS = ConvertTo-SecureString -String $UserToken -AsPlainText -Force 
