@@ -1,17 +1,18 @@
 <#
 .SYNOPSIS
-    Short description
+    Get GLPI Configuration File.
 .DESCRIPTION
-    Long description
+    This function getting data inside GLPI config file, to use it with other functions
+    and show stored values.
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> Get-GlpiToolsConfig
+    Running script like that, shows you current config data.
 .INPUTS
-    Inputs (if any)
+    None
 .OUTPUTS
-    Output (if any)
+    Function creates PSCustomObject 
 .NOTES
-    Wojtek 12/2018
+    PSP 12/2018
 #>
 
 function Get-GlpiToolsConfig {

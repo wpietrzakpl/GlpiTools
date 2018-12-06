@@ -1,17 +1,22 @@
 <#
 .SYNOPSIS
-    Short description
+    Function which kill API session.
 .DESCRIPTION
-    Long description
+    Function gets nesessery information from Config file, and Function Set-GlpiToolsInitSession, then kill session.
+.PARAMETER SessionToken
+    This parameter have to be passed from Set-GlpiToolsInitSession
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> $SessionToken | Set-GlpiToolsKillSession
+    Run command like that and you will kill session with API GLPI
+.EXAMPLE
+    PS C:\Users\Wojtek> Set-GlpiToolsKillSession -SessionToken $SessionToken
+    Run command like that and you will kill session with API GLPI
 .INPUTS
-    Inputs (if any)
+    SessionToken from Set-GlpiToolsInitSession
 .OUTPUTS
-    Output (if any)
+    None
 .NOTES
-    Wojtek 12/2018
+    PSP 12/2018
 #>
 
 function Set-GlpiToolsKillSession {
@@ -22,7 +27,6 @@ function Set-GlpiToolsKillSession {
     )
     
     begin {
-        . .\Get-GlpiToolsConfig.ps1
 
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi

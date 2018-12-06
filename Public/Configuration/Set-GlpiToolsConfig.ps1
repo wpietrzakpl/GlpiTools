@@ -1,30 +1,33 @@
 <#
 .SYNOPSIS
-    Short description
+    Set GLPI Configuration File.
 .DESCRIPTION
-    Long description
+    This function preparing config file for GLPI API.
+.PARAMETER AppToken
+    Application Token, you can find Token in API Settings at your GLPI website.
+.PARAMETER UserToken
+    User Token, you can find inside user account settings.
+.PARAMETER PathToGlpi
+    Path To GLPI, you can find the path in API Settings at your GLPI website.
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> Set-GlpiToolsConfig -AppToken 'dsahu2uh2uh32gt43tf434t' -UserToken 'sdasg3123hg3t1ftf21t3' -PathToGlpi 'http://pathtoglpi/glpi'
+    This example show how to set GLPI config file
 .INPUTS
-    Inputs (if any)
+    None, you cannot pipe objects to Set-GlpiToolsConfig
 .OUTPUTS
-    Output (if any)
+    None
 .NOTES
-    Wojtek 12/2018
+    PSP 12/2018
 #>
 
 function Set-GlpiToolsConfig {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true)]
+        [parameter(Mandatory = $true)]
         [string]$AppToken,
-        [parameter(Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true)]
+        [parameter(Mandatory = $true)]
         [string]$UserToken,
-        [parameter(Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true)]
+        [parameter(Mandatory = $true)]
         [string]$PathToGlpi
     )
     

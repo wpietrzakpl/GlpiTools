@@ -1,17 +1,17 @@
 <#
 .SYNOPSIS
-    Short description
+    Function which init API session.
 .DESCRIPTION
-    Long description
+    Function gets nesessery information from Config file, then initialize session, and return object with session_token property.
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> Set-GlpiToolsInitSession
+    Run command like that and you will initiate session with API GLPI
 .INPUTS
-    Inputs (if any)
+    None, inside script Function uses Get-GlpiToolsConfig to get data from Config. 
 .OUTPUTS
-    Output (if any)
+    SessionToken parameter
 .NOTES
-    Wojtek 12/2018
+    PSP 12/2018
 #>
 
 function Set-GlpiToolsInitSession {
@@ -21,7 +21,6 @@ function Set-GlpiToolsInitSession {
     )
     
     begin {
-        . .\Get-GlpiToolsConfig.ps1
 
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $UserToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty UserToken

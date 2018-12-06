@@ -2,16 +2,29 @@
 .SYNOPSIS
     Function is getting Computer informations from GLPI
 .DESCRIPTION
-    Long description
+    Function is based on ComputerID which you can find in GLPI website
+    Returns object with property's of computer
+.PARAMETER ComputerId
+    This parameter can take pipline input, either, you can use this function with -ComputerId keyword.
+    Provide to this param Computer ID from GLPI Computers Bookmark
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\Users\Wojtek> 326 | Get-GlpiToolsComputers
+    Function gets ComputerId from GLPI from Pipline, and return Computer object
+.EXAMPLE
+    PS C:\Users\Wojtek> 326, 321 | Get-GlpiToolsComputers
+    Function gets ComputerId from GLPI from Pipline (u can pass many ID's like that), and return Computer object
+.EXAMPLE
+    PS C:\Users\Wojtek> Get-GlpiToolsComputers -ComputerId 326
+    Function gets ComputerId from GLPI which is provided through -ComputerId after Function type, and return Computer object
+.EXAMPLE 
+    PS C:\Users\Wojtek> Get-GlpiToolsComputers -ComputerId 326, 321
+    Function gets ComputerId from GLPI which is provided through -ComputerId keyword after Function type (u can provide many ID's like that), and return Computer object
 .INPUTS
-    Inputs (if any)
+    Computer ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
-    Output (if any)
+    Function returns PSCustomObject with property's of computers from GLPI
 .NOTES
-    Wojtek 12/2018
+    PSP 12/2018
 #>
 
 function Get-GlpiToolsComputers {
@@ -23,10 +36,6 @@ function Get-GlpiToolsComputers {
     )
     
     begin {
-        . .\Set-GlpiToolsInitSession.ps1
-        . .\Set-GlpiToolsKillSession.ps1
-        . .\Get-GlpiToolsConfig.ps1
-        . .\Get-GlpiToolsUsers.ps1
 
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
@@ -56,7 +65,7 @@ function Get-GlpiToolsComputers {
                 $GlpiId = $GlpiComputer | Select-Object -ExpandProperty id
                 $EntityId = $GlpiComputer | Select-Object -ExpandProperty entities_id
                 $Name = $GlpiComputer | Select-Object -ExpandProperty name
-                $User = $GlpiComputer | Select-Object -ExpandProperty users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
+                $User = $GlpiComputer | Select-Object -ExpandProperty users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User # HERE DELETE THIS
                 $Serial = $GlpiComputer | Select-Object -ExpandProperty serial
                 $OtherSerial = $GlpiComputer | Select-Object -ExpandProperty otherserial
                 $Contact = $GlpiComputer | Select-Object -ExpandProperty contact
