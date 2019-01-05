@@ -38,13 +38,9 @@ function Set-GlpiToolsConfig {
         # Linux Section 
         ## Code
         # Windows Section
-        # Add to module dependecies Install-Module -Name Get-Configuration
         $ConfigFile = "Configuration.json"
         $ConfigPath = "$env:LOCALAPPDATA\GlpiToolsConfig\"
         $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
-        
-
-        Set-Configuration -Key GlpiConfPath -Value $Config
 
         if (!(Test-Path $ConfigPath)) {
             New-Item -Path $ConfigPath -ItemType Directory | Out-Null

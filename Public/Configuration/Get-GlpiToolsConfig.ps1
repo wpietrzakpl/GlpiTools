@@ -23,7 +23,9 @@ function Get-GlpiToolsConfig {
     
     begin {
         $GlpiConfig = @()
-        $Config = Get-Configuration -Key GlpiConfPath
+        $ConfigFile = "Configuration.json"
+        $ConfigPath = "$env:LOCALAPPDATA\GlpiToolsConfig\"
+        $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
     }
     
     process {
