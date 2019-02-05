@@ -4,9 +4,14 @@
 .DESCRIPTION
     Function is based on ComputerID which you can find in GLPI website
     Returns object with property's of computer
+.PARAMETER All
+    This parameter will return all computers from GLPI
 .PARAMETER ComputerId
     This parameter can take pipline input, either, you can use this function with -ComputerId keyword.
     Provide to this param Computer ID from GLPI Computers Bookmark
+.PARAMETER ComputerName
+    This parameter can take pipline input, either, you can use this function with -ComputerName keyword.
+    Provide to this param Computer Name from GLPI Computers Bookmark
 .EXAMPLE
     PS C:\Users\Wojtek> 326 | Get-GlpiToolsComputers
     Function gets ComputerId from GLPI from Pipline, and return Computer object
@@ -147,7 +152,7 @@ function Get-GlpiToolsComputers {
                 }
             }
             ComputerId { 
-                foreach ( $Id in $ComputerId ) {
+                foreach ( $CId in $ComputerId ) {
                     $params = @{
                         headers = @{
                             'Content-Type'  = 'application/json'
@@ -155,7 +160,7 @@ function Get-GlpiToolsComputers {
                             'Session-Token' = $SessionToken
                         }
                         method  = 'get'
-                        uri     = "$($PathToGlpi)/Computer/$($Id)"
+                        uri     = "$($PathToGlpi)/Computer/$($CId)"
                     }
                 
                     try {
@@ -187,6 +192,7 @@ function Get-GlpiToolsComputers {
                         $User = $GlpiComputer | Select-Object -ExpandProperty users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
                         $GroupsIs = $GlpiComputer | Select-Object -ExpandProperty groups_id
                         $StatesId = $GlpiComputer | Select-Object -ExpandProperty states_id
+                        $States = $GlpiComputer | Select-Object -ExpandProperty states_id | Get-GlpiToolsDropdownsStatusesOfItems | Select-Object -ExpandProperty Name
                         $TicketTco = $GlpiComputer | Select-Object -ExpandProperty ticket_tco
                         $UUID = $GlpiComputer | Select-Object -ExpandProperty uuid
                         $DateCreation = $GlpiComputer | Select-Object -ExpandProperty date_creation
@@ -219,6 +225,7 @@ function Get-GlpiToolsComputers {
                         $object | Add-Member -Name 'User' -MemberType NoteProperty -Value $User
                         $object | Add-Member -Name 'GroupsIs' -MemberType NoteProperty -Value $GroupsIs
                         $object | Add-Member -Name 'StatesId' -MemberType NoteProperty -Value $StatesId
+                        $object | Add-Member -Name 'States' -MemberType NoteProperty -Value $States
                         $object | Add-Member -Name 'TicketTco' -MemberType NoteProperty -Value $TicketTco
                         $object | Add-Member -Name 'UUID' -MemberType NoteProperty -Value $UUID
                         $object | Add-Member -Name 'DateCreation' -MemberType NoteProperty -Value $DateCreation
