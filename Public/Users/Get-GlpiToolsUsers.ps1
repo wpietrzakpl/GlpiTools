@@ -42,9 +42,10 @@ function Get-GlpiToolsUsers {
         $SessionToken = Set-GlpiToolsInitSession | Select-Object -ExpandProperty SessionToken
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
+
+        $UserObject = @()
     }
     process {
-        $glpiObject = @()
         foreach ($gUser in $User) {
             $params = @{
                 headers = @{
@@ -58,20 +59,23 @@ function Get-GlpiToolsUsers {
             try {
                 $glpiUser = Invoke-RestMethod @params -ErrorAction Stop
 
-                $firstname = $glpiUser | Select-Object -ExpandProperty firstname
-                $lastname = $glpiUser | Select-Object -ExpandProperty realname
-
-                $object = New-Object -TypeName PSCustomObject
-                $object | Add-Member -Name 'User' -MemberType NoteProperty -Value ($firstname + " " + $lastname)
-                $glpiObject += $object
+                $UserHash = [ordered]@{
+                    'User' = $glpiUser.firstname + ' ' + $glpiUser.realname
+                    # here i have to make full object
+                }
+                $object = New-Object -TypeName PSCustomObject -Property $UserHash
+                $UserObject += $object
             }
             catch {
-                $object = New-Object -TypeName PSCustomObject
-                $object | Add-Member -Name 'User' -MemberType NoteProperty -Value $gUser
-                $glpiObject += $object
+                $UserHash = [ordered]@{
+                    'User' = $gUser
+                }
+                $object = New-Object -TypeName PSCustomObject -Property $UserHash
+                $UserObject += $object
             }
         }
-        $glpiObject
+        $UserObject
+        $UserObject = @()
     }
     end {
         Set-GlpiToolsKillSession -SessionToken $SessionToken

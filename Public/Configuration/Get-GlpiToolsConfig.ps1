@@ -41,13 +41,15 @@ function Get-GlpiToolsConfig {
             $UserTokenDecrypt = [System.Runtime.InteropServices.marshal]::PtrToStringAuto([System.Runtime.InteropServices.marshal]::SecureStringToBSTR($UserTokenSS))
             $PathToGlpiDecrypt = [System.Runtime.InteropServices.marshal]::PtrToStringAuto([System.Runtime.InteropServices.marshal]::SecureStringToBSTR($PathToGlpiSS))
             
-            $object = New-Object -TypeName PSCustomObject
-            $object | Add-Member -Name 'AppToken' -MemberType NoteProperty -Value $AppTokenDecrypt
-            $object | Add-Member -Name 'UserToken' -MemberType NoteProperty -Value $UserTokenDecrypt
-            $object | Add-Member -Name 'PathToGlpi' -MemberType NoteProperty -Value $PathToGlpiDecrypt
+            $ConfigHash = [ordered]@{
+                'AppToken' = $AppTokenDecrypt
+                'UserToken' = $UserTokenDecrypt
+                'PathToGlpi' = $PathToGlpiDecrypt
+            }
+
+            $object = New-Object -TypeName PSCustomObject -Property $ConfigHash
             $GlpiConfig += $object 
             
-            $GlpiConfig
         }
         else {
             Write-Warning -Message "I cannot find Config File, check if you used Set-GlpiToolsConfig to generate Config"
@@ -56,5 +58,6 @@ function Get-GlpiToolsConfig {
     }
     
     end {
+        $GlpiConfig
     }
 }

@@ -39,9 +39,12 @@ function Set-GlpiToolsInitSession {
         }
         $InitSession = Invoke-RestMethod @params
         
-        $object = New-Object -TypeName PSCustomObject
-        $object | Add-Member -Name 'SessionToken' -MemberType NoteProperty -Value $InitSession.session_token
+        $SessionHash = [ordered]@{
+            'SessionToken' = $InitSession.session_token
+        }
+        $object = New-Object -TypeName PSCustomObject -Property $SessionHash
         $SessionToken += $object
+        
     }
     
     end {

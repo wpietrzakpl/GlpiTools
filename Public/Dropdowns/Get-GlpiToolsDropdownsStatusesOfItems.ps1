@@ -54,58 +54,34 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
             }
             $State = Invoke-RestMethod @params
             
-            $Id = $State | Select-Object -ExpandProperty id
-            $Name = $State | Select-Object -ExpandProperty name
-            $EntitiesId = $State | Select-Object -ExpandProperty entities_id
-            $IsRecursive = $State | Select-Object -ExpandProperty is_recursive
-            $Comment = $State | Select-Object -ExpandProperty comment
-            $StatesId = $State | Select-Object -ExpandProperty states_id 
-            $CompleteName = $State | Select-Object -ExpandProperty completename
-            $Level = $State | Select-Object -ExpandProperty level
-            $AncestorsCache = $State | Select-Object -ExpandProperty ancestors_cache 
-            $SonsCache = $State | Select-Object -ExpandProperty sons_cache
-            $IsVisibleComputer = $State | Select-Object -ExpandProperty is_visible_computer
-            $IsVisibleMonitor = $State | Select-Object -ExpandProperty is_visible_monitor
-            $IsVisibleNetworkEquipment = $State | Select-Object -ExpandProperty is_visible_networkequipment
-            $IsVisiblePeripherial = $State | Select-Object -ExpandProperty is_visible_peripheral
-            $IsVisiblePhone = $State | Select-Object -ExpandProperty is_visible_phone 
-            $IsVisiblePrinter = $State | Select-Object -ExpandProperty is_visible_printer 
-            $IsVisibleSoftwareVersion = $State | Select-Object -ExpandProperty is_visible_softwareversion
-            $IsVisibleSoftwareLicence = $State | Select-Object -ExpandProperty is_visible_softwarelicense
-            $IsVisibleLine = $State | Select-Object -ExpandProperty is_visible_line
-            $IsVisibleCertificate = $State | Select-Object -ExpandProperty is_visible_certificate
-            $IsVisibleRack = $State | Select-Object -ExpandProperty is_visible_rack
-            $IsVisibleEnclosure = $State | Select-Object -ExpandProperty is_visible_enclosure
-            $IsVisiblePdu = $State | Select-Object -ExpandProperty is_visible_pdu
-            $DateMod = $State | Select-Object -ExpandProperty date_mod 
-            $DateCreation = $State | Select-Object -ExpandProperty date_creation 
-
-            $object = New-Object -TypeName PSCustomObject
-            $object | Add-Member -Name 'Id' -MemberType NoteProperty -Value $Id
-            $object | Add-Member -Name 'Name' -MemberType NoteProperty -Value $Name
-            $object | Add-Member -Name 'EntitiesId' -MemberType NoteProperty -Value $EntitiesId
-            $object | Add-Member -Name 'IsRecursive' -MemberType NoteProperty -Value $IsRecursive
-            $object | Add-Member -Name 'Comment' -MemberType NoteProperty -Value $Comment
-            $object | Add-Member -Name 'StatesId' -MemberType NoteProperty -Value $StatesId
-            $object | Add-Member -Name 'CompleteName' -MemberType NoteProperty -Value $CompleteName
-            $object | Add-Member -Name 'Level' -MemberType NoteProperty -Value $Level
-            $object | Add-Member -Name 'AncestorsCache' -MemberType NoteProperty -Value $AncestorsCache
-            $object | Add-Member -Name 'SonsCache' -MemberType NoteProperty -Value $SonsCache
-            $object | Add-Member -Name 'IsVisibleComputer' -MemberType NoteProperty -Value $IsVisibleComputer
-            $object | Add-Member -Name 'IsVisibleMonitor' -MemberType NoteProperty -Value $IsVisibleMonitor
-            $object | Add-Member -Name 'IsVisibleNetworkEquipment' -MemberType NoteProperty -Value $IsVisibleNetworkEquipment
-            $object | Add-Member -Name 'IsVisiblePeripherial' -MemberType NoteProperty -Value $IsVisiblePeripherial
-            $object | Add-Member -Name 'IsVisiblePhone' -MemberType NoteProperty -Value $IsVisiblePhone
-            $object | Add-Member -Name 'IsVisiblePrinter' -MemberType NoteProperty -Value $IsVisiblePrinter
-            $object | Add-Member -Name 'IsVisibleSoftwareVersion' -MemberType NoteProperty -Value $IsVisibleSoftwareVersion
-            $object | Add-Member -Name 'IsVisibleSoftwareLicence' -MemberType NoteProperty -Value $IsVisibleSoftwareLicence
-            $object | Add-Member -Name 'IsVisibleLine' -MemberType NoteProperty -Value $IsVisibleLine
-            $object | Add-Member -Name 'IsVisibleCertificate' -MemberType NoteProperty -Value $IsVisibleCertificate
-            $object | Add-Member -Name 'IsVisibleRack' -MemberType NoteProperty -Value $IsVisibleRack
-            $object | Add-Member -Name 'IsVisibleEnclosure' -MemberType NoteProperty -Value $IsVisibleEnclosure
-            $object | Add-Member -Name 'IsVisiblePdu' -MemberType NoteProperty -Value $IsVisiblePdu
-            $object | Add-Member -Name 'DateMod' -MemberType NoteProperty -Value $DateMod
-            $object | Add-Member -Name 'DateCreation' -MemberType NoteProperty -Value $DateCreation
+            $StateHash = [ordered]@{
+                'Id' = $State.id
+                'Name' = $State.name
+                'EntitiesId' = $State.entities_id
+                'IsRecursive' = $State.is_recursive
+                'Comment' = $State.comment
+                'StatesId' = $State.states_id 
+                'CompleteName' = $State.completename
+                'Level' = $State.level
+                'AncestorsCache' = $State.ancestors_cache 
+                'SonsCache' = $State.sons_cache
+                'IsVisibleComputer' = $State.is_visible_computer
+                'IsVisibleMonitor' = $State.is_visible_monitor
+                'IsVisibleNetworkEquipment' = $State.is_visible_networkequipment
+                'IsVisiblePeripherial' = $State.is_visible_peripheral
+                'IsVisiblePhone' = $State.is_visible_phone 
+                'IsVisiblePrinter' = $State.is_visible_printer 
+                'IsVisibleSoftwareVersion' = $State.is_visible_softwareversion
+                'IsVisibleSoftwareLicence' = $State.is_visible_softwarelicense
+                'IsVisibleLine' = $State.is_visible_line
+                'IsVisibleCertificate' = $State.is_visible_certificate
+                'IsVisibleRack' = $State.is_visible_rack
+                'IsVisibleEnclosure' = $State.is_visible_enclosure
+                'IsVisiblePdu' = $State.is_visible_pdu
+                'DateMod' = $State.date_mod 
+                'DateCreation' = $State.date_creation 
+            }
+            $object = New-Object -TypeName PSCustomObject -Property $StateHash
             $StatesArray += $object 
 
         }
