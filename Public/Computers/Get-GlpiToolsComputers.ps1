@@ -78,78 +78,47 @@ function Get-GlpiToolsComputers {
                     uri     = "$($PathToGlpi)/Computer/?range=0-99999999999"
                 }
                 
-                try {
-                    $GlpiComputerAll = Invoke-RestMethod @params -ErrorAction Stop
-                }
-                catch {
-                    throw "I cannot invoke command, check if u setup Glpi Config by the Set-GlpiToolsConfig function"
-                }
-                
+                $GlpiComputerAll = Invoke-RestMethod @params
+
                 foreach ($GlpiComputer in $GlpiComputerAll) {
-                    $Id = $GlpiComputer | Select-Object -ExpandProperty id
-                    $EntitiesId = $GlpiComputer | Select-Object -ExpandProperty entities_id
-                    $Name = $GlpiComputer | Select-Object -ExpandProperty name
-                    $Serial = $GlpiComputer | Select-Object -ExpandProperty serial
-                    $OtherSerial = $GlpiComputer | Select-Object -ExpandProperty otherserial
-                    $Contact = $GlpiComputer | Select-Object -ExpandProperty contact
-                    $ContactNum = $GlpiComputer | Select-Object -ExpandProperty contact_num
-                    $UsersIdTech = $GlpiComputer | Select-Object -ExpandProperty users_id_tech
-                    $GroupsIdTech = $GlpiComputer | Select-Object -ExpandProperty groups_id_tech
-                    $Comment = $GlpiComputer | Select-Object -ExpandProperty comment
-                    $DateMod = $GlpiComputer | Select-Object -ExpandProperty date_mod
-                    $Autoupdatesystems_id = $GlpiComputer | Select-Object -ExpandProperty autoupdatesystems_id
-                    $LocationsId = $GlpiComputer | Select-Object -ExpandProperty locations_id
-                    $DomainsId = $GlpiComputer | Select-Object -ExpandProperty domains_id
-                    $Networks_id = $GlpiComputer | Select-Object -ExpandProperty networks_id 
-                    $ComputerModelsId = $GlpiComputer | Select-Object -ExpandProperty computermodels_id
-                    $ComputerTypesId = $GlpiComputer | Select-Object -ExpandProperty computertypes_id
-                    $IsTemplate = $GlpiComputer | Select-Object -ExpandProperty is_template
-                    $TemplateName = $GlpiComputer | Select-Object -ExpandProperty template_name
-                    $Manufacturers_id = $GlpiComputer | Select-Object -ExpandProperty manufacturers_id
-                    $IsDeleted = $GlpiComputer | Select-Object -ExpandProperty is_deleted
-                    $IsDynamic = $GlpiComputer | Select-Object -ExpandProperty is_dynamic
-                    $UsersId = $GlpiComputer | Select-Object -ExpandProperty users_id
-                    $User = $GlpiComputer | Select-Object -ExpandProperty users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
-                    $GroupsIs = $GlpiComputer | Select-Object -ExpandProperty groups_id
-                    $StatesId = $GlpiComputer | Select-Object -ExpandProperty states_id
-                    $TicketTco = $GlpiComputer | Select-Object -ExpandProperty ticket_tco
-                    $UUID = $GlpiComputer | Select-Object -ExpandProperty uuid
-                    $DateCreation = $GlpiComputer | Select-Object -ExpandProperty date_creation
-                    $IsRecursive = $GlpiComputer | Select-Object -ExpandProperty is_recursive
-    
-                    $object = New-Object -TypeName PSCustomObject
-                    $object | Add-Member -Name 'Id' -MemberType NoteProperty -Value $Id
-                    $object | Add-Member -Name 'EntitiesId' -MemberType NoteProperty -Value $EntitiesId 
-                    $object | Add-Member -Name 'Name' -MemberType NoteProperty -Value $Name
-                    $object | Add-Member -Name 'Serial' -MemberType NoteProperty -Value $Serial
-                    $object | Add-Member -Name 'OtherSerial' -MemberType NoteProperty -Value $OtherSerial
-                    $object | Add-Member -Name 'Contact' -MemberType NoteProperty -Value $Contact
-                    $object | Add-Member -Name 'ContactNum' -MemberType NoteProperty -Value $ContactNum
-                    $object | Add-Member -Name 'UsersIdTech' -MemberType NoteProperty -Value $UsersIdTech
-                    $object | Add-Member -Name 'GroupsIdTech' -MemberType NoteProperty -Value $GroupsIdTech
-                    $object | Add-Member -Name 'Comment' -MemberType NoteProperty -Value $Comment
-                    $object | Add-Member -Name 'DateMod' -MemberType NoteProperty -Value $DateMod
-                    $object | Add-Member -Name 'Autoupdatesystems_id' -MemberType NoteProperty -Value $Autoupdatesystems_id
-                    $object | Add-Member -Name 'LocationsId' -MemberType NoteProperty -Value $LocationsId
-                    $object | Add-Member -Name 'DomainsId' -MemberType NoteProperty -Value $DomainsId
-                    $object | Add-Member -Name 'Networks_id' -MemberType NoteProperty -Value $Networks_id
-                    $object | Add-Member -Name 'ComputerModelsId' -MemberType NoteProperty -Value $ComputerModelsId
-                    $object | Add-Member -Name 'ComputerTypesId' -MemberType NoteProperty -Value $ComputerTypesId
-                    $object | Add-Member -Name 'IsTemplate' -MemberType NoteProperty -Value $IsTemplate
-                    $object | Add-Member -Name 'TemplateName' -MemberType NoteProperty -Value $TemplateName
-                    $object | Add-Member -Name 'Manufacturers_id' -MemberType NoteProperty -Value $Manufacturers_id
-                    $object | Add-Member -Name 'IsDeleted' -MemberType NoteProperty -Value $IsDeleted
-                    $object | Add-Member -Name 'IsDynamic' -MemberType NoteProperty -Value $IsDynamic
-                    $object | Add-Member -Name 'UsersId' -MemberType NoteProperty -Value $UsersId
-                    $object | Add-Member -Name 'User' -MemberType NoteProperty -Value $User
-                    $object | Add-Member -Name 'GroupsIs' -MemberType NoteProperty -Value $GroupsIs
-                    $object | Add-Member -Name 'StatesId' -MemberType NoteProperty -Value $StatesId
-                    $object | Add-Member -Name 'TicketTco' -MemberType NoteProperty -Value $TicketTco
-                    $object | Add-Member -Name 'UUID' -MemberType NoteProperty -Value $UUID
-                    $object | Add-Member -Name 'DateCreation' -MemberType NoteProperty -Value $DateCreation
-                    $object | Add-Member -Name 'IsRecursive' -MemberType NoteProperty -Value $IsRecursive
+                    $ComputerHash = [ordered]@{
+                        'Id'                   = $GlpiComputer.id
+                        'EntitiesId'           = $GlpiComputer.entities_id
+                        'EntityName'           = $GlpiComputer.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
+                        'Name'                 = $GlpiComputer.name
+                        'Serial'               = $GlpiComputer.serial
+                        'OtherSerial'          = $GlpiComputer.otherserial
+                        'Contact'              = $GlpiComputer.contact
+                        'ContactNum'           = $GlpiComputer.contact_num
+                        'UsersIdTech'          = $GlpiComputer.users_id_tech
+                        'GroupsIdTech'         = $GlpiComputer.groups_id_tech
+                        'Comment'              = $GlpiComputer.comment
+                        'DateMod'              = $GlpiComputer.date_mod
+                        'Autoupdatesystems_id' = $GlpiComputer.autoupdatesystems_id
+                        'LocationsId'          = $GlpiComputer.locations_id
+                        'DomainsId'            = $GlpiComputer.domains_id
+                        'Networks_id'          = $GlpiComputer.networks_id 
+                        'ComputerModelsId'     = $GlpiComputer.computermodels_id
+                        'ComputerTypesId'      = $GlpiComputer.computertypes_id
+                        'IsTemplate'           = $GlpiComputer.is_template
+                        'TemplateName'         = $GlpiComputer.template_name
+                        'Manufacturers_id'     = $GlpiComputer.manufacturers_id
+                        'IsDeleted'            = $GlpiComputer.is_deleted
+                        'IsDynamic'            = $GlpiComputer.is_dynamic
+                        'UsersId'              = $GlpiComputer.users_id
+                        'User'                 = $GlpiComputer.users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
+                        'GroupsIs'             = $GlpiComputer.groups_id
+                        'StatesId'             = $GlpiComputer.states_id
+                        'TicketTco'            = $GlpiComputer.ticket_tco
+                        'UUID'                 = $GlpiComputer.uuid
+                        'DateCreation'         = $GlpiComputer.date_creation
+                        'IsRecursive'          = $GlpiComputer.is_recursive
+                    }
+                    $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
                     $ComputerObjectArray += $object
                 }
+                $ComputerObjectArray
+                $ComputerObjectArray = @()
             }
             ComputerId { 
                 foreach ( $CId in $ComputerId ) {
@@ -165,108 +134,82 @@ function Get-GlpiToolsComputers {
                 
                     try {
                         $GlpiComputer = Invoke-RestMethod @params -ErrorAction Stop
-                
-                        $Id = $GlpiComputer | Select-Object -ExpandProperty id
-                        $EntitiesId = $GlpiComputer | Select-Object -ExpandProperty entities_id
-                        $Name = $GlpiComputer | Select-Object -ExpandProperty name
-                        $Serial = $GlpiComputer | Select-Object -ExpandProperty serial
-                        $OtherSerial = $GlpiComputer | Select-Object -ExpandProperty otherserial
-                        $Contact = $GlpiComputer | Select-Object -ExpandProperty contact
-                        $ContactNum = $GlpiComputer | Select-Object -ExpandProperty contact_num
-                        $UsersIdTech = $GlpiComputer | Select-Object -ExpandProperty users_id_tech
-                        $GroupsIdTech = $GlpiComputer | Select-Object -ExpandProperty groups_id_tech
-                        $Comment = $GlpiComputer | Select-Object -ExpandProperty comment
-                        $DateMod = $GlpiComputer | Select-Object -ExpandProperty date_mod
-                        $Autoupdatesystems_id = $GlpiComputer | Select-Object -ExpandProperty autoupdatesystems_id
-                        $LocationsId = $GlpiComputer | Select-Object -ExpandProperty locations_id
-                        $DomainsId = $GlpiComputer | Select-Object -ExpandProperty domains_id
-                        $Networks_id = $GlpiComputer | Select-Object -ExpandProperty networks_id 
-                        $ComputerModelsId = $GlpiComputer | Select-Object -ExpandProperty computermodels_id
-                        $ComputerTypesId = $GlpiComputer | Select-Object -ExpandProperty computertypes_id
-                        $IsTemplate = $GlpiComputer | Select-Object -ExpandProperty is_template
-                        $TemplateName = $GlpiComputer | Select-Object -ExpandProperty template_name
-                        $Manufacturers_id = $GlpiComputer | Select-Object -ExpandProperty manufacturers_id
-                        $IsDeleted = $GlpiComputer | Select-Object -ExpandProperty is_deleted
-                        $IsDynamic = $GlpiComputer | Select-Object -ExpandProperty is_dynamic
-                        $UsersId = $GlpiComputer | Select-Object -ExpandProperty users_id
-                        $User = $GlpiComputer | Select-Object -ExpandProperty users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
-                        $GroupsIs = $GlpiComputer | Select-Object -ExpandProperty groups_id
-                        $StatesId = $GlpiComputer | Select-Object -ExpandProperty states_id
-                        $States = $GlpiComputer | Select-Object -ExpandProperty states_id | Get-GlpiToolsDropdownsStatusesOfItems | Select-Object -ExpandProperty Name
-                        $TicketTco = $GlpiComputer | Select-Object -ExpandProperty ticket_tco
-                        $UUID = $GlpiComputer | Select-Object -ExpandProperty uuid
-                        $DateCreation = $GlpiComputer | Select-Object -ExpandProperty date_creation
-                        $IsRecursive = $GlpiComputer | Select-Object -ExpandProperty is_recursive
-    
-                        $object = New-Object -TypeName PSCustomObject
-                        $object | Add-Member -Name 'Id' -MemberType NoteProperty -Value $Id
-                        $object | Add-Member -Name 'EntitiesId' -MemberType NoteProperty -Value $EntitiesId 
-                        $object | Add-Member -Name 'Name' -MemberType NoteProperty -Value $Name
-                        $object | Add-Member -Name 'Serial' -MemberType NoteProperty -Value $Serial
-                        $object | Add-Member -Name 'OtherSerial' -MemberType NoteProperty -Value $OtherSerial
-                        $object | Add-Member -Name 'Contact' -MemberType NoteProperty -Value $Contact
-                        $object | Add-Member -Name 'ContactNum' -MemberType NoteProperty -Value $ContactNum
-                        $object | Add-Member -Name 'UsersIdTech' -MemberType NoteProperty -Value $UsersIdTech
-                        $object | Add-Member -Name 'GroupsIdTech' -MemberType NoteProperty -Value $GroupsIdTech
-                        $object | Add-Member -Name 'Comment' -MemberType NoteProperty -Value $Comment
-                        $object | Add-Member -Name 'DateMod' -MemberType NoteProperty -Value $DateMod
-                        $object | Add-Member -Name 'Autoupdatesystems_id' -MemberType NoteProperty -Value $Autoupdatesystems_id
-                        $object | Add-Member -Name 'LocationsId' -MemberType NoteProperty -Value $LocationsId
-                        $object | Add-Member -Name 'DomainsId' -MemberType NoteProperty -Value $DomainsId
-                        $object | Add-Member -Name 'Networks_id' -MemberType NoteProperty -Value $Networks_id
-                        $object | Add-Member -Name 'ComputerModelsId' -MemberType NoteProperty -Value $ComputerModelsId
-                        $object | Add-Member -Name 'ComputerTypesId' -MemberType NoteProperty -Value $ComputerTypesId
-                        $object | Add-Member -Name 'IsTemplate' -MemberType NoteProperty -Value $IsTemplate
-                        $object | Add-Member -Name 'TemplateName' -MemberType NoteProperty -Value $TemplateName
-                        $object | Add-Member -Name 'Manufacturers_id' -MemberType NoteProperty -Value $Manufacturers_id
-                        $object | Add-Member -Name 'IsDeleted' -MemberType NoteProperty -Value $IsDeleted
-                        $object | Add-Member -Name 'IsDynamic' -MemberType NoteProperty -Value $IsDynamic
-                        $object | Add-Member -Name 'UsersId' -MemberType NoteProperty -Value $UsersId
-                        $object | Add-Member -Name 'User' -MemberType NoteProperty -Value $User
-                        $object | Add-Member -Name 'GroupsIs' -MemberType NoteProperty -Value $GroupsIs
-                        $object | Add-Member -Name 'StatesId' -MemberType NoteProperty -Value $StatesId
-                        $object | Add-Member -Name 'States' -MemberType NoteProperty -Value $States
-                        $object | Add-Member -Name 'TicketTco' -MemberType NoteProperty -Value $TicketTco
-                        $object | Add-Member -Name 'UUID' -MemberType NoteProperty -Value $UUID
-                        $object | Add-Member -Name 'DateCreation' -MemberType NoteProperty -Value $DateCreation
-                        $object | Add-Member -Name 'IsRecursive' -MemberType NoteProperty -Value $IsRecursive
-                        $ComputerObjectArray += $object 
+                        $ComputerHash = [ordered]@{
+                            'Id'                   = $GlpiComputer.id
+                            'EntitiesId'           = $GlpiComputer.entities_id
+                            'EntityName'           = $GlpiComputer.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
+                            'Name'                 = $GlpiComputer.name
+                            'Serial'               = $GlpiComputer.serial
+                            'OtherSerial'          = $GlpiComputer.otherserial
+                            'Contact'              = $GlpiComputer.contact
+                            'ContactNum'           = $GlpiComputer.contact_num
+                            'UsersIdTech'          = $GlpiComputer.users_id_tech
+                            'GroupsIdTech'         = $GlpiComputer.groups_id_tech
+                            'Comment'              = $GlpiComputer.comment
+                            'DateMod'              = $GlpiComputer.date_mod
+                            'Autoupdatesystems_id' = $GlpiComputer.autoupdatesystems_id
+                            'LocationsId'          = $GlpiComputer.locations_id
+                            'DomainsId'            = $GlpiComputer.domains_id
+                            'Networks_id'          = $GlpiComputer.networks_id 
+                            'ComputerModelsId'     = $GlpiComputer.computermodels_id
+                            'ComputerTypesId'      = $GlpiComputer.computertypes_id
+                            'IsTemplate'           = $GlpiComputer.is_template
+                            'TemplateName'         = $GlpiComputer.template_name
+                            'Manufacturers_id'     = $GlpiComputer.manufacturers_id
+                            'IsDeleted'            = $GlpiComputer.is_deleted
+                            'IsDynamic'            = $GlpiComputer.is_dynamic
+                            'UsersId'              = $GlpiComputer.users_id
+                            'User'                 = $GlpiComputer.users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
+                            'GroupsIs'             = $GlpiComputer.groups_id
+                            'StatesId'             = $GlpiComputer.states_id
+                            'TicketTco'            = $GlpiComputer.ticket_tco
+                            'UUID'                 = $GlpiComputer.uuid
+                            'DateCreation'         = $GlpiComputer.date_creation
+                            'IsRecursive'          = $GlpiComputer.is_recursive
+                        }
+                        $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
+                        $ComputerObjectArray += $object
                     }
                     catch {
-                        $object = New-Object -TypeName PSCustomObject
-                        $object | Add-Member -Name 'Id' -MemberType NoteProperty -Value $Id
-                        $object | Add-Member -Name 'EntitiesId' -MemberType NoteProperty -Value '' 
-                        $object | Add-Member -Name 'Name' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Serial' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'OtherSerial' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Contact' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'ContactNum' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'UsersIdTech' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'GroupsIdTech' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Comment' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'DateMod' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Autoupdatesystems_id' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'LocationsId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'DomainsId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Networks_id' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'ComputerModelsId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'ComputerTypesId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'IsTemplate' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'TemplateName' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'Manufacturers_id' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'IsDeleted' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'IsDynamic' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'UsersId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'User' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'GroupsIs' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'StatesId' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'TicketTco' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'UUID' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'DateCreation' -MemberType NoteProperty -Value ''
-                        $object | Add-Member -Name 'IsRecursive' -MemberType NoteProperty -Value ''
+                        $ComputerHash = [ordered]@{
+                            'Id'                   = $CId
+                            'EntitiesId'           = ' '
+                            'EntityName'           = ' '
+                            'Name'                 = ' '
+                            'Serial'               = ' '
+                            'OtherSerial'          = ' '
+                            'Contact'              = ' '
+                            'ContactNum'           = ' '
+                            'UsersIdTech'          = ' '
+                            'GroupsIdTech'         = ' '
+                            'Comment'              = ' '
+                            'DateMod'              = ' '
+                            'Autoupdatesystems_id' = ' '
+                            'LocationsId'          = ' '
+                            'DomainsId'            = ' '
+                            'Networks_id'          = ' '
+                            'ComputerModelsId'     = ' '
+                            'ComputerTypesId'      = ' '
+                            'IsTemplate'           = ' '
+                            'TemplateName'         = ' '
+                            'Manufacturers_id'     = ' '
+                            'IsDeleted'            = ' '
+                            'IsDynamic'            = ' '
+                            'UsersId'              = ' '
+                            'User'                 = ' '
+                            'GroupsIs'             = ' '
+                            'StatesId'             = ' '
+                            'TicketTco'            = ' '
+                            'UUID'                 = ' '
+                            'DateCreation'         = ' '
+                            'IsRecursive'          = ' '
+                        }
+                        $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
                         $ComputerObjectArray += $object  
                     }
                 }
+                $ComputerObjectArray
+                $ComputerObjectArray = @()
             }
             ComputerName { 
                 # here search function 
@@ -275,8 +218,6 @@ function Get-GlpiToolsComputers {
                 
             }
         }
-        
-        $ComputerObjectArray
     }
     
     end {
