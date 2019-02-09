@@ -99,6 +99,7 @@ function Get-GlpiToolsComputers {
                         'DomainsId'            = $GlpiComputer.domains_id
                         'Networks_id'          = $GlpiComputer.networks_id 
                         'ComputerModelsId'     = $GlpiComputer.computermodels_id
+                        'ComputerModel'        = $GlpiComputer.computermodels_id | Get-GlpiToolsComputerModel | Select-Object -ExpandProperty Name
                         'ComputerTypesId'      = $GlpiComputer.computertypes_id
                         'IsTemplate'           = $GlpiComputer.is_template
                         'TemplateName'         = $GlpiComputer.template_name
@@ -152,6 +153,7 @@ function Get-GlpiToolsComputers {
                             'DomainsId'            = $GlpiComputer.domains_id
                             'Networks_id'          = $GlpiComputer.networks_id 
                             'ComputerModelsId'     = $GlpiComputer.computermodels_id
+                            'ComputerModel'        = $GlpiComputer.computermodels_id | Get-GlpiToolsComputerModel | Select-Object -ExpandProperty Name
                             'ComputerTypesId'      = $GlpiComputer.computertypes_id
                             'IsTemplate'           = $GlpiComputer.is_template
                             'TemplateName'         = $GlpiComputer.template_name
@@ -189,6 +191,7 @@ function Get-GlpiToolsComputers {
                             'DomainsId'            = ' '
                             'Networks_id'          = ' '
                             'ComputerModelsId'     = ' '
+                            'ComputerModel'        = ' '
                             'ComputerTypesId'      = ' '
                             'IsTemplate'           = ' '
                             'TemplateName'         = ' '
