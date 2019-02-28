@@ -16,9 +16,29 @@ PowerShell Module which wrap Glpi API into handy functions.
 
  ## Instalation
 
- To install module you have to:
+ To install\import module you have to:
  
  * Download module from GitHub (When finish module, will be to download from PowerShell Gallery)
- * Unzip module, and copy into folder which you have configured to store modules, you can find the path running command ```powershell $env:PSModulePath -split ";" ```
+ * Unzip module, and copy into folder which you have configured to store modules, you can find the path running command in PowerShell ``` $env:PSModulePath -split ";" ```
+ * To import module into active powershell session you have to use command ` Import-Module GlpiTools `
+ * Or if you want to install module you have to use command ` Install-Module GlpiTools `
+ * Configure Module to later use with command `Set-GlpiToolsConfig`, pass to the command tokens and url which you have from Prerequisites section
 
  ## Use
+
+ ## Available commands
+
+ ```
+ Key                                   Value
+ ---                                   -----
+ Get-GlpiToolsComputers                Get-GlpiToolsComputers
+ Get-GlpiToolsConfig                   Get-GlpiToolsConfig
+ Get-GlpiToolsDropdownsStatusesOfItems Get-GlpiToolsDropdownsStatusesOfItems
+ Get-GlpiToolsEntities                 Get-GlpiToolsEntities
+ Get-GlpiToolsFusionAgents             Get-GlpiToolsFusionAgents
+ Get-GlpiToolsSearchItems              Get-GlpiToolsSearchItems
+ Get-GlpiToolsUsers                    Get-GlpiToolsUsers
+ Set-GlpiToolsConfig                   Set-GlpiToolsConfig
+ Set-GlpiToolsInitSession              Set-GlpiToolsInitSession
+ Set-GlpiToolsKillSession              Set-GlpiToolsKillSession
+ ```
