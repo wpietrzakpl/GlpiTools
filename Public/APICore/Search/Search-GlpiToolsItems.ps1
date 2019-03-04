@@ -17,6 +17,7 @@
     - Enclosure
     - Pdu
     - User
+    - Group
     
     Based on his names.
 .EXAMPLE
