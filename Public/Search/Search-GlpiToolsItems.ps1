@@ -30,7 +30,7 @@
     PSP 02/2019
 #>
 
-function Get-GlpiToolsSearchItems {
+function Search-GlpiToolsItems {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]
@@ -46,7 +46,8 @@ function Get-GlpiToolsSearchItems {
             "Rack",
             "Enclosure",
             "Pdu",
-            "Users")]
+            "Users",
+            "Group")]
         [String]$SearchFor,
         [parameter(Mandatory = $true)]
         [ValidateSet("contains",
