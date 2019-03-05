@@ -33,11 +33,14 @@ PowerShell Module which wrap Glpi API into handy functions.
  ---                                   -----
  Get-GlpiToolsComputers                Get-GlpiToolsComputers
  Get-GlpiToolsConfig                   Get-GlpiToolsConfig
+ Get-GlpiToolsDropdownsComputerModels  Get-GlpiToolsDropdownsComputerModels
  Get-GlpiToolsDropdownsStatusesOfItems Get-GlpiToolsDropdownsStatusesOfItems
+ Get-GlpiToolsDropdownsUpdateSources   Get-GlpiToolsDropdownsUpdateSources
  Get-GlpiToolsEntities                 Get-GlpiToolsEntities
- Get-GlpiToolsFusionAgents             Get-GlpiToolsFusionAgents
- Get-GlpiToolsSearchItems              Get-GlpiToolsSearchItems
+ Get-GlpiToolsFusionInventoryAgents    Get-GlpiToolsFusionInventoryAgents
+ Get-GlpiToolsGroups                   Get-GlpiToolsGroups
  Get-GlpiToolsUsers                    Get-GlpiToolsUsers
+ Search-GlpiToolsItems                 Search-GlpiToolsItems
  Set-GlpiToolsConfig                   Set-GlpiToolsConfig
  Set-GlpiToolsInitSession              Set-GlpiToolsInitSession
  Set-GlpiToolsKillSession              Set-GlpiToolsKillSession
