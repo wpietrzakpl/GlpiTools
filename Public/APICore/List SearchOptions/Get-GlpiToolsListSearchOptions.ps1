@@ -6,35 +6,11 @@
     Parameters are the names of options in GLPI
     Remember that, names used in cmdlet coming from glpi URL, and can be hard to understand, but most of them are intuitional.
     To get name you always have to look at the URL in GLPI, for example "http://glpi/front/computer.php" where "computer" is the name to use in parameter.
-.PARAMETER ListOptionsForAssets
+.PARAMETER ListOptionsFor
     You can use this function with -ListOptionsForAssets parameter.
     Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForAssistance
-    You can use this function with -ListOptionsForAssistance parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForManagement
-    You can use this function with -ListOptionsForManagement parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForTools
-    You can use this function with -ListOptionsForTools parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForAdministration
-    You can use this function with -ListOptionsForAdministration parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForSetup
-    You can use this function with -ListOptionsForSetup parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForSetupDropdowns
-    You can use this function with -ListOptionsForSetupDropdowns parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForSetupComponents
-    You can use this function with -ListOptionsForSetupComponents parameter.
-    Using TAB button you can choose desired option.
-.PARAMETER ListOptionsForSetupNotifications
-    You can use this function with -ListOptionsForSetupNotifications parameter.
-    Using TAB button you can choose desired option.
 .EXAMPLE
-    PS C:\WINDOWS\system32> Get-GlpiToolsListSearchOptions -ListOptionsForSetupComponents DeviceCase
+    PS C:\WINDOWS\system32> Get-GlpiToolsListSearchOptions -ListOptionsFor DeviceCase
     Example will return object which is list of Search Option for Setup -> Components Tab from GLPI
 .INPUTS
     None
@@ -47,8 +23,7 @@
 function Get-GlpiToolsListSearchOptions {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Assets")]
+        [parameter(Mandatory = $true)]
         [ValidateSet("Computer",
             "Monitor",
             "Software",
@@ -60,12 +35,8 @@ function Get-GlpiToolsListSearchOptions {
             "Phone",
             "Rack",
             "Enclosure",
-            "Pdu")]
-        [String]$ListOptionsForAssets,
-
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Assistance")]
-        [ValidateSet("Ticket",
+            "Pdu",
+            "Ticket",
             "Problem",
             "Change",
             "Ticketrecurrent",
@@ -73,11 +44,8 @@ function Get-GlpiToolsListSearchOptions {
             "Supplier",
             "Budget",
             "Users",
-            "Group")]
-        [String]$ListOptionsForAssistance,
-
-        [parameter(Mandatory = $false, ParameterSetName = "Management")]
-        [ValidateSet("Softwarelicense",
+            "Group",
+            "Softwarelicense",
             "Budget",
             "Supplier",
             "Contact",
@@ -85,44 +53,28 @@ function Get-GlpiToolsListSearchOptions {
             "Document",
             "Line",
             "Certificate",
-            "Datacenter")]
-        [String]$ListOptionsForManagement,
-
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Tools")]
-        [ValidateSet("Project",
+            "Datacenter",
+            "Project",
             "Reminder",
             "Rssfeed",
             "Knowbaseitem",
             "Reservationitem",
             "Report",
-            "Savedsearch")]
-        [String]$ListOptionsForTools,
-
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Administration")]
-        [ValidateSet("User",
+            "Savedsearch",
+            "User",
             "Group",
             "Entity",
             "Rule",
             "Profile",
             "Queuednotification",
-            "Savedsearch")]
-        [String]$ListOptionsForAdministration,
-
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Setup")]
-        [ValidateSet("Slm",
+            "Savedsearch",
+            "Slm",
             "Fieldunicity",
             "Crontask",
             "Mailcollector",
             "Link",
-            "Plugin")]
-        [String]$ListOptionsForSetup,
-
-        [parameter(Mandatory = $false,
-            ParameterSetName = "Dropdowns")]
-        [ValidateSet("Location",
+            "Plugin",
+            "Location",
             "State",
             "Manufacturer",
             "Blacklist",
@@ -217,11 +169,8 @@ function Get-GlpiToolsListSearchOptions {
             "Rulerightparameter",
             "Fieldblacklist",
             "Ssovariable",
-            "Plug")]
-        [String]$ListOptionsForSetupDropdowns,
-        [parameter(Mandatory = $false,
-        ParameterSetName = "Components")]
-        [ValidateSet("DeviceBattery",
+            "Plug",
+            "DeviceBattery",
             "DeviceCase",
             "DeviceControl",
             "DeviceDrive",
@@ -237,13 +186,44 @@ function Get-GlpiToolsListSearchOptions {
             "DeviceSensor",
             "DeviceSimcard",
             "DeviceSoundCard",
-            "DeviceMotherboard")]
-        [String]$ListOptionsForSetupComponents,
-        [parameter(Mandatory = $false,
-        ParameterSetName = "Notifications")]
-        [ValidateSet("Notificationtemplate",
+            "DeviceMotherboard",
+            "DeviceBattery",
+            "DeviceCase",
+            "DeviceControl",
+            "DeviceDrive",
+            "DeviceFirmware",
+            "DeviceGeneric",
+            "DeviceGraphicCard",
+            "DeviceHardDrive",
+            "DeviceMemory",
+            "DeviceNetworkCard",
+            "DevicePci",
+            "DevicePowerSupply",
+            "DeviceProcessor",
+            "DeviceSensor",
+            "DeviceSimcard",
+            "DeviceSoundCard",
+            "DeviceMotherboard",
+            "DeviceBattery",
+            "DeviceCase",
+            "DeviceControl",
+            "DeviceDrive",
+            "DeviceFirmware",
+            "DeviceGeneric",
+            "DeviceGraphicCard",
+            "DeviceHardDrive",
+            "DeviceMemory",
+            "DeviceNetworkCard",
+            "DevicePci",
+            "DevicePowerSupply",
+            "DeviceProcessor",
+            "DeviceSensor",
+            "DeviceSimcard",
+            "DeviceSoundCard",
+            "DeviceMotherboard",
+            "Notificationtemplate",
             "Notification")]
-        [String]$ListOptionsForSetupNotifications
+        [String]$ListOptionsFor
 
     )
     
@@ -256,8 +236,6 @@ function Get-GlpiToolsListSearchOptions {
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession | Select-Object -ExpandProperty SessionToken
 
-        $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Values
-
         $SearchOptionsArray = @()
     }
     
@@ -269,7 +247,7 @@ function Get-GlpiToolsListSearchOptions {
                 'Session-Token' = $SessionToken
             }
             method  = 'get'
-            uri = "$($PathToGlpi)/listSearchOptions/$($ChoosenParam)"
+            uri = "$($PathToGlpi)/listSearchOptions/$($ListOptionsFor)"
         }
         $ListSearchOptions = Invoke-RestMethod @params
         $ListProperties = $ListSearchOptions.PSObject.Properties | Select-Object -Property Name,Value
