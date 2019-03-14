@@ -225,6 +225,8 @@ function Search-GlpiToolsItems {
     )
     
     begin {
+        $SearchArray = @()
+
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
         $SessionToken = $Script:SessionToken
@@ -235,13 +237,16 @@ function Search-GlpiToolsItems {
 
         if ($SearchInTrash) {
             $Trash = 1
-        } else {
+        }
+        else {
             $Trash = 0
         }
-        $SearchArray = @()
+        
+        $ListSearchOptions = Get-GlpiToolsListSearchOptions -ListOptionsFor $SearchFor
     }
     
     process {
+        
         foreach ($Value in $SearchValue) {
             $params = @{
                 headers = @{
@@ -254,9 +259,24 @@ function Search-GlpiToolsItems {
             }
             
             $SearchResult = Invoke-RestMethod @params
+            $SearchResult = $SearchResult | Select-Object -ExpandProperty data
+
+            foreach ($SearchItem in $SearchResult) {
+                $DataResult = $SearchItem.PSObject.Properties | Select-Object -Property Name, Value
         
+                foreach ($Data in $DataResult) {
+                    $Property = $ListSearchOptions | Where-Object {$_.Id -eq $Data.Name } | Select-Object -ExpandProperty Name  
+                    $Value = $Data.Value
+                    
+                    $object = New-Object -TypeName PSCustomObject
+                    $object | Add-Member -MemberType NoteProperty -Name Property -Value $Property
+                    $object | Add-Member -MemberType NoteProperty -Name Value -Value $Value
+
+                    $SearchArray += $object   
+                }
+            }
+            $SearchArray
         }
-        $SearchResult
     }
     
     end {
