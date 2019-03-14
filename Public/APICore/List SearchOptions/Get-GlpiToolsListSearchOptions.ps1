@@ -283,7 +283,7 @@ function Get-GlpiToolsListSearchOptions {
                 'DataType' = $list.Value.datatype
                 'NoSearch' = $list.Value.nosearch
                 'NoDisplay' = $list.Value.nodisplay
-                'AvailableSearchtypes' = $list.Value.available_searchtypes
+                'Available_Searchtypes' = $list.Value.available_searchtypes
                 'Uid' = $list.Value.uid   
             }
             $object = New-Object -TypeName PSCustomObject -Property $OptionsHash
