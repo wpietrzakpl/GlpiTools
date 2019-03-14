@@ -39,6 +39,7 @@ PowerShell Module which wrap Glpi API into handy functions.
  Get-GlpiToolsEntities                 Get-GlpiToolsEntities
  Get-GlpiToolsFusionInventoryAgents    Get-GlpiToolsFusionInventoryAgents
  Get-GlpiToolsGroups                   Get-GlpiToolsGroups
+ Get-GlpiToolsListSearchOptions        Get-GlpiToolsListSearchOptions
  Get-GlpiToolsUsers                    Get-GlpiToolsUsers
  Search-GlpiToolsItems                 Search-GlpiToolsItems
  Set-GlpiToolsConfig                   Set-GlpiToolsConfig
