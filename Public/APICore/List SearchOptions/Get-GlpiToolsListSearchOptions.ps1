@@ -7,7 +7,7 @@
     Remember that, names used in cmdlet coming from glpi URL, and can be hard to understand, but most of them are intuitional.
     To get name you always have to look at the URL in GLPI, for example "http://glpi/front/computer.php" where "computer" is the name to use in parameter.
 .PARAMETER ListOptionsFor
-    You can use this function with -ListOptionsForAssets parameter.
+    You can use this function with -ListOptionsFor parameter.
     Using TAB button you can choose desired option.
 .EXAMPLE
     PS C:\WINDOWS\system32> Get-GlpiToolsListSearchOptions -ListOptionsFor DeviceCase
