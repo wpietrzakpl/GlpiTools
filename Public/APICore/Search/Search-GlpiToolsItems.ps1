@@ -218,7 +218,7 @@ function Search-GlpiToolsItems {
 
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true)]
-        [String[]]$SearchValue,
+        [String]$SearchValue,
 
         [parameter(Mandatory = $false)]
         [Switch]$SearchInTrash
@@ -226,6 +226,7 @@ function Search-GlpiToolsItems {
     
     begin {
         $SearchArray = @()
+        $IntermediateArray = @()
 
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
@@ -247,36 +248,44 @@ function Search-GlpiToolsItems {
     
     process {
         
-        foreach ($Value in $SearchValue) {
-            $params = @{
-                headers = @{
-                    'Content-Type'  = 'application/json'
-                    'App-Token'     = $AppToken
-                    'Session-Token' = $SessionToken
-                }
-                method  = 'get'
-                uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0&criteria[0][field]=$($SearchField)&criteria[0][searchtype]=$($SearchType)&criteria[0][value]=$($Value)&search=Search&itemtype=$($SearchFor)&range=0-9999999999999"
+        $params = @{
+            headers = @{
+                'Content-Type'  = 'application/json'
+                'App-Token'     = $AppToken
+                'Session-Token' = $SessionToken
             }
-            
-            $SearchResult = Invoke-RestMethod @params
-            $SearchResult = $SearchResult | Select-Object -ExpandProperty data
-
-            foreach ($SearchItem in $SearchResult) {
-                $DataResult = $SearchItem.PSObject.Properties | Select-Object -Property Name, Value
-        
-                foreach ($Data in $DataResult) {
-                    $Property = $ListSearchOptions | Where-Object {$_.Id -eq $Data.Name } | Select-Object -ExpandProperty Name  
-                    $Value = $Data.Value
-                    
-                    $object = New-Object -TypeName PSCustomObject
-                    $object | Add-Member -MemberType NoteProperty -Name Property -Value $Property
-                    $object | Add-Member -MemberType NoteProperty -Name Value -Value $Value
-
-                    $SearchArray += $object   
-                }
-            }
-            $SearchArray
+            method  = 'get'
+            uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0&criteria[0][field]=$($SearchField)&criteria[0][searchtype]=$($SearchType)&criteria[0][value]=$($SearchValue)&search=Search&itemtype=$($SearchFor)&range=0-9999999999999"
         }
+            
+        $SearchResult = Invoke-RestMethod @params
+        $SearchResults = $SearchResult | Select-Object -ExpandProperty data
+
+        foreach ($SearchItem in $SearchResults) {
+            $SearchHash = [ordered]@{}
+            $DataResult = $SearchItem.PSObject.Properties | Select-Object -Property Name, Value 
+
+            foreach ($Data in $DataResult) {
+                    
+                $Property = $ListSearchOptions | Where-Object {$_.Id -eq $Data.Name } | Select-Object -ExpandProperty Name
+                $Table = $ListSearchOptions | Where-Object {$_.Id -eq $Data.Name } | Select-Object -ExpandProperty Table
+                $Value = $Data.Value
+
+                if ($SearchHash.Keys -contains $Property) {
+                    $NewProperty = $Property + "_" + $Table
+                    $SearchHash.Add($NewProperty, $Value)
+                } else {
+                    $SearchHash.Add($Property, $Value)
+                }
+                
+            }
+
+            $object = [pscustomobject]$SearchHash
+            $IntermediateArray += $object 
+        }
+
+        $IntermediateArray
+        $IntermediateArray = @()
     }
     
     end {
