@@ -1,4 +1,11 @@
 # GlpiTools
+<div align="center">
+<!-- Discord -->
+  <a href="https://discord.gg/u4YdyVb">
+    <img src="https://img.shields.io/discord/235574673155293194.svg?style=flat&label=Discord&logo=discord"
+      alt="Discord - Chat" title="Discord - Chat" />
+  </a>&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
 
 ## Abstract
 
@@ -42,6 +49,7 @@ PowerShell Module which wrap Glpi API into handy functions.
  Get-GlpiToolsListSearchOptions        Get-GlpiToolsListSearchOptions
  Get-GlpiToolsUsers                    Get-GlpiToolsUsers
  Search-GlpiToolsItems                 Search-GlpiToolsItems
+ Set-GlpiToolsChangeActiveEntities     Set-GlpiToolsChangeActiveEntities
  Set-GlpiToolsConfig                   Set-GlpiToolsConfig
  Set-GlpiToolsInitSession              Set-GlpiToolsInitSession
  Set-GlpiToolsKillSession              Set-GlpiToolsKillSession
