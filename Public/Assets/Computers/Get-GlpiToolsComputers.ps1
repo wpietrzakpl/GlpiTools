@@ -46,7 +46,12 @@ function Get-GlpiToolsComputers {
         [parameter(Mandatory = $true,
             ParameterSetName = "ComputerName")]
         [alias('CN')]
-        [string]$ComputerName
+        [string]$ComputerName,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "ComputerName")]
+        [alias('SIT')]
+        [ValidateSet("Yes","No")]
+        [string]$SearchInTrash = "No"
     )
     
     begin {
@@ -215,7 +220,7 @@ function Get-GlpiToolsComputers {
                 $ComputerObjectArray = @()
             }
             ComputerName { 
-                Search-GlpiToolsItems -SearchFor Computer -SearchType contains -SearchValue $ComputerName 
+                Search-GlpiToolsItems -SearchFor Computer -SearchType contains -SearchValue $ComputerName -SearchInTrash $SearchInTrash
             }
             Default {
                 

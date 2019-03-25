@@ -233,7 +233,8 @@ function Search-GlpiToolsItems {
         [String]$SearchValue,
 
         [parameter(Mandatory = $false)]
-        [Switch]$SearchInTrash
+        [ValidateSet("Yes", "No")]
+        [String]$SearchInTrash = "No"
     )
     
     begin {
@@ -247,7 +248,7 @@ function Search-GlpiToolsItems {
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession | Select-Object -ExpandProperty SessionToken
 
-        if ($SearchInTrash) {
+        if ($SearchInTrash -eq "Yes") {
             $Trash = 1
         }
         else {
