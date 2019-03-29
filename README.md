@@ -53,4 +53,6 @@ PowerShell Module which wrap Glpi API into handy functions.
  Set-GlpiToolsConfig                   Set-GlpiToolsConfig
  Set-GlpiToolsInitSession              Set-GlpiToolsInitSession
  Set-GlpiToolsKillSession              Set-GlpiToolsKillSession
+ Set-GlpiToolsPasswordReset            Set-GlpiToolsPasswordReset
+ Set-GlpiToolsResetPasswordRequest     Set-GlpiToolsResetPasswordRequest
  ```
