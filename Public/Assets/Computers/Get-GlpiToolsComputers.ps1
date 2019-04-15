@@ -9,9 +9,18 @@
 .PARAMETER ComputerId
     This parameter can take pipline input, either, you can use this function with -ComputerId keyword.
     Provide to this param Computer ID from GLPI Computers Bookmark
+.PARAMETER Raw
+    Parameter which you can use with ComputerId Parameter.
+    ComputerId has converted parameters from default, parameter Raw allows not convert this parameters.
 .PARAMETER ComputerName
     This parameter can take pipline input, either, you can use this function with -ComputerName keyword.
     Provide to this param Computer Name from GLPI Computers Bookmark
+.PARAMETER SearchInTrash
+    Parameter which you can use with ComputerName Parameter.
+    If you want Search for computer name in trash, that parameter allow you to do it.
+.PARAMETER Parameter
+    Parameter which you can use with ComputerId Parameter. 
+    If you want to get additional parameter of computer object like, disks, or logs, use this parameter.
 .EXAMPLE
     PS C:\Users\Wojtek> 326 | Get-GlpiToolsComputers
     Function gets ComputerId from GLPI from Pipline, and return Computer object
@@ -38,11 +47,16 @@ function Get-GlpiToolsComputers {
         [parameter(Mandatory = $false,
             ParameterSetName = "All")]
         [switch]$All,
+
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ParameterSetName = "ComputerId")]
         [alias('CID')]
         [string[]]$ComputerId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "ComputerId")]
+        [switch]$Raw,
+
         [parameter(Mandatory = $true,
             ParameterSetName = "ComputerName")]
         [alias('CN')]
@@ -50,8 +64,29 @@ function Get-GlpiToolsComputers {
         [parameter(Mandatory = $false,
             ParameterSetName = "ComputerName")]
         [alias('SIT')]
-        [ValidateSet("Yes","No")]
-        [string]$SearchInTrash = "No"
+        [ValidateSet("Yes", "No")]
+        [string]$SearchInTrash = "No",
+
+        [parameter(Mandatory = $false,
+            ParameterSetName = "ComputerId")]
+        [alias('Param')]
+        [ValidateSet("ExpandDropdowns",
+            "GetHateoas",
+            "GetSha1",
+            "WithDevices",
+            "WithDisks",
+            "WithSoftwares",
+            "WithConnections",
+            "WithNetworkports",
+            "WithInfocoms",
+            "WithContracts",
+            "WithDocuments",
+            "WithTickets",
+            "WithProblems",
+            "WithChanges",
+            "WithNotes",
+            "WithLogs")]
+        [string]$Parameter
     )
     
     begin {
@@ -60,13 +95,33 @@ function Get-GlpiToolsComputers {
         $PathToGlpi = $Script:PathToGlpi
         $SessionToken = $Script:SessionToken
 
-        $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
-        $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
-        $SessionToken = Set-GlpiToolsInitSession | Select-Object -ExpandProperty SessionToken
+        $AppToken = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty AppToken
+        $PathToGlpi = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty PathToGlpi
+        $SessionToken = Set-GlpiToolsInitSession -Verbose:$false | Select-Object -ExpandProperty SessionToken
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
         $ComputerObjectArray = @()
+
+        switch ($Parameter) {
+            ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
+            GetHateoas { $ParamValue = "?get_hateoas=true" }
+            GetSha1 { $ParamValue = "?get_sha1=true" }
+            WithDevices { $ParamValue = "?with_devices=true" }
+            WithDisks { $ParamValue = "?with_disks=true" }
+            WithSoftwares { $ParamValue = "?with_softwares=true" }
+            WithConnections { $ParamValue = "?with_connections=true" }
+            WithNetworkports { $ParamValue = "?with_networkports=true" }
+            WithInfocoms { $ParamValue = "?with_infocoms=true" }
+            WithContracts { $ParamValue = "?with_contracts=true" }
+            WithDocuments { $ParamValue = "?with_documents=true" }
+            WithTickets { $ParamValue = "?with_tickets=true" } 
+            WithProblems { $ParamValue = "?with_problems=true" }
+            WithChanges { $ParamValue = "?with_changes=true" }
+            WithNotes { $ParamValue = "?with_notes=true" } 
+            WithLogs { $ParamValue = "?with_logs=true" }
+            Default { $ParamValue = "" }
+        }
 
     }
     
@@ -83,45 +138,17 @@ function Get-GlpiToolsComputers {
                     uri     = "$($PathToGlpi)/Computer/?range=0-99999999999"
                 }
                 
-                $GlpiComputerAll = Invoke-RestMethod @params
+                $GlpiComputerAll = Invoke-RestMethod @params -Verbose:$false
 
                 foreach ($GlpiComputer in $GlpiComputerAll) {
-                    $ComputerHash = [ordered]@{
-                        'Id'                   = $GlpiComputer.id
-                        'Entities_id'          = $GlpiComputer.entities_id
-                        'EntityName'           = $GlpiComputer.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
-                        'Name'                 = $GlpiComputer.name
-                        'Serial'               = $GlpiComputer.serial
-                        'OtherSerial'          = $GlpiComputer.otherserial
-                        'Contact'              = $GlpiComputer.contact
-                        'Contact_num'          = $GlpiComputer.contact_num
-                        'Users_id_tech'        = $GlpiComputer.users_id_tech
-                        'Groups_id_tech'       = $GlpiComputer.groups_id_tech
-                        'Comment'              = $GlpiComputer.comment
-                        'Date_mod'             = $GlpiComputer.date_mod
-                        'Autoupdatesystems_id' = $GlpiComputer.autoupdatesystems_id
-                        'Locations_id'         = $GlpiComputer.locations_id
-                        'Domains_id'           = $GlpiComputer.domains_id
-                        'Networks_id'          = $GlpiComputer.networks_id 
-                        'ComputerModels_id'    = $GlpiComputer.computermodels_id
-                        'ComputerModel'        = $GlpiComputer.computermodels_id | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty Name
-                        'ComputerTypes_id'     = $GlpiComputer.computertypes_id
-                        'Is_template'          = $GlpiComputer.is_template
-                        'Template_name'        = $GlpiComputer.template_name
-                        'Manufacturers_id'     = $GlpiComputer.manufacturers_id
-                        'Is_deleted'           = $GlpiComputer.is_deleted
-                        'Is_dynamic'           = $GlpiComputer.is_dynamic
-                        'Users_id'             = $GlpiComputer.users_id
-                        'User'                 = $GlpiComputer.users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
-                        'Groups_id'            = $GlpiComputer.groups_id
-                        'States_id'            = $GlpiComputer.states_id
-                        'Ticket_tco'           = $GlpiComputer.ticket_tco
-                        'UUID'                 = $GlpiComputer.uuid
-                        'Date_creation'        = $GlpiComputer.date_creation
-                        'Is_recursive'         = $GlpiComputer.is_recursive
-                    }
-                    $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
-                    $ComputerObjectArray += $object
+                    $ComputerHash = [ordered]@{ }
+                            $ComputerProperties = $GlpiComputer.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ComputerProp in $ComputerProperties) {
+                                $ComputerHash.Add($ComputerProp.Name, $ComputerProp.Value)
+                            }
+                            $object = [pscustomobject]$ComputerHash
+                            $ComputerObjectArray += $object 
                 }
                 $ComputerObjectArray
                 $ComputerObjectArray = @()
@@ -135,89 +162,49 @@ function Get-GlpiToolsComputers {
                             'Session-Token' = $SessionToken
                         }
                         method  = 'get'
-                        uri     = "$($PathToGlpi)/Computer/$($CId)"
+                        uri     = "$($PathToGlpi)/Computer/$($CId)$ParamValue"
                     }
-                
-                    try {
+
+                    Try {
                         $GlpiComputer = Invoke-RestMethod @params -ErrorAction Stop
-                        $ComputerHash = [ordered]@{
-                            'Id'                   = $GlpiComputer.id
-                            'Entities_id'          = $GlpiComputer.entities_id
-                            'EntityName'           = $GlpiComputer.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
-                            'Name'                 = $GlpiComputer.name
-                            'Serial'               = $GlpiComputer.serial
-                            'OtherSerial'          = $GlpiComputer.otherserial
-                            'Contact'              = $GlpiComputer.contact
-                            'Contact_num'          = $GlpiComputer.contact_num
-                            'Users_id_tech'        = $GlpiComputer.users_id_tech
-                            'Groups_id_tech'       = $GlpiComputer.groups_id_tech
-                            'Comment'              = $GlpiComputer.comment
-                            'Date_mod'             = $GlpiComputer.date_mod
-                            'Autoupdatesystems_id' = $GlpiComputer.autoupdatesystems_id
-                            'Locations_id'         = $GlpiComputer.locations_id
-                            'Domains_id'           = $GlpiComputer.domains_id
-                            'Networks_id'          = $GlpiComputer.networks_id 
-                            'ComputerModels_id'    = $GlpiComputer.computermodels_id
-                            'ComputerModel'        = $GlpiComputer.computermodels_id | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty Name
-                            'ComputerTypes_id'     = $GlpiComputer.computertypes_id
-                            'Is_template'          = $GlpiComputer.is_template
-                            'Template_name'        = $GlpiComputer.template_name
-                            'Manufacturers_id'     = $GlpiComputer.manufacturers_id
-                            'Is_deleted'           = $GlpiComputer.is_deleted
-                            'Is_dynamic'           = $GlpiComputer.is_dynamic
-                            'Users_id'             = $GlpiComputer.users_id
-                            'User'                 = $GlpiComputer.users_id | Get-GlpiToolsUsers | Select-Object -ExpandProperty User
-                            'Groups_id'            = $GlpiComputer.groups_id
-                            'States_id'            = $GlpiComputer.states_id
-                            'Ticket_tco'           = $GlpiComputer.ticket_tco
-                            'UUID'                 = $GlpiComputer.uuid
-                            'Date_creation'        = $GlpiComputer.date_creation
-                            'Is_recursive'         = $GlpiComputer.is_recursive
+
+                        if ($Raw) {
+                            $ComputerHash = [ordered]@{ }
+                            $ComputerProperties = $GlpiComputer.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ComputerProp in $ComputerProperties) {
+                                $ComputerHash.Add($ComputerProp.Name, $ComputerProp.Value)
+                            }
+                            $object = [pscustomobject]$ComputerHash
+                            $ComputerObjectArray += $object 
+                        } else {
+                            $ComputerHash = [ordered]@{ }
+                            $ComputerProperties = $GlpiComputer.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ComputerProp in $ComputerProperties) {
+
+                                switch ($ComputerProp.Name) {
+                                    entities_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
+                                    computermodels_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty Name }
+                                    users_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object -ExpandProperty User }
+                                    Default {
+                                        $ComputerPropNewValue = $ComputerProp.Value
+                                    }
+                                }
+
+                                $ComputerHash.Add($ComputerProp.Name, $ComputerPropNewValue)
+                            }
+                            $object = [pscustomobject]$ComputerHash
+                            $ComputerObjectArray += $object 
                         }
-                        $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
-                        $ComputerObjectArray += $object
+                    } Catch {
+
+                        Write-Verbose -Message "Computer ID = $CId is not found"
+                        
                     }
-                    catch {
-                        $ComputerHash = [ordered]@{
-                            'Id'                   = $CId
-                            'Entities_id'          = ' '
-                            'EntityName'           = ' '
-                            'Name'                 = ' '
-                            'Serial'               = ' '
-                            'OtherSerial'          = ' '
-                            'Contact'              = ' '
-                            'Contact_num'          = ' '
-                            'Users_id_tech'        = ' '
-                            'Groups_id_tech'       = ' '
-                            'Comment'              = ' '
-                            'Date_mod'             = ' '
-                            'Autoupdatesystems_id' = ' '
-                            'Locations_id'         = ' '
-                            'Domains_id'           = ' '
-                            'Networks_id'          = ' '
-                            'ComputerModels_id'    = ' '
-                            'ComputerModel'        = ' '
-                            'ComputerTypes_id'     = ' '
-                            'Is_template'          = ' '
-                            'Template_name'        = ' '
-                            'Manufacturers_id'     = ' '
-                            'Is_deleted'           = ' '
-                            'Is_dynamic'           = ' '
-                            'Users_id'             = ' '
-                            'User'                 = ' '
-                            'Groups_id'            = ' '
-                            'States_id'            = ' '
-                            'Ticket_tco'           = ' '
-                            'UUID'                 = ' '
-                            'Date_creation'        = ' '
-                            'Is_recursive'         = ' '
-                        }
-                        $object = New-Object -TypeName PSCustomObject -Property $ComputerHash
-                        $ComputerObjectArray += $object  
-                    }
+                    $ComputerObjectArray
+                    $ComputerObjectArray = @()
                 }
-                $ComputerObjectArray
-                $ComputerObjectArray = @()
             }
             ComputerName { 
                 Search-GlpiToolsItems -SearchFor Computer -SearchType contains -SearchValue $ComputerName -SearchInTrash $SearchInTrash
@@ -229,6 +216,6 @@ function Get-GlpiToolsComputers {
     }
     
     end {
-        Set-GlpiToolsKillSession -SessionToken $SessionToken
+        Set-GlpiToolsKillSession -SessionToken $SessionToken -Verbose:$false
     }
 }
