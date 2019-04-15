@@ -63,8 +63,7 @@ function Get-GlpiToolsPlugins {
                 $object = [pscustomobject]$PluginHash
                 $PluginsArray += $object 
             }
-        }
-        else {
+        } else {
             foreach ($Plugin in $Plugins) {
                 $PluginHash = [ordered]@{ }
                 $PluginProperties = $Plugin.PSObject.Properties | Select-Object -Property Name, Value 
@@ -74,16 +73,13 @@ function Get-GlpiToolsPlugins {
                     if (($PluginProp.Name -eq "state") -and ($PluginProp.Value -eq "1")) {
                         $StateResolved = "Enabled"
                         $PluginHash.Add($PluginProp.Name, $StateResolved) 
-                    }
-                    elseif (($PluginProp.Name -eq "state") -and ($PluginProp.Value -eq "4")) {
+                    } elseif (($PluginProp.Name -eq "state") -and ($PluginProp.Value -eq "4")) {
                         $StateResolved = "Installed / not activated"
                         $PluginHash.Add($PluginProp.Name, $StateResolved)
-                    }
-                    elseif (($PluginProp.Name -eq "state") -and ($PluginProp.Value -eq "2")) {
+                    } elseif (($PluginProp.Name -eq "state") -and ($PluginProp.Value -eq "2")) {
                         $StateResolved = "Not installed"
                         $PluginHash.Add($PluginProp.Name, $StateResolved)
-                    }
-                    else {
+                    } else {
                         $PluginHash.Add($PluginProp.Name, $PluginProp.Value)
                     }
                     
