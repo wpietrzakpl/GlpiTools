@@ -10,7 +10,7 @@
     This parameter can take pipline input, either, you can use this function with -UpdateSourcesId keyword.
     Provide to this param Update Sources ID from GLPI Update Sources Bookmark
 .PARAMETER UpdateSourcesName
-    This parameter can take pipline input, either, you can use this function with -UpdateSourcesName keyword.
+    You can use this function with -UpdateSourcesName keyword.
     Provide to this param Update Sources Name from GLPI Update Sources Bookmark
 .EXAMPLE
     PS C:\Users\Wojtek> 326 | Get-GlpiToolsDropdownsUpdateSources
