@@ -176,6 +176,13 @@ function Get-GlpiToolsSoftware {
                                 switch ($SoftwareProp.Name) {
                                     entities_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
                                     users_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsUsers | Select-Object -ExpandProperty User }
+                                    softwarecategories_id {
+                                        if ($SoftwareProp.Value -eq 0) {
+                                            $SoftwarePropNewValue = ''
+                                        } else {
+                                            $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsDropdownsSoftwareCategory | Select-Object -ExpandProperty name 
+                                        }
+                                    }
                                     Default {
                                         $SoftwarePropNewValue = $SoftwareProp.Value
                                     }
