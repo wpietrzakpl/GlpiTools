@@ -1,15 +1,17 @@
 <#
 .SYNOPSIS
-    Short description
+    Function that check if GLPI Plugin is Enable in GLPI
 .DESCRIPTION
-    Long description
+    Function that check if GLPI Plugin is Enable, if not, will throw error, if yes, will continue fuction execution
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\> Check-GlpiToolsPluginExist -InvocationCommand "Get-GlpiToolsFusionInventoryAgent"
+    Example will return True if plugin is Enabled in GLPI or False if not. \
+.PARAMETER InvocationCommand
+    Parameter which is used to provide plugin name to check in function
 .INPUTS
-    Inputs (if any)
+    InvocationCommand
 .OUTPUTS
-    Output (if any)
+    Boolean, True if Plugin is Enabled, False if not
 .NOTES
     PSP 04/2019
 #>
@@ -17,16 +19,26 @@
 function Check-GlpiToolsPluginExist {
     [CmdletBinding()]
     param (
-        
+        [parameter(Mandatory = $false)]
+        [string]$InvocationCommand
     )
     
     begin {
 
-        $GlpiAvailablePlugins = Get-GlpiToolsPlugins | Where-Object {$_.State -eq "Enabled"}
+        $GlpiAvailablePlugins = Get-GlpiToolsPlugins | Where-Object { $_.State -eq "Enabled" }
 
     }
     
     process {
+
+        foreach ($Plugin in $GlpiAvailablePlugins) {
+            
+            if ($InvocationCommand -match $Plugin.Name) {
+                $true
+            } else {
+                $false
+            }
+        }
     }
     
     end {
