@@ -2,7 +2,7 @@
 .SYNOPSIS
     Function to show Fusion Agents from GLPI
 .DESCRIPTION
-    Function to show Fusion Agents from GLPI. Function will show Agents, which are in GLPI, not on Computers
+    Function to show Fusion Agents from GLPI. Function will show Agents, which are in GLPI, not on Fusions
 .EXAMPLE
     PS C:\> Get-GlpiToolsFusionAgents
     Function will show all agents which are available in GLPI
@@ -21,6 +21,15 @@ function Get-GlpiToolsFusionInventoryAgents {
     )
     
     begin {
+
+        $InvocationCommand = $MyInvocation.MyCommand.Name
+
+        if (Check-GlpiToolsPluginExist -InvocationCommand $InvocationCommand) {
+
+        } else {
+            throw "You don't have this plugin Enabled in GLPI"
+        }
+
         $SessionToken = $Script:SessionToken
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
@@ -42,33 +51,20 @@ function Get-GlpiToolsFusionInventoryAgents {
             method  = 'get'
             uri     = "$($PathToGlpi)/PluginFusioninventoryAgent/?range=0-999999999" 
         }
-        $FusionAgents = Invoke-RestMethod @params
+        $AllFusionAgents = Invoke-RestMethod @params
 
-        foreach ($fusion in $FusionAgents) {
-            $FusionHash = [ordered]@{
-                'Id' = $fusion.id
-                'EntitiesId' = $fusion.entities_id
-                'IsRecursive' = $fusion.is_recursive
-                'Name' = $fusion.name
-                'LastContact' = $fusion.last_contact 
-                'Version' = $fusion.version
-                'Lock' = $fusion.lock
-                'DeviceId' = $fusion.device_id
-                'ComputersId' = $fusion.computers_id
-                'Token' = $fusion.token
-                'UserAgent' = $fusion.useragent
-                'Tag' = $fusion.tag
-                'ThreadsNetworkDiscovery' = $fusion.threads_networkdiscovery
-                'ThreadsNetworkInventory' = $fusion.threads_networkinventory
-                'Senddico' = $fusion.senddico
-                'TimeoutNetworkDiscovery' = $fusion.timeout_networkdiscovery
-                'TimeoutNetworkInventory' = $fusion.timeout_networkinventory
-                'AgentPort' = $fusion.agent_port
-            }
-            $object = New-Object -TypeName PSCustomObject -Property $FusionHash
-            $AgentArray += $object 
+        foreach ($FusionAgent in $AllFusionAgents) {
+            $FusionHash = [ordered]@{ }
+                    $FusionProperties = $FusionAgent.PSObject.Properties | Select-Object -Property Name, Value 
+                        
+                    foreach ($FusionProp in $FusionProperties) {
+                        $FusionHash.Add($FusionProp.Name, $FusionProp.Value)
+                    }
+                    $object = [pscustomobject]$FusionHash
+                    $AgentArray += $object 
         }
         $AgentArray
+        $AgentArray = @()
     }
     
     end {
