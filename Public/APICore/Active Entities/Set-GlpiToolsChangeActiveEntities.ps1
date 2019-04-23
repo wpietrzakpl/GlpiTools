@@ -33,7 +33,7 @@ function Set-GlpiToolsChangeActiveEntities {
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true)]
         [alias('EID')]
-        [string]$EntitiesId,
+        [int]$EntitiesId,
         [parameter(Mandatory = $false)]
         [alias('IR')]
         [switch]$IsRecursive
