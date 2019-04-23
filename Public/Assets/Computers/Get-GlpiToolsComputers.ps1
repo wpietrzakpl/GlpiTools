@@ -69,7 +69,6 @@ function Get-GlpiToolsComputers {
 
         [parameter(Mandatory = $false,
             ParameterSetName = "ComputerId")]
-        [parameter(ParameterSetName = "All")]
         [alias('Param')]
         [ValidateSet("ExpandDropdowns",
             "GetHateoas",
@@ -136,7 +135,7 @@ function Get-GlpiToolsComputers {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'get'
-                    uri     = "$($PathToGlpi)/Computer/$ParamValue"
+                    uri     = "$($PathToGlpi)/Computer/?range=0-9999999999999"
                 }
                 
                 $GlpiComputerAll = Invoke-RestMethod @params -Verbose:$false
