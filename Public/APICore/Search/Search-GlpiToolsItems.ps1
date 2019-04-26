@@ -267,7 +267,7 @@ function Search-GlpiToolsItems {
                 'Session-Token' = $SessionToken
             }
             method  = 'get'
-            uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0&criteria[0][field]=$($SearchField)&criteria[0][searchtype]=$($SearchType)&criteria[0][value]=$($SearchValue)&search=Search&itemtype=$($SearchFor)"
+            uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0&criteria[0][field]=$($SearchField)&criteria[0][searchtype]=$($SearchType)&criteria[0][value]=$($SearchValue)&search=Search&itemtype=$($SearchFor)&range=0-9999999999999"
         }
             
         $SearchResult = Invoke-RestMethod @params
