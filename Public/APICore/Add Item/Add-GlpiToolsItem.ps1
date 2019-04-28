@@ -10,11 +10,11 @@
 .PARAMETER JsonPayload
     Parameter specify a hashtable with "input" parameter to be a JsonPayload.
 .EXAMPLE
-    PS C:\> Add-GlpiToolsAddItem -AddTo Computer -HashtableToAdd @{name = "test"} | ConvertTo-Json
+    PS C:\> Add-GlpiToolsItem -AddTo Computer -HashtableToAdd @{name = "test"} | ConvertTo-Json
     Example will add item into Computers
 .EXAMPLE
     PS C:\> $example =  @{name = "test"} | ConvertTo-Json
-    PS C:\> Add-GlpiToolsAddItem -AddTo Computer -HashtableToAdd $example
+    PS C:\> Add-GlpiToolsItem -AddTo Computer -HashtableToAdd $example
     Example will add item into Computers
 .EXAMPLE
     PS C:\> $example = @{ name = "test" } | ConvertTo-Json
