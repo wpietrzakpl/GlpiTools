@@ -1,28 +1,28 @@
 <#
 .SYNOPSIS
-    Function Delete an object existing in GLPI.
+    Function Remove an object existing in GLPI.
 .DESCRIPTION
-    Delete an object existing in GLPI. You can choose between every items in Asset Tab.
-.PARAMETER DeleteFrom
-    Parameter specify where you want to delete object. 
+    Remove an object existing in GLPI. You can choose between every items in Asset Tab.
+.PARAMETER RemoveFrom
+    Parameter specify where you want to Remove object. 
 .PARAMETER ItemId
-    Paremter which indicate on item id to delete. 
+    Paremter which indicate on item id to Remove. 
 .PARAMETER HashtableToAdd
-    Parameter specify a hashtable with fields of itemtype to be deleted.
+    Parameter specify a hashtable with fields of itemtype to be Removed.
 .PARAMETER JsonPayload
     Parameter specify a hashtable with "input" parameter to be a JsonPayload.
 .PARAMETER Purge
-    Switch parameter boolean, if the itemtype have a trashbin, you can force purge (delete finally). Optional.
+    Switch parameter boolean, if the itemtype have a trashbin, you can force purge (Remove finally). Optional.
 .EXAMPLE
-    PS C:\> Delete-GlpiToolsItem -DeleteFrom Computer -ItemId 1
-    Command will delete item with id 1, and put item into trashbin.
+    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -ItemId 1
+    Command will Remove item with id 1, and put item into trashbin.
 .EXAMPLE
-    PS C:\> Delete-GlpiToolsItem -DeleteFrom Computer -ItemId 1 -Purge
-    Command will delete item with id 1. Command will delete item from trashbin too.
+    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -ItemId 1 -Purge
+    Command will Remove item with id 1. Command will Remove item from trashbin too.
 .EXAMPLE
     PS C:\> $example =  @{id = "1"} 
-    PS C:\> Delete-GlpiToolsItem -DeleteFrom Computer -HashtableToDelete $example
-    Example will Delete item from Computers.
+    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -HashtableToRemove $example
+    Example will Remove item from Computers.
 .EXAMPLE
     PS C:\> $example = "@
     {
@@ -36,7 +36,7 @@
 	]
 }
 @"
-    PS C:\> Delete-GlpiToolsItem -DeleteFrom Computer -JsonPayload $example
+    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -JsonPayload $example
     Example will Add items into Computers
 .INPUTS
     Id of item, hashtable, JsonPayload. 
@@ -46,7 +46,7 @@
     PSP 04/2019
 #>
 
-function Delete-GlpiToolsItem {
+function Remove-GlpiToolsItem {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]
@@ -64,7 +64,7 @@ function Delete-GlpiToolsItem {
             "Enclosure",
             "Pdu",
             "Allassets")]
-        [string]$DeleteFrom,
+        [string]$RemoveFrom,
 
         [parameter(Mandatory = $true,
             ParameterSetName = "ID")]
@@ -72,9 +72,9 @@ function Delete-GlpiToolsItem {
         [int]$ItemId,
 
         [parameter(Mandatory = $true,
-            ParameterSetName = "HashtableToDelete")]
+            ParameterSetName = "HashtableToRemove")]
         [alias('HashToDel')]
-        [hashtable]$HashtableToDelete,
+        [hashtable]$HashtableToRemove,
 
         [parameter(Mandatory = $false,
             ParameterSetName = "JsonPayload")]
@@ -111,14 +111,14 @@ function Delete-GlpiToolsItem {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'delete'
-                    uri     = "$($PathToGlpi)/$($DeleteFrom)/$($ItemId)$($PurgeValue)"
+                    uri     = "$($PathToGlpi)/$($RemoveFrom)/$($ItemId)$($PurgeValue)"
                 }
                 Invoke-RestMethod @params
             }
-            HashtableToDelete {
-                $GlpiDelete = $HashtableToDelete | ConvertTo-Json
+            HashtableToRemove {
+                $GlpiRemove = $HashtableToRemove | ConvertTo-Json
 
-                $Delete = '{ "input" : ' + $GlpiDelete + '}' 
+                $Remove = '{ "input" : ' + $GlpiRemove + '}' 
                 
                 $params = @{
                     headers = @{
@@ -127,8 +127,8 @@ function Delete-GlpiToolsItem {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'delete'
-                    uri     = "$($PathToGlpi)/$($DeleteFrom)/"
-                    body    = ([System.Text.Encoding]::UTF8.GetBytes($Delete))
+                    uri     = "$($PathToGlpi)/$($RemoveFrom)/"
+                    body    = ([System.Text.Encoding]::UTF8.GetBytes($Remove))
                 }
                 Invoke-RestMethod @params
             }
@@ -140,7 +140,7 @@ function Delete-GlpiToolsItem {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'delete'
-                    uri     = "$($PathToGlpi)/$($DeleteFrom)/"
+                    uri     = "$($PathToGlpi)/$($RemoveFrom)/"
                     body    = ([System.Text.Encoding]::UTF8.GetBytes($JsonPayload))
                 }
                 Invoke-RestMethod @params
