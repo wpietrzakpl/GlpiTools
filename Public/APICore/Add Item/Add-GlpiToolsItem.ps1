@@ -20,6 +20,23 @@
     PS C:\> $example = @{ name = "test" } | ConvertTo-Json
     PS C:\> $upload = '{ "input" : ' + $example + '}'
     PS C:\> Add-GlpiToolsItem -AddTo Computer -JsonPayload $upload
+.EXAMPLE
+    PS C:\> $example = "@
+    {
+	"input" : [
+		{
+			"name" : "test1",
+			"comment" : "updated from script"
+		},
+		{
+			"name" : "test2",
+			"comment" : "updated from script"
+		}
+	]
+}
+@"
+    PS C:\> Add-GlpiToolsItem -AddTo Computer -JsonPayload $example
+    Example will Add items into Computers
 .INPUTS
     Hashtable with "input" parameter, or JsonPayload    .
 .OUTPUTS
