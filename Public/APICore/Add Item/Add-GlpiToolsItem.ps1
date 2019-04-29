@@ -21,7 +21,7 @@
     PS C:\> $upload = '{ "input" : ' + $example + '}'
     PS C:\> Add-GlpiToolsItem -AddTo Computer -JsonPayload $upload
 .INPUTS
-    Hashtable with "input" parameter, or JsonPayload.
+    Hashtable with "input" parameter, or JsonPayload    .
 .OUTPUTS
     Information with id and message, which items were added.
 .NOTES
