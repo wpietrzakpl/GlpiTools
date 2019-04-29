@@ -5,8 +5,8 @@
     Function Update an object (or multiple objects) into GLPI. You can choose between every items in Asset Tab.\
 .PARAMETER UpdateTo
     Parameter specify where you want to update object. 
-.PARAMETER ItemsHashtableWithId
-    Parameter specify a hashtable with id of item to be updated, and others fields. You can get values to use, when you run Get-GlpiToolsComputer function.
+.PARAMETER JsonPayload
+    Parameter specify a JsonPayload with id of item to be updated, and others fields. You can get values to use, when you run Get-GlpiToolsComputer function.
 .PARAMETER ItemId
     Parameter specify item id. You can find id in GLPI or, when you run Get-GlpiToolsComputer function.
 .PARAMETER ItemsHashtableWithoutId
@@ -14,16 +14,30 @@
     You provide id in -ItemId parameter.
     You can get values to use, when you run Get-GlpiToolsComputer function.
 .EXAMPLE
-    PS C:\> Update-GlpiToolsItem -UpdateTo Computer -ItemsHashtableWithId @{id = "5"; comment = "test"}
-    Example will Update item which id is 5 into Computers
+    PS C:\> $example = "@
+    {
+	"input" : [
+		{
+			"id" : "15",
+			"comment" : "updated from script 4"
+		},
+		{
+			"id" : "17",
+			"comment" : "updated from script 2"
+		}
+	]
+}
+@"
+    PS C:\> Update-GlpiToolsItem -UpdateTo Computer -JsonPayload $example
+    Example will Update item which id is 15 and 17 into Computers
 .EXAMPLE
     PS C:\> $example =  @{name = "test"}
     PS C:\> Update-GlpiToolsItem -UpdateTo Computer -ItemId 5 -ItemsHashtableWithoutId $example
     Example will Update item which id is 5 into Computers
 .INPUTS
-    Hashtable, or hashtable with "input" parameter.
+    JsonPayload, or hashtable.
 .OUTPUTS
-    Information with id and message, which items were Updateed.
+    Information with id and message, which items were Updated.
 .NOTES
     PSP 04/2019
 #>
@@ -49,17 +63,6 @@ function Update-GlpiToolsItem {
         [string]$UpdateTo,
 
         [parameter(Mandatory = $true,
-            ParameterSetName = "ItemsHashtable")]
-        [ValidateScript({ if ($_.ContainsKey('id')) {
-               $true
-             } else {
-               Throw "The HashTable not contains id of item, you should Update it to HashTable"
-             }
-        })]
-        [alias('IH')]
-        [hashtable]$ItemsHashtableWithId,
-
-        [parameter(Mandatory = $true,
             ParameterSetName = "ID")]
         [alias('IId')]
         [int]$ItemId,
@@ -73,7 +76,12 @@ function Update-GlpiToolsItem {
             }
         })]
         [alias('IHWID')]
-        [hashtable]$ItemsHashtableWithoutId
+        [hashtable]$ItemsHashtableWithoutId,
+
+        [parameter(Mandatory = $true,
+            ParameterSetName = "JsonPayload")]
+        [alias('JsPa')]
+        [array]$JsonPayload
     )
     
     begin {
@@ -90,11 +98,7 @@ function Update-GlpiToolsItem {
     
     process {
         switch ($ChoosenParam) {
-            ItemsHashtable {  
-                $GlpiUpload = $ItemsHashtable | ConvertTo-Json
-
-                $Upload = '{ "input" : ' + $GlpiUpload + '}' 
-                
+            JsonPayload {
                 $params = @{
                     headers = @{
                         'Content-Type'  = 'application/json'
@@ -103,7 +107,7 @@ function Update-GlpiToolsItem {
                     }
                     method  = 'put'
                     uri     = "$($PathToGlpi)/$($UpdateTo)/"
-                    body    = ([System.Text.Encoding]::UTF8.GetBytes($Upload))
+                    body    = ([System.Text.Encoding]::UTF8.GetBytes($JsonPayload))
                 }
                 Invoke-RestMethod @params
             }
