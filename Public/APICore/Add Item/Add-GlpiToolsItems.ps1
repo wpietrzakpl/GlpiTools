@@ -10,16 +10,16 @@
 .PARAMETER JsonPayload
     Parameter specify a hashtable with "input" parameter to be a JsonPayload.
 .EXAMPLE
-    PS C:\> Add-GlpiToolsItem -AddTo Computer -HashtableToAdd @{name = "test"} | ConvertTo-Json
+    PS C:\> Add-GlpiToolsItems -AddTo Computer -HashtableToAdd @{name = "test"} | ConvertTo-Json
     Example will add item into Computers
 .EXAMPLE
     PS C:\> $example =  @{name = "test"} | ConvertTo-Json
-    PS C:\> Add-GlpiToolsItem -AddTo Computer -HashtableToAdd $example
+    PS C:\> Add-GlpiToolsItems -AddTo Computer -HashtableToAdd $example
     Example will add item into Computers
 .EXAMPLE
     PS C:\> $example = @{ name = "test" } | ConvertTo-Json
     PS C:\> $upload = '{ "input" : ' + $example + '}'
-    PS C:\> Add-GlpiToolsItem -AddTo Computer -JsonPayload $upload
+    PS C:\> Add-GlpiToolsItems -AddTo Computer -JsonPayload $upload
 .EXAMPLE
     PS C:\> $example = "@
     {
@@ -35,7 +35,7 @@
 	]
 }
 @"
-    PS C:\> Add-GlpiToolsItem -AddTo Computer -JsonPayload $example
+    PS C:\> Add-GlpiToolsItems -AddTo Computer -JsonPayload $example
     Example will Add items into Computers
 .INPUTS
     Hashtable with "input" parameter, or JsonPayload    .
@@ -45,7 +45,7 @@
     PSP 04/2019
 #>
 
-function Add-GlpiToolsItem {
+function Add-GlpiToolsItems {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]

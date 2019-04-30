@@ -28,11 +28,11 @@
 	]
 }
 @"
-    PS C:\> Update-GlpiToolsItem -UpdateTo Computer -JsonPayload $example
+    PS C:\> Update-GlpiToolsItems -UpdateTo Computer -JsonPayload $example
     Example will Update item which id is 15 and 17 into Computers
 .EXAMPLE
     PS C:\> $example =  @{name = "test"}
-    PS C:\> Update-GlpiToolsItem -UpdateTo Computer -ItemId 5 -ItemsHashtableWithoutId $example
+    PS C:\> Update-GlpiToolsItems -UpdateTo Computer -ItemId 5 -ItemsHashtableWithoutId $example
     Example will Update item which id is 5 into Computers
 .INPUTS
     JsonPayload, or hashtable.
@@ -42,7 +42,7 @@
     PSP 04/2019
 #>
 
-function Update-GlpiToolsItem {
+function Update-GlpiToolsItems {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]

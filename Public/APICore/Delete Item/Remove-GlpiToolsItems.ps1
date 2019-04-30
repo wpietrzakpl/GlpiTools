@@ -14,14 +14,14 @@
 .PARAMETER Purge
     Switch parameter boolean, if the itemtype have a trashbin, you can force purge (Remove finally). Optional.
 .EXAMPLE
-    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -ItemId 1
+    PS C:\> Remove-GlpiToolsItems -RemoveFrom Computer -ItemId 1
     Command will Remove item with id 1, and put item into trashbin.
 .EXAMPLE
-    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -ItemId 1 -Purge
+    PS C:\> Remove-GlpiToolsItems -RemoveFrom Computer -ItemId 1 -Purge
     Command will Remove item with id 1. Command will Remove item from trashbin too.
 .EXAMPLE
     PS C:\> $example =  @{id = "1"} 
-    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -HashtableToRemove $example
+    PS C:\> Remove-GlpiToolsItems -RemoveFrom Computer -HashtableToRemove $example
     Example will Remove item from Computers.
 .EXAMPLE
     PS C:\> $example = "@
@@ -36,7 +36,7 @@
 	]
 }
 @"
-    PS C:\> Remove-GlpiToolsItem -RemoveFrom Computer -JsonPayload $example
+    PS C:\> Remove-GlpiToolsItems -RemoveFrom Computer -JsonPayload $example
     Example will Add items into Computers
 .INPUTS
     Id of item, hashtable, JsonPayload. 
@@ -46,7 +46,7 @@
     PSP 04/2019
 #>
 
-function Remove-GlpiToolsItem {
+function Remove-GlpiToolsItems {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]
