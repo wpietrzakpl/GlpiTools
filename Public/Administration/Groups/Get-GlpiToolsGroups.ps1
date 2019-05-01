@@ -9,21 +9,37 @@
 .PARAMETER GroupId
     This parameter can take pipline input, either, you can use this function with -GroupId keyword.
     Provide to this param Group ID from GLPI Group Bookmark
+.PARAMETER Raw
+    Parameter which you can use with GroupId Parameter.
+    GroupId has converted parameters from default, parameter Raw allows not convert this parameters.
 .PARAMETER GroupName
     This parameter can take pipline input, either, you can use this function with -GroupName keyword.
     Provide to this param Group Name from GLPI Group Bookmark
 .EXAMPLE
-    PS C:\Users\Wojtek> 326 | Get-GlpiToolsGroup
-    Function gets GroupId from GLPI from Pipline, and return Group object
+    PS C:\> Get-GlpiToolsGroups -All
+    Example will return all Groups from Groups. 
 .EXAMPLE
-    PS C:\Users\Wojtek> 326, 321 | Get-GlpiToolsGroup
-    Function gets GroupId from GLPI from Pipline (u can pass many ID's like that), and return Group object
+    PS C:\> 326 | Get-GlpiToolsGroups
+    Function gets GroupID from GLPI from Pipline, and return Group object
 .EXAMPLE
-    PS C:\Users\Wojtek> Get-GlpiToolsGroup -GroupId 326
-    Function gets GroupId from GLPI which is provided through -GroupId after Function type, and return Group object
+    PS C:\> 326, 321 | Get-GlpiToolsGroups
+    Function gets GroupID from GLPI from Pipline (u can pass many ID's like that), and return Group object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsGroups -GroupId 326
+    Function gets GroupID from GLPI which is provided through -GroupId after Function type, and return Group object
 .EXAMPLE 
-    PS C:\Users\Wojtek> Get-GlpiToolsGroup -GroupId 326, 321
-    Function gets GroupId from GLPI which is provided through -GroupId keyword after Function type (u can provide many ID's like that), and return Group object
+    PS C:\> Get-GlpiToolsGroups -GroupId 326, 321
+    Function gets GroupID from GLPI which is provided through -GroupId keyword after Function type (u can provide many ID's like that), and return Group object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsGroups -GroupId 234 -Raw
+    Example will show Group with id 234, but without any parameter converted
+.EXAMPLE
+    PS C:\> 234 | Get-GlpiToolsGroups -Raw
+    Example will show Group with id 234, but without any parameter converted
+.EXAMPLE
+    PS C:\> Get-GlpiToolsGroups -GroupName glpi
+    Example will return glpi Group, but what is the most important, Group will be shown exactly as you see in glpi Groups tab.
+    If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
 .INPUTS
     Group ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
@@ -38,15 +54,20 @@ function Get-GlpiToolsGroups {
         [parameter(Mandatory = $false,
             ParameterSetName = "All")]
         [switch]$All,
+
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ParameterSetName = "GroupId")]
         [alias('GID')]
         [string[]]$GroupId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "GroupId")]
+        [switch]$Raw,
+
         [parameter(Mandatory = $true,
             ParameterSetName = "GroupName")]
         [alias('GN')]
-        [string[]]$GroupName
+        [string]$GroupName
     )
     
     begin {
@@ -75,39 +96,20 @@ function Get-GlpiToolsGroups {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'get'
-                    uri     = "$($PathToGlpi)/Group/?range=0-99999999999"
+                    uri     = "$($PathToGlpi)/Group/?range=0-9999999999999"
                 }
                 
-                $GlpiGroupAll = Invoke-RestMethod @params
+                $GlpiGroupsAll = Invoke-RestMethod @params -Verbose:$false
 
-                foreach ($GlpiGroup in $GlpiGroupAll) {
-                    $GroupHash = [ordered]@{
-                        'Id'                   = $GlpiGroup.id
-                        'EntitiesId'           = $GlpiGroup.entities_id
-                        'EntityName'           = $GlpiGroup.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
-                        'IsRecursive'          = $GlpiGroup.is_recursive
-                        'Name'                 = $GlpiGroup.name 
-                        'Comment'              = $GlpiGroup.comment
-                        'LdapField'            = $GlpiGroup.ldap_field
-                        'LdapValue'            = $GlpiGroup.ldap_value
-                        'LdapGroupDn'          = $GlpiGroup.ldap_group_dn
-                        'DateMod'              = $GlpiGroup.date_mod
-                        'GroupsId'             = $GlpiGroup.groups_id
-                        'CompleteName'         = $GlpiGroup.completename
-                        'Level'                = $GlpiGroup.level
-                        'AncestorsCache'       = $GlpiGroup.ancestors_cache
-                        'SonsCache'            = $GlpiGroup.sons_cache
-                        'IsRequester'          = $GlpiGroup.is_requester
-                        'IsAssign'             = $GlpiGroup.is_assign
-                        'IsTask'               = $GlpiGroup.is_task
-                        'IsNotify'             = $GlpiGroup.is_notify
-                        'IsItemgroup'          = $GlpiGroup.is_itemgroup
-                        'IsUsergroup'          = $GlpiGroup.is_usergroup
-                        'IsManager'            = $GlpiGroup.is_manager
-                        'DateCreation'         = $GlpiGroup.date_creation
-                    }
-                    $object = New-Object -TypeName PSCustomObject -Property $GroupHash
-                    $GroupObjectArray += $object
+                foreach ($GlpiGroup in $GlpiGroupsAll) {
+                    $GroupHash = [ordered]@{ }
+                            $GroupProperties = $GlpiGroup.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($GroupProp in $GroupProperties) {
+                                $GroupHash.Add($GroupProp.Name, $GroupProp.Value)
+                            }
+                            $object = [pscustomobject]$GroupHash
+                            $GroupObjectArray += $object 
                 }
                 $GroupObjectArray
                 $GroupObjectArray = @()
@@ -123,72 +125,48 @@ function Get-GlpiToolsGroups {
                         method  = 'get'
                         uri     = "$($PathToGlpi)/Group/$($GId)"
                     }
-                
-                    try {
+
+                    Try {
                         $GlpiGroup = Invoke-RestMethod @params -ErrorAction Stop
-                        $GroupHash = [ordered]@{
-                            'Id'                   = $GlpiGroup.id
-                            'EntitiesId'           = $GlpiGroup.entities_id
-                            'EntityName'           = $GlpiGroup.entities_id | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName
-                            'IsRecursive'          = $GlpiGroup.is_recursive
-                            'Name'                 = $GlpiGroup.name 
-                            'Comment'              = $GlpiGroup.comment
-                            'LdapField'            = $GlpiGroup.ldap_field
-                            'LdapValue'            = $GlpiGroup.ldap_value
-                            'LdapGroupDn'          = $GlpiGroup.ldap_group_dn
-                            'DateMod'              = $GlpiGroup.date_mod
-                            'GroupsId'             = $GlpiGroup.groups_id
-                            'CompleteName'         = $GlpiGroup.completename
-                            'Level'                = $GlpiGroup.level
-                            'AncestorsCache'       = $GlpiGroup.ancestors_cache
-                            'SonsCache'            = $GlpiGroup.sons_cache
-                            'IsRequester'          = $GlpiGroup.is_requester
-                            'IsAssign'             = $GlpiGroup.is_assign
-                            'IsTask'               = $GlpiGroup.is_task
-                            'IsNotify'             = $GlpiGroup.is_notify
-                            'IsItemgroup'          = $GlpiGroup.is_itemgroup
-                            'IsUsergroup'          = $GlpiGroup.is_usergroup
-                            'IsManager'            = $GlpiGroup.is_manager
-                            'DateCreation'         = $GlpiGroup.date_creation
+
+                        if ($Raw) {
+                            $GroupHash = [ordered]@{ }
+                            $GroupProperties = $GlpiGroup.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($GroupProp in $GroupProperties) {
+                                $GroupHash.Add($GroupProp.Name, $GroupProp.Value)
+                            }
+                            $object = [pscustomobject]$GroupHash
+                            $GroupObjectArray += $object 
+                        } else {
+                            $GroupHash = [ordered]@{ }
+                            $GroupProperties = $GlpiGroup.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($GroupProp in $GroupProperties) {
+
+                                switch ($GroupProp.Name) {
+                                    entities_id { $GroupPropNewValue = $GroupProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
+                                    Default {
+                                        $GroupPropNewValue = $GroupProp.Value
+                                    }
+                                }
+
+                                $GroupHash.Add($GroupProp.Name, $GroupPropNewValue)
+                            }
+                            $object = [pscustomobject]$GroupHash
+                            $GroupObjectArray += $object 
                         }
-                        $object = New-Object -TypeName PSCustomObject -Property $GroupHash
-                        $GroupObjectArray += $object
+                    } Catch {
+
+                        Write-Verbose -Message "Group ID = $GId is not found"
+                        
                     }
-                    catch {
-                        $GroupHash = [ordered]@{
-                            'Id'                   = $GId
-                            'EntitiesId'           = ' '
-                            'EntityName'           = ' '
-                            'IsRecursive'          = ' '
-                            'Name'                 = ' ' 
-                            'Comment'              = ' '
-                            'LdapField'            = ' '
-                            'LdapValue'            = ' '
-                            'LdapGroupDn'          = ' '
-                            'DateMod'              = ' '
-                            'GroupsId'             = ' '
-                            'CompleteName'         = ' '
-                            'Level'                = ' '
-                            'AncestorsCache'       = ' '
-                            'SonsCache'            = ' '
-                            'IsRequester'          = ' '
-                            'IsAssign'             = ' '
-                            'IsTask'               = ' '
-                            'IsNotify'             = ' '
-                            'IsItemgroup'          = ' '
-                            'IsUsergroup'          = ' '
-                            'IsManager'            = ' '
-                            'DateCreation'         = ' '
-                        }
-                        $object = New-Object -TypeName PSCustomObject -Property $GroupHash
-                        $GroupObjectArray += $object  
-                    }
+                    $GroupObjectArray
+                    $GroupObjectArray = @()
                 }
-                $GroupObjectArray
-                $GroupObjectArray = @()
             }
             GroupName { 
-                # here search function 
+                Search-GlpiToolsItems -SearchFor Group -SearchType contains -SearchValue $GroupName 
             }
             Default {
                 
