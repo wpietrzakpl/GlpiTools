@@ -151,6 +151,7 @@ function Get-GlpiToolsUsers {
                             foreach ($UserProp in $UserProperties) {
 
                                 switch ($UserProp.Name) {
+                                    profiles_id { $UserPropNewValue = Get-GlpiToolsProfiles -All | Where-Object {$_.id -eq $UserProp.Value } | Select-Object -ExpandProperty name }
                                     entities_id { $UserPropNewValue = $UserProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
                                     Default {
                                         $UserPropNewValue = $UserProp.Value
