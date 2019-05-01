@@ -198,7 +198,7 @@ function Get-GlpiToolsComputers {
                                 switch ($ComputerProp.Name) {
                                     entities_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
                                     computermodels_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty Name }
-                                    users_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object -ExpandProperty User }
+                                    users_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
                                     Default {
                                         $ComputerPropNewValue = $ComputerProp.Value
                                     }
