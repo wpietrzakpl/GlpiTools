@@ -9,9 +9,15 @@
 .PARAMETER ComputerModelsId
     This parameter can take pipline input, either, you can use this function with -ComputerModelsId keyword.
     Provide to this param Computer Models ID from GLPI Computer Models Bookmark
+.PARAMETER Raw
+    Parameter which you can use with ComputerModelsId Parameter.
+    ComputerModelsId has converted parameters from default, parameter Raw allows not convert this parameters.
 .PARAMETER ComputerModelsName
     This parameter can take pipline input, either, you can use this function with -ComputerModelsName keyword.
     Provide to this param Computer Models Name from GLPI Computer Models Bookmark
+.EXAMPLE
+    PS C:\> Get-GlpiToolsDropdownsComputerModels -All
+    Example will return all Computer Models from Glpi
 .EXAMPLE
     PS C:\Users\Wojtek> 326 | Get-GlpiToolsDropdownsComputerModels
     Function gets ComputerModelsId from GLPI from Pipline, and return Computer Models object
@@ -24,6 +30,10 @@
 .EXAMPLE 
     PS C:\Users\Wojtek> Get-GlpiToolsDropdownsComputerModels -ComputerModelsId 326, 321
     Function gets ComputerModelsId from GLPI which is provided through -ComputerModelsId keyword after Function type (u can provide many ID's like that), and return Computer Models object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsDropdownsComputerModels -ComputerModelsName Lenovo
+    Example will return glpi computer model, but what is the most important, computer model will be shown exactly as you see in glpi dropdown computer models.
+    If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
 .INPUTS
     Computer Models ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
@@ -36,17 +46,21 @@ function Get-GlpiToolsDropdownsComputerModels {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $false,
-        ParameterSetName = "All")]
+            ParameterSetName = "All")]
         [switch]$All,
         [parameter(Mandatory = $true,
-        ValueFromPipeline = $true,
-        ParameterSetName = "ComputerModelsId")]
+            ValueFromPipeline = $true,
+            ParameterSetName = "ComputerModelsId")]
         [alias('CMID')]
         [string[]]$ComputerModelsId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "ComputerModelsId")]
+        [switch]$Raw,
+        
         [parameter(Mandatory = $true,
-        ParameterSetName = "ComputerModelsName")]
+            ParameterSetName = "ComputerModelsName")]
         [alias('CMN')]
-        [string[]]$ComputerModelsName
+        [string]$ComputerModelsName
     )
     
     begin {
@@ -73,30 +87,20 @@ function Get-GlpiToolsDropdownsComputerModels {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'get'
-                    uri     = "$($PathToGlpi)/computermodel/?range=0-99999999999"
+                    uri     = "$($PathToGlpi)/ComputerModel/?range=0-9999999999999"
                 }
                 
-                $GlpiComputerModelsAll = Invoke-RestMethod @params
+                $GlpiComputerModelsAll = Invoke-RestMethod @params -Verbose:$false
 
-                foreach ($GlpiComputerModels in $GlpiComputerModelsAll) {
-                    $ComputerModelsHash = [ordered]@{
-                        'Id'                = $GlpiComputerModels.id
-                        'Name'              = $GlpiComputerModels.name
-                        'Comment'           = $GlpiComputerModels.comment
-                        'ProductNumber'     = $GlpiComputerModels.product_number
-                        'Weight'            = $GlpiComputerModels.weight
-                        'RequiredUnits'     = $GlpiComputerModels.required_units
-                        'Depth'             = $GlpiComputerModels.depth
-                        'PowerConnections'  = $GlpiComputerModels.power_connections
-                        'PowerConsumption'  = $GlpiComputerModels.power_consumption
-                        'IsHalfRack'        = $GlpiComputerModels.is_half_rack
-                        'PictureFront'      = $GlpiComputerModels.picture_front
-                        'PictureRear'       = $GlpiComputerModels.picture_rear
-                        'DateMod'           = $GlpiComputerModels.date_mod
-                        'DateCreation'      = $GlpiComputerModels.date_creation
+                foreach ($GlpiComputerModel in $GlpiComputerModelsAll) {
+                    $ComputerModelHash = [ordered]@{ }
+                    $ComputerModelProperties = $GlpiComputerModel.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                    foreach ($ComputerModelProp in $ComputerModelProperties) {
+                        $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelProp.Value)
                     }
-                    $object = New-Object -TypeName PSCustomObject -Property $ComputerModelsHash
-                    $ComputerModelsArray += $object
+                    $object = [pscustomobject]$ComputerModelHash
+                    $ComputerModelsArray += $object 
                 }
                 $ComputerModelsArray
                 $ComputerModelsArray = @()
@@ -110,60 +114,56 @@ function Get-GlpiToolsDropdownsComputerModels {
                             'Session-Token' = $SessionToken
                         }
                         method  = 'get'
-                        uri     = "$($PathToGlpi)/computermodel/$($CMId)"
+                        uri     = "$($PathToGlpi)/ComputerModel/$($CMId)"
                     }
-                
-                    try {
-                        $GlpiComputerModels = Invoke-RestMethod @params -ErrorAction Stop
-                        $ComputerModelsHash = [ordered]@{
-                            'Id'                = $GlpiComputerModels.id
-                            'Name'              = $GlpiComputerModels.name
-                            'Comment'           = $GlpiComputerModels.comment
-                            'ProductNumber'     = $GlpiComputerModels.product_number
-                            'Weight'            = $GlpiComputerModels.weight
-                            'RequiredUnits'     = $GlpiComputerModels.required_units
-                            'Depth'             = $GlpiComputerModels.depth
-                            'PowerConnections'  = $GlpiComputerModels.power_connections
-                            'PowerConsumption'  = $GlpiComputerModels.power_consumption
-                            'IsHalfRack'        = $GlpiComputerModels.is_half_rack
-                            'PictureFront'      = $GlpiComputerModels.picture_front
-                            'PictureRear'       = $GlpiComputerModels.picture_rear
-                            'DateMod'           = $GlpiComputerModels.date_mod
-                            'DateCreation'      = $GlpiComputerModels.date_creation
+
+                    Try {
+                        $GlpiComputerModel = Invoke-RestMethod @params -ErrorAction Stop
+
+                        if ($Raw) {
+                            $ComputerModelHash = [ordered]@{ }
+                            $ComputerModelProperties = $GlpiComputerModel.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ComputerModelProp in $ComputerModelProperties) {
+                                $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelProp.Value)
+                            }
+                            $object = [pscustomobject]$ComputerModelHash
+                            $ComputerModelsArray += $object 
+                        } else {
+                            $ComputerModelHash = [ordered]@{ }
+                            $ComputerModelProperties = $GlpiComputerModel.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ComputerModelProp in $ComputerModelProperties) {
+
+                                switch ($ComputerModelProp.Name) {
+                                    is_half_rack {
+                                        if ($ComputerModelProp.Value -eq 0) { 
+                                            $ComputerModelPropNewValue = 'No' 
+                                        } else {
+                                            $ComputerModelPropNewValue = 'Yes'
+                                        } 
+                                    }
+                                    Default { $ComputerModelPropNewValue = $ComputerModelProp.Value }
+                                }
+
+                                $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelPropNewValue)
+                            }
+                            $object = [pscustomobject]$ComputerModelHash
+                            $ComputerModelsArray += $object 
                         }
-                        $object = New-Object -TypeName PSCustomObject -Property $ComputerModelsHash
-                        $ComputerModelsArray += $object
+                    } Catch {
+
+                        Write-Verbose -Message "ComputerModel ID = $CMId is not found"
+                        
                     }
-                    catch {
-                        $ComputerModelsHash = [ordered]@{
-                            'Id'                = $CMId
-                            'Name'              = ' '
-                            'Comment'           = ' '
-                            'ProductNumber'     = ' '
-                            'Weight'            = ' '
-                            'RequiredUnits'     = ' '
-                            'Depth'             = ' '
-                            'PowerConnections'  = ' '
-                            'PowerConsumption'  = ' '
-                            'IsHalfRack'        = ' '
-                            'PictureFront'      = ' '
-                            'PictureRear'       = ' '
-                            'DateMod'           = ' '
-                            'DateCreation'      = ' '
-                        }
-                        $object = New-Object -TypeName PSCustomObject -Property $ComputerModelsHash
-                        $ComputerModelsArray += $object  
-                    }
+                    $ComputerModelsArray
+                    $ComputerModelsArray = @()
                 }
-                $ComputerModelsArray
-                $ComputerModelsArray = @()
             }
             ComputerModelsName { 
-                # here search function 
-            }
-            Default {
-                
-            }
+                Search-GlpiToolsItems -SearchFor Computermodel -SearchType contains -SearchValue $ComputerModelsName 
+            } 
+            Default { }
         }
     }
     
