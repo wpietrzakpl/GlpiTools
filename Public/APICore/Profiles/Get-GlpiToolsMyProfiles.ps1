@@ -45,19 +45,18 @@ function Get-GlpiToolsMyProfiles {
             
         $MyProfiles = Invoke-RestMethod @params
 
-        foreach ($Prof in $MyProfiles.myprofiles) {
-
-            $ProfileHash = [ordered] @{
-                Id = $Prof.Id
-                Name = $Prof.Name
-                Entities = $Prof.Entities
-            }
-            
-            $object = [pscustomobject]$ProfileHash
-            $ProfileArray += $object
-
+        foreach ($GlpiProfile in $MyProfiles.myprofiles) {
+            $ProfileHash = [ordered]@{ }
+                    $ProfileProperties = $GlpiProfile.PSObject.Properties | Select-Object -Property Name, Value 
+                        
+                    foreach ($ProfileProp in $ProfileProperties) {
+                        $ProfileHash.Add($ProfileProp.Name, $ProfileProp.Value)
+                    }
+                    $object = [pscustomobject]$ProfileHash
+                    $ProfileArray += $object 
         }
         $ProfileArray
+        $ProfileArray = @()
     }
     
     end {
