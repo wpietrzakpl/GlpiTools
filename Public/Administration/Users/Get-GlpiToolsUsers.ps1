@@ -3,25 +3,51 @@
     Function based on GLPI User ID, returns Name and Surname of desired user.
 .DESCRIPTION
     Function based on GLPI User ID, returns Name and Surname of desired user.
-.PARAMETER User
-    This parameter can take pipline input, either, you can use this function with -User keyword.
-    Provide to this param User ID from GLPI Users Bookmark.
+.PARAMETER All
+    This parameter will return all users from GLPI
+.PARAMETER UserId
+    This parameter can take pipline input, either, you can use this function with -UserId keyword.
+    Provide to this param User ID from GLPI Users Bookmark
+.PARAMETER Raw
+    Parameter which you can use with UserId Parameter.
+    UserId has converted parameters from default, parameter Raw allows not convert this parameters.
+.PARAMETER UserName
+    Provide to this param User Name from GLPI Users Bookmark
+.PARAMETER SearchInTrash
+    Parameter which you can use with UserName Parameter.
+    If you want Search for user name in trash, that parameter allow you to do it.
+.EXAMPLE
+    PS C:\> Get-GlpiToolsUsers -All
+    Example will return all users from Users. 
 .EXAMPLE
     PS C:\Users\Wojtek> 326 | Get-GlpiToolsUsers
-    Function gets UserID from GLPI from Pipline, and return Name and Surname
+    Function gets UserID from GLPI from Pipline, and return User object
 .EXAMPLE
     PS C:\Users\Wojtek> 326, 321 | Get-GlpiToolsUsers
-    Function gets UserID from GLPI from Pipline (u can pass many ID's like that), and return Name and Surname
+    Function gets UserID from GLPI from Pipline (u can pass many ID's like that), and return User object
 .EXAMPLE
-    PS C:\Users\Wojtek> Get-GlpiToolsUsers -User 326
-    Function gets UserID from GLPI which is provided through -User after Function type, and return Name and Surname
+    PS C:\Users\Wojtek> Get-GlpiToolsUsers -UserId 326
+    Function gets UserID from GLPI which is provided through -UserId after Function type, and return User object
 .EXAMPLE 
-    PS C:\Users\Wojtek> Get-GlpiToolsUsers -User 326, 321
-    Function gets UserID from GLPI which is provided through -User keyword after Function type (u can provide many ID's like that), and return Name and Surname
+    PS C:\Users\Wojtek> Get-GlpiToolsUsers -UserId 326, 321
+    Function gets UserID from GLPI which is provided through -UserId keyword after Function type (u can provide many ID's like that), and return User object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsUsers -UserId 234 -Raw
+    Example will show user with id 234, but without any parameter converted
+.EXAMPLE
+    PS C:\> 234 | Get-GlpiToolsUsers -Raw
+    Example will show user with id 234, but without any parameter converted
+.EXAMPLE
+    PS C:\> Get-GlpiToolsUsers -UserName glpi
+    Example will return glpi user, but what is the most important, user will be shown exactly as you see in glpi users tab.
+    If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
+.EXAMPLE
+    PS C:\> Get-GlpiToolsUsers -UserName glpi -SearchInTrash Yes
+    Example will return glpi user, but from trash
 .INPUTS
-    User ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
+    User ID which you can find in GLPI, or use this Function to convert ID returned from other Functions.
 .OUTPUTS
-    Function returns PSCustomObject with two property's
+    Function returns PSCustomObject with users data from GLPI.
 .NOTES
     PSP 12/2018
 #>
@@ -29,9 +55,28 @@
 function Get-GlpiToolsUsers {
     [CmdletBinding()]
     param (
+        [parameter(Mandatory = $false,
+            ParameterSetName = "All")]
+        [switch]$All,
+
         [parameter(Mandatory = $true,
-            ValueFromPipeline = $true)]
-        [string[]]$User
+            ValueFromPipeline = $true,
+            ParameterSetName = "UserId")]
+        [alias('UID')]
+        [string[]]$UserId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "UserId")]
+        [switch]$Raw,
+
+        [parameter(Mandatory = $true,
+            ParameterSetName = "UserName")]
+        [alias('UN')]
+        [string]$UserName,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "UserName")]
+        [alias('SIT')]
+        [ValidateSet("Yes", "No")]
+        [string]$SearchInTrash = "No"
     )
     begin {
 
@@ -43,39 +88,94 @@ function Get-GlpiToolsUsers {
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
 
-        $UserObject = @()
+        $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
+
+        $UserObjectArray = @()
     }
     process {
-        foreach ($gUser in $User) {
-            $params = @{
-                headers = @{
-                    'Content-Type'  = 'application/json'
-                    'App-Token'     = $AppToken
-                    'Session-Token' = $SessionToken
+        switch ($ChoosenParam) {
+            All {
+                $params = @{
+                    headers = @{
+                        'Content-Type'  = 'application/json'
+                        'App-Token'     = $AppToken
+                        'Session-Token' = $SessionToken
+                    }
+                    method  = 'get'
+                    uri     = "$($PathToGlpi)/User/?range=0-9999999999999"
                 }
-                method  = 'get'
-                uri     = "$($PathToGlpi)/User/$($gUser)"
-            }
-            try {
-                $glpiUser = Invoke-RestMethod @params -ErrorAction Stop
+                
+                $GlpiUsersAll = Invoke-RestMethod @params -Verbose:$false
 
-                $UserHash = [ordered]@{
-                    'User' = $glpiUser.firstname + ' ' + $glpiUser.realname
-                    # here i have to make full object
+                foreach ($GlpiUser in $GlpiUsersAll) {
+                    $UserHash = [ordered]@{ }
+                            $UserProperties = $GlpiUser.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($UserProp in $UserProperties) {
+                                $UserHash.Add($UserProp.Name, $UserProp.Value)
+                            }
+                            $object = [pscustomobject]$UserHash
+                            $UserObjectArray += $object 
                 }
-                $object = New-Object -TypeName PSCustomObject -Property $UserHash
-                $UserObject += $object
+                $UserObjectArray
+                $UserObjectArray = @()
             }
-            catch {
-                $UserHash = [ordered]@{
-                    'User' = $gUser
+            UserId {
+                foreach ( $UId in $UserId ) {
+                    $params = @{
+                        headers = @{
+                            'Content-Type'  = 'application/json'
+                            'App-Token'     = $AppToken
+                            'Session-Token' = $SessionToken
+                        }
+                        method  = 'get'
+                        uri     = "$($PathToGlpi)/User/$($UId)"
+                    }
+
+                    Try {
+                        $GlpiUser = Invoke-RestMethod @params -ErrorAction Stop
+
+                        if ($Raw) {
+                            $UserHash = [ordered]@{ }
+                            $UserProperties = $GlpiUser.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($UserProp in $UserProperties) {
+                                $UserHash.Add($UserProp.Name, $UserProp.Value)
+                            }
+                            $object = [pscustomobject]$UserHash
+                            $UserObjectArray += $object 
+                        } else {
+                            $UserHash = [ordered]@{ }
+                            $UserProperties = $GlpiUser.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($UserProp in $UserProperties) {
+
+                                switch ($UserProp.Name) {
+                                    entities_id { $UserPropNewValue = $UserProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
+                                    Default {
+                                        $UserPropNewValue = $UserProp.Value
+                                    }
+                                }
+
+                                $UserHash.Add($UserProp.Name, $UserPropNewValue)
+                            }
+                            $object = [pscustomobject]$UserHash
+                            $UserObjectArray += $object 
+                        }
+                    } Catch {
+
+                        Write-Verbose -Message "User ID = $UId is not found"
+                        
+                    }
+                    $UserObjectArray
+                    $UserObjectArray = @()
                 }
-                $object = New-Object -TypeName PSCustomObject -Property $UserHash
-                $UserObject += $object
             }
+            UserName {
+                Search-GlpiToolsItems -SearchFor User -SearchType contains -SearchValue $UserName -SearchInTrash $SearchInTrash
+            }
+            Default {}
         }
-        $UserObject
-        $UserObject = @()
     }
     end {
         Set-GlpiToolsKillSession -SessionToken $SessionToken
