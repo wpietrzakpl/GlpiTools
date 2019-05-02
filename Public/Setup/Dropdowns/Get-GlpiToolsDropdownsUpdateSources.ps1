@@ -10,20 +10,26 @@
     This parameter can take pipline input, either, you can use this function with -UpdateSourcesId keyword.
     Provide to this param Update Sources ID from GLPI Update Sources Bookmark
 .PARAMETER UpdateSourcesName
-    You can use this function with -UpdateSourcesName keyword.
     Provide to this param Update Sources Name from GLPI Update Sources Bookmark
 .EXAMPLE
-    PS C:\Users\Wojtek> 326 | Get-GlpiToolsDropdownsUpdateSources
-    Function gets UpdateSourcesId from GLPI from Pipline, and return Update Sources object
+    PS C:\> Get-GlpiToolsDropdownsUpdateSources -All
+    Example will return all Update Sources from Update Sources. 
 .EXAMPLE
-    PS C:\Users\Wojtek> 326, 321 | Get-GlpiToolsDropdownsUpdateSources
-    Function gets UpdateSourcesId from GLPI from Pipline (u can pass many ID's like that), and return Update Sources object
+    PS C:\> 326 | Get-GlpiToolsDropdownsUpdateSources
+    Function gets UpdateSourcesID from GLPI from Pipline, and return Update Sources object
 .EXAMPLE
-    PS C:\Users\Wojtek> Get-GlpiToolsDropdownsUpdateSources -UpdateSourcesId 326
-    Function gets UpdateSourcesId from GLPI which is provided through -UpdateSourcesId after Function type, and return Update Sources object
+    PS C:\> 326, 321 | Get-GlpiToolsDropdownsUpdateSources
+    Function gets UpdateSourcesID from GLPI from Pipline (u can pass many ID's like that), and return Update Sources object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsDropdownsUpdateSources -UpdateSourcesId 326
+    Function gets UpdateSourcesID from GLPI which is provided through -UpdateSourcesId after Function type, and return Update Sources object
 .EXAMPLE 
-    PS C:\Users\Wojtek> Get-GlpiToolsDropdownsUpdateSources -UpdateSourcesId 326, 321
-    Function gets UpdateSourcesId from GLPI which is provided through -UpdateSourcesId keyword after Function type (u can provide many ID's like that), and return Update Sources object
+    PS C:\> Get-GlpiToolsDropdownsUpdateSources -UpdateSourcesId 326, 321
+    Function gets UpdateSourcesID from GLPI which is provided through -UpdateSourcesId keyword after Function type (u can provide many ID's like that), and return Update Sources object
+.EXAMPLE
+    PS C:\> Get-GlpiToolsDropdownsUpdateSources -UpdateSourcesName glpi
+    Example will return glpi Update Sources, but what is the most important, Update Sources will be shown exactly as you see in glpi Update Sources tab.
+    If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
 .INPUTS
     Update Sources ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
@@ -38,15 +44,17 @@ function Get-GlpiToolsDropdownsUpdateSources {
         [parameter(Mandatory = $false,
             ParameterSetName = "All")]
         [switch]$All,
+
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ParameterSetName = "UpdateSourcesId")]
         [alias('USID')]
         [string[]]$UpdateSourcesId,
+
         [parameter(Mandatory = $true,
             ParameterSetName = "UpdateSourcesName")]
         [alias('USN')]
-        [string[]]$UpdateSourcesName
+        [string]$UpdateSourcesName
     )
     
     begin {
@@ -74,19 +82,20 @@ function Get-GlpiToolsDropdownsUpdateSources {
                         'Session-Token' = $SessionToken
                     }
                     method  = 'get'
-                    uri     = "$($PathToGlpi)/autoupdatesystem/?range=0-99999999999"
+                    uri     = "$($PathToGlpi)/autoupdatesystem/?range=0-9999999999999"
                 }
                 
-                $GlpiUpdateSourcesAll = Invoke-RestMethod @params
+                $GlpiUpdateSourcesAll = Invoke-RestMethod @params -Verbose:$false
 
-                foreach ($GlpiUpdateSource in $GlpiUpdateSourcesAll) {
-                    $UpdateSourceHash = [ordered]@{
-                        'Id'                = $GlpiUpdateSource.id
-                        'Name'              = $GlpiUpdateSource.name
-                        'Comment'           = $GlpiUpdateSource.comment
+                foreach ($GlpiUpdateSources in $GlpiUpdateSourcesAll) {
+                    $UpdateSourcesHash = [ordered]@{ }
+                    $UpdateSourcesProperties = $GlpiUpdateSources.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                    foreach ($UpdateSourcesProp in $UpdateSourcesProperties) {
+                        $UpdateSourcesHash.Add($UpdateSourcesProp.Name, $UpdateSourcesProp.Value)
                     }
-                    $object = New-Object -TypeName PSCustomObject -Property $UpdateSourceHash
-                    $UpdateSourcesArray += $object
+                    $object = [pscustomobject]$UpdateSourcesHash
+                    $UpdateSourcesArray += $object 
                 }
                 $UpdateSourcesArray
                 $UpdateSourcesArray = @()
@@ -102,32 +111,31 @@ function Get-GlpiToolsDropdownsUpdateSources {
                         method  = 'get'
                         uri     = "$($PathToGlpi)/autoupdatesystem/$($USId)"
                     }
+
+                    Try {
+                        $GlpiUpdateSources = Invoke-RestMethod @params -ErrorAction Stop
+
+                        
+                        $UpdateSourcesHash = [ordered]@{ }
+                        $UpdateSourcesProperties = $GlpiUpdateSources.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                        foreach ($UpdateSourcesProp in $UpdateSourcesProperties) {
+                            $UpdateSourcesHash.Add($UpdateSourcesProp.Name, $UpdateSourcesProp.Value)
+                        }
+                        $object = [pscustomobject]$UpdateSourcesHash
+                        $UpdateSourcesArray += $object 
                 
-                    try {
-                        $GlpiUpdateSource = Invoke-RestMethod @params -ErrorAction Stop
-                        $UpdateSourceHash = [ordered]@{
-                            'Id'                = $GlpiUpdateSource.id
-                            'Name'              = $GlpiUpdateSource.name
-                            'Comment'           = $GlpiUpdateSource.comment
-                        }
-                        $object = New-Object -TypeName PSCustomObject -Property $UpdateSourceHash
-                        $UpdateSourcesArray += $object
+                    } Catch {
+
+                        Write-Verbose -Message "UpdateSources ID = $USId is not found"
+                        
                     }
-                    catch {
-                        $UpdateSourceHash = [ordered]@{
-                            'Id'                = $USId
-                            'Name'              = ' '
-                            'Comment'           = ' '
-                        }
-                        $object = New-Object -TypeName PSCustomObject -Property $UpdateSourceHash
-                        $UpdateSourcesArray += $object  
-                    }
+                    $UpdateSourcesArray
+                    $UpdateSourcesArray = @()
                 }
-                $UpdateSourcesArray
-                $UpdateSourcesArray = @()
             }
             UpdateSourcesName { 
-                # here search function 
+                Search-GlpiToolsItems -SearchFor Autoupdatesystem -SearchType contains -SearchValue $UpdateSourcesName
             }
             Default {
                 
