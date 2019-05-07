@@ -32,24 +32,23 @@ function Set-GlpiToolsConfig {
     )
     
     begin {
-        #TODO
-        ## Help!
-        ## Code to verify OS 
-        # Linux Section 
-        ## Code
-        # Windows Section
-        $ConfigFile = "Configuration.json"
-        $ConfigPath = "$env:LOCALAPPDATA\GlpiToolsConfig\"
-        $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
+
+        if ($IsLinux) {
+            $ConfigFile = "Configuration.json"
+            $ConfigPath = "$env:HOME/.config/GlpiToolsConfig\"
+            $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
+        } else {
+            $ConfigFile = "Configuration.json"
+            $ConfigPath = "$env:LOCALAPPDATA\GlpiToolsConfig\"
+            $Config = Join-Path -Path $ConfigPath -ChildPath $ConfigFile
+        }
 
         if (!(Test-Path $ConfigPath)) {
             New-Item -Path $ConfigPath -ItemType Directory | Out-Null
-        }
-        else {
+        } else {
             try {
                 Remove-Item -Path $Config -ErrorAction Stop    
-            }
-            catch {
+            } catch {
                 
             }
         }
