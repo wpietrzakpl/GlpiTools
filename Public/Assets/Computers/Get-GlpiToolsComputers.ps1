@@ -197,13 +197,19 @@ function Get-GlpiToolsComputers {
 
                                 switch ($ComputerProp.Name) {
                                     entities_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    computermodels_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty Name }
+                                    computermodels_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty name 
+                                        }
+                                    }
                                     users_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
                                     Default {
                                         $ComputerPropNewValue = $ComputerProp.Value
                                     }
                                 }
-
+                                
                                 $ComputerHash.Add($ComputerProp.Name, $ComputerPropNewValue)
                             }
                             $object = [pscustomobject]$ComputerHash
