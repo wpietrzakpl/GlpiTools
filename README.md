@@ -10,6 +10,7 @@
 ## Abstract
 
 PowerShell Module which wrap Glpi API into handy functions.
+Module works on Windows or Linux. 
 
 ***
 
@@ -41,6 +42,7 @@ PowerShell Module which wrap Glpi API into handy functions.
  Get-GlpiToolsActiveProfile             Get-GlpiToolsActiveProfile
  Get-GlpiToolsComputers                 Get-GlpiToolsComputers
  Get-GlpiToolsConfig                    Get-GlpiToolsConfig
+ Get-GlpiToolsDocuments                 Get-GlpiToolsDocuments
  Get-GlpiToolsDropdownsComputerModels   Get-GlpiToolsDropdownsComputerModels
  Get-GlpiToolsDropdownsSoftwareCategory Get-GlpiToolsDropdownsSoftwareCategory
  Get-GlpiToolsDropdownsStatusesOfItems  Get-GlpiToolsDropdownsStatusesOfItems
@@ -53,6 +55,7 @@ PowerShell Module which wrap Glpi API into handy functions.
  Get-GlpiToolsPlugins                   Get-GlpiToolsPlugins
  Get-GlpiToolsProfiles                  Get-GlpiToolsProfiles
  Get-GlpiToolsSoftware                  Get-GlpiToolsSoftware
+ Get-GlpiToolsSystemConfig              Get-GlpiToolsSystemConfig
  Get-GlpiToolsUsers                     Get-GlpiToolsUsers
  Remove-GlpiToolsItems                  Remove-GlpiToolsItems
  Search-GlpiToolsItems                  Search-GlpiToolsItems
