@@ -45,22 +45,27 @@
 #>
 
 function Get-GlpiToolsDocuments {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'DocumentId')]
     param (
         [parameter(Mandatory = $false,
             ParameterSetName = "All")]
         [switch]$All,
 
         [parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ParameterSetName = "DocumentId")]
+            ParameterSetName = "DocumentId",
+            Position = 0)]
+        [Parameter(ParameterSetName = 'Raw')]
+        [Parameter(ParameterSetName = 'RawDocument')]
         [alias('DocID')]
         [int[]]$DocumentId,
+
         [parameter(Mandatory = $false,
-            ParameterSetName = "DocumentId")]
+            ParameterSetName = "Raw",
+            Position = 1)]
         [switch]$Raw,
         [parameter(Mandatory = $false,
-            ParameterSetName = "DocumentId")]
+            ParameterSetName = "RawDocument",
+            Position = 1)]
         [switch]$RawDocument
     )
     
