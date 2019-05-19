@@ -27,15 +27,6 @@
 .EXAMPLE
     PS C:\> Get-GlpiToolsDocuments -ComputerId 2 -RawDocument
     Example will return content which document has inside the file.
-.EXAMPLE
-    PS C:\> 2 | Get-GlpiToolsDocuments
-    Example will return object of document which id is 2. Example will convert values to human readable. 
-.EXAMPLE
-    PS C:\> 2 | Get-GlpiToolsDocuments -Raw
-    Example will return object of document which id is 2. Example will not convert values to human readable.
-.EXAMPLE
-    PS C:\> 2 | Get-GlpiToolsDocuments -RawDocument
-    Example will return content of Document.
 .INPUTS
     Document ID which you can find in GLPI, or use this Function to convert ID returned from other Functions
 .OUTPUTS
