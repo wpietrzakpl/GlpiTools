@@ -59,8 +59,7 @@ function Get-GlpiToolsSoftware {
         [parameter(Mandatory = $false,
             ParameterSetName = "SoftwareId")]
         [alias('Param')]
-        [ValidateSet("ExpandDropdowns",
-            "GetHateoas",
+        [ValidateSet("GetHateoas",
             "GetSha1",
             "WithNetworkports",
             "WithInfocoms",
@@ -99,7 +98,6 @@ function Get-GlpiToolsSoftware {
         $SoftwareObjectArray = @()
 
         switch ($Parameter) {
-            ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
             GetHateoas { $ParamValue = "?get_hateoas=true" }
             GetSha1 { $ParamValue = "?get_sha1=true" }
             WithNetworkports { $ParamValue = "?with_networkports=true" }
@@ -175,7 +173,7 @@ function Get-GlpiToolsSoftware {
 
                                 switch ($SoftwareProp.Name) {
                                     entities_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsUsers | Select-Object -ExpandProperty User }
+                                    users_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
                                     softwarecategories_id {
                                         if ($SoftwareProp.Value -eq 0) {
                                             $SoftwarePropNewValue = ''
