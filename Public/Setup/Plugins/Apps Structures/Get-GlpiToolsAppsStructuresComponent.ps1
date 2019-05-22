@@ -135,6 +135,9 @@ function Get-GlpiToolsAppsStructuresComponent {
                                 switch ($ComponentProp.Name) {
                                     entities_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
                                     plugin_archisw_swcomponenttargets_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentTarget | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponenttypes_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentType | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentstates_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentState | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponenttechnics_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentTechnic | Select-Object -ExpandProperty Name }
                                     Default {
                                         $ComponentPropNewValue = $ComponentProp.Value
                                     }
