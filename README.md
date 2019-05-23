@@ -10,7 +10,7 @@
 ## Abstract
 
 PowerShell Module which wrap Glpi API into handy functions.
-Module works on Windows or Linux. 
+Module works on Windows or Linux with PowerShell Core. 
 
 ***
 
@@ -25,7 +25,7 @@ Module works on Windows or Linux.
 
  To install\import module you have to:
  
- * Download module from GitHub (When finish module, will be to download from PowerShell Gallery)
+ * Download module from GitHub.
  * Unzip module, remove GitHub branch name from the name of directory, and copy into folder which you have configured to store modules, you can find the path running command in PowerShell ``` $env:PSModulePath -split ";" ```
  * To import module into active powershell session you have to use command ` Import-Module GlpiTools `
  * Or if you want to install module you have to use command ` Install-Module GlpiTools `
@@ -36,35 +36,46 @@ Module works on Windows or Linux.
  ## Available commands
 
  ```
- Key                                    Value
- ---                                    -----
- Add-GlpiToolsItems                     Add-GlpiToolsItems
- Get-GlpiToolsActiveProfile             Get-GlpiToolsActiveProfile
- Get-GlpiToolsComputers                 Get-GlpiToolsComputers
- Get-GlpiToolsConfig                    Get-GlpiToolsConfig
- Get-GlpiToolsDocuments                 Get-GlpiToolsDocuments
- Get-GlpiToolsDropdownsComputerModels   Get-GlpiToolsDropdownsComputerModels
- Get-GlpiToolsDropdownsSoftwareCategory Get-GlpiToolsDropdownsSoftwareCategory
- Get-GlpiToolsDropdownsStatusesOfItems  Get-GlpiToolsDropdownsStatusesOfItems
- Get-GlpiToolsDropdownsUpdateSources    Get-GlpiToolsDropdownsUpdateSources
- Get-GlpiToolsEntities                  Get-GlpiToolsEntities
- Get-GlpiToolsFusionInventoryAgents     Get-GlpiToolsFusionInventoryAgents
- Get-GlpiToolsGroups                    Get-GlpiToolsGroups
- Get-GlpiToolsListSearchOptions         Get-GlpiToolsListSearchOptions
- Get-GlpiToolsMyProfiles                Get-GlpiToolsMyProfiles
- Get-GlpiToolsPlugins                   Get-GlpiToolsPlugins
- Get-GlpiToolsProfiles                  Get-GlpiToolsProfiles
- Get-GlpiToolsSoftware                  Get-GlpiToolsSoftware
- Get-GlpiToolsSystemConfig              Get-GlpiToolsSystemConfig
- Get-GlpiToolsUsers                     Get-GlpiToolsUsers
- Remove-GlpiToolsItems                  Remove-GlpiToolsItems
- Search-GlpiToolsItems                  Search-GlpiToolsItems
- Set-GlpiToolsChangeActiveEntities      Set-GlpiToolsChangeActiveEntities
- Set-GlpiToolsChangeActiveProfile       Set-GlpiToolsChangeActiveProfile
- Set-GlpiToolsConfig                    Set-GlpiToolsConfig
- Set-GlpiToolsInitSession               Set-GlpiToolsInitSession
- Set-GlpiToolsKillSession               Set-GlpiToolsKillSession
- Set-GlpiToolsPasswordReset             Set-GlpiToolsPasswordReset
- Set-GlpiToolsResetPasswordRequest      Set-GlpiToolsResetPasswordRequest
- Update-GlpiToolsItems                  Update-GlpiToolsItems
+ Key                                          Value
+ ---                                          -----
+ Add-GlpiToolsItems                           Add-GlpiToolsItems
+ Get-GlpiToolsActiveProfile                   Get-GlpiToolsActiveProfile
+ Get-GlpiToolsAppsStructuresComponent         Get-GlpiToolsAppsStructuresComponent
+ Get-GlpiToolsAppsStructuresComponentDb       Get-GlpiToolsAppsStructuresComponentDb
+ Get-GlpiToolsAppsStructuresComponentInstance Get-GlpiToolsAppsStructuresComponentInstance
+ Get-GlpiToolsAppsStructuresComponentLicense  Get-GlpiToolsAppsStructuresComponentLicense
+ Get-GlpiToolsAppsStructuresComponentSla      Get-GlpiToolsAppsStructuresComponentSla
+ Get-GlpiToolsAppsStructuresComponentState    Get-GlpiToolsAppsStructuresComponentState
+ Get-GlpiToolsAppsStructuresComponentTarget   Get-GlpiToolsAppsStructuresComponentTarget
+ Get-GlpiToolsAppsStructuresComponentTechnic  Get-GlpiToolsAppsStructuresComponentTechnic
+ Get-GlpiToolsAppsStructuresComponentType     Get-GlpiToolsAppsStructuresComponentType
+ Get-GlpiToolsAppsStructuresComponentUser     Get-GlpiToolsAppsStructuresComponentUser
+ Get-GlpiToolsComputers                       Get-GlpiToolsComputers
+ Get-GlpiToolsConfig                          Get-GlpiToolsConfig
+ Get-GlpiToolsDocuments                       Get-GlpiToolsDocuments
+ Get-GlpiToolsDropdownsComputerModels         Get-GlpiToolsDropdownsComputerModels
+ Get-GlpiToolsDropdownsSoftwareCategory       Get-GlpiToolsDropdownsSoftwareCategory
+ Get-GlpiToolsDropdownsStatusesOfItems        Get-GlpiToolsDropdownsStatusesOfItems
+ Get-GlpiToolsDropdownsUpdateSources          Get-GlpiToolsDropdownsUpdateSources
+ Get-GlpiToolsEntities                        Get-GlpiToolsEntities
+ Get-GlpiToolsFusionInventoryAgents           Get-GlpiToolsFusionInventoryAgents
+ Get-GlpiToolsGroups                          Get-GlpiToolsGroups
+ Get-GlpiToolsItemLogs                        Get-GlpiToolsItemLogs
+ Get-GlpiToolsListSearchOptions               Get-GlpiToolsListSearchOptions
+ Get-GlpiToolsMyProfiles                      Get-GlpiToolsMyProfiles
+ Get-GlpiToolsPlugins                         Get-GlpiToolsPlugins
+ Get-GlpiToolsProfiles                        Get-GlpiToolsProfiles 
+ Get-GlpiToolsSoftware                        Get-GlpiToolsSoftware
+ Get-GlpiToolsSystemConfig                    Get-GlpiToolsSystemConfig
+ Get-GlpiToolsUsers                           Get-GlpiToolsUsers
+ Remove-GlpiToolsItems                        Remove-GlpiToolsItems
+ Search-GlpiToolsItems                        Search-GlpiToolsItems
+ Set-GlpiToolsChangeActiveEntities            Set-GlpiToolsChangeActiveEntities
+ Set-GlpiToolsChangeActiveProfile             Set-GlpiToolsChangeActiveProfile
+ Set-GlpiToolsConfig                          Set-GlpiToolsConfig
+ Set-GlpiToolsInitSession                     Set-GlpiToolsInitSession
+ Set-GlpiToolsKillSession                     Set-GlpiToolsKillSession
+ Set-GlpiToolsPasswordReset                   Set-GlpiToolsPasswordReset
+ Set-GlpiToolsResetPasswordRequest            Set-GlpiToolsResetPasswordRequest
+ Update-GlpiToolsItems                        Update-GlpiToolsItems
  ```
