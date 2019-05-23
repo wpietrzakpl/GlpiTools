@@ -1,22 +1,30 @@
 <#
 .SYNOPSIS
-    Function to show Apps Structures Components Targets from GLPI
+    Function to show Apps Structures Targets from GLPI
 .DESCRIPTION
-    Function to show Apps Structures Components Targets from GLPI. Function will show all Components Targets from Apps Structures.
+    Function to show Apps Structures Targets from GLPI. Function will show all Targets from Apps Structures.
 .PARAMETER All
-    Switch parameter, if you will choose, you will get All available Component Targets.
+    Switch parameter, if you will choose, you will get All available Apps Target.
 .PARAMETER AppsStructureComponentTargetId
     Int parameter, you can provide here number of Apps Structure Target. It is ID which you can find in GLPI or with parameter -All.
     Can take pipeline input.
+.PARAMETER Raw
+    Switch parameter. In default output has converted id to humanreadable format, that parameter can disable it and return raw object with id's.
 .EXAMPLE
-    PS C:\> GlpiToolsAppsStructuresComponentTarget -All
-    Example will show all Apps Structures Targets.
+    PS C:\> Get-GlpiToolsAppsStructuresComponentTarget -All
+    Example will show All Apps Structures Targets
 .EXAMPLE
-    PS C:\> GlpiToolsAppsStructuresComponentTarget -AppsStructureComponentTargetId 2
-    Example will show Component Target which id is 2.
+    PS C:\> Get-GlpiToolsAppsStructuresComponentTarget -AppsStructureComponentTargetId 2
+    Example will show Apps Structure Target which id is 2. Object will have converted values.
 .EXAMPLE
-    PS C:\> 2 | GlpiToolsAppsStructuresComponentTarget
-    Example will show Component Target which id is 2.
+    PS C:\> Get-GlpiToolsAppsStructuresComponentTarget -AppsStructureComponentTargetId 2 -Raw
+    Example will show Apps Structure Target which id is 2. Object will not have converted values.
+.EXAMPLE
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponentTarget
+    Example will show Apps Structure Target which id is 2. Object will have converted values.
+.EXAMPLE
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponentTarget -Raw
+    Example will show Apps Structure Target which id is 2. Object will not have converted values.
 .INPUTS
     Inputs (if any)
 .OUTPUTS

@@ -14,16 +14,16 @@
     PS C:\> GlpiToolsAppsStructuresComponent -All
     Example will show All Apps Structures Items
 .EXAMPLE
-    PS C:\> GlpiToolsAppsStructuresComponent -AppsStructureId 2
+    PS C:\> Get-GlpiToolsAppsStructuresComponent -AppsStructureId 2
     Example will show Apps Structure Item which id is 2. Object will have converted values.
 .EXAMPLE
-    PS C:\> GlpiToolsAppsStructuresComponent -AppsStructureId 2 -Raw
+    PS C:\> Get-GlpiToolsAppsStructuresComponent -AppsStructureId 2 -Raw
     Example will show Apps Structure Item which id is 2. Object will not have converted values.
 .EXAMPLE
-    PS C:\> 2 | GlpiToolsAppsStructuresComponent
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponent
     Example will show Apps Structure Item which id is 2. Object will have converted values.
 .EXAMPLE
-    PS C:\> 2 | GlpiToolsAppsStructuresComponent -Raw
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponent -Raw
     Example will show Apps Structure Item which id is 2. Object will not have converted values.
 .INPUTS
     Inputs (if any)
@@ -134,10 +134,17 @@ function Get-GlpiToolsAppsStructuresComponent {
 
                                 switch ($ComponentProp.Name) {
                                     entities_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
+                                    users_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
+                                    groups_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsGroups | Select-Object -ExpandProperty Name }
                                     plugin_archisw_swcomponenttargets_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentTarget | Select-Object -ExpandProperty Name }
                                     plugin_archisw_swcomponenttypes_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentType | Select-Object -ExpandProperty Name }
                                     plugin_archisw_swcomponentstates_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentState | Select-Object -ExpandProperty Name }
                                     plugin_archisw_swcomponenttechnics_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentTechnic | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentusers_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentUser | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentslas_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentSla | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentdbs_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentDb | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentinstances_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentInstance | Select-Object -ExpandProperty Name }
+                                    plugin_archisw_swcomponentlicenses_id { $ComponentPropNewValue = $ComponentProp.Value | Get-GlpiToolsAppsStructuresComponentLicense | Select-Object -ExpandProperty Name }
                                     Default {
                                         $ComponentPropNewValue = $ComponentProp.Value
                                     }

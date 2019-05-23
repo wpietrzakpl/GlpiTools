@@ -1,15 +1,34 @@
 <#
 .SYNOPSIS
-    Short description
+    Function to show Apps Structures Types from GLPI
 .DESCRIPTION
-    Long description
+    Function to show Apps Structures Types from GLPI. Function will show all Types from Apps Structures.
+.PARAMETER All
+    Switch parameter, if you will choose, you will get All available Apps Type.
+.PARAMETER AppsStructureComponentTypeId
+    Int parameter, you can provide here number of Apps Structure Type. It is ID which you can find in GLPI or with parameter -All.
+    Can take pipeline input.
+.PARAMETER Raw
+    Switch parameter. In default output has converted id to humanreadable format, that parameter can disable it and return raw object with id's.
 .EXAMPLE
-    PS C:\> <example usage>
-    Explanation of what the example does
+    PS C:\> Get-GlpiToolsAppsStructuresComponentType -All
+    Example will show All Apps Structures Types
+.EXAMPLE
+    PS C:\> Get-GlpiToolsAppsStructuresComponentType -AppsStructureComponentTypeId 2
+    Example will show Apps Structure Type which id is 2. Object will have converted values.
+.EXAMPLE
+    PS C:\> Get-GlpiToolsAppsStructuresComponentType -AppsStructureComponentTypeId 2 -Raw
+    Example will show Apps Structure Type which id is 2. Object will not have converted values.
+.EXAMPLE
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponentType
+    Example will show Apps Structure Type which id is 2. Object will have converted values.
+.EXAMPLE
+    PS C:\> 2 | Get-GlpiToolsAppsStructuresComponentType -Raw
+    Example will show Apps Structure Type which id is 2. Object will not have converted values.
 .INPUTS
     Inputs (if any)
 .OUTPUTS
-    Output (if any)
+    Function returns PSCustomObject
 .NOTES
     PSP 05/2019
 #>
