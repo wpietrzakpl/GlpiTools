@@ -50,21 +50,31 @@ Module works on Windows or Linux with PowerShell Core.
  Get-GlpiToolsAppsStructuresComponentTechnic  Get-GlpiToolsAppsStructuresComponentTechnic
  Get-GlpiToolsAppsStructuresComponentType     Get-GlpiToolsAppsStructuresComponentType
  Get-GlpiToolsAppsStructuresComponentUser     Get-GlpiToolsAppsStructuresComponentUser
+ Get-GlpiToolsCartridgeItems                  Get-GlpiToolsCartridgeItems
  Get-GlpiToolsComputers                       Get-GlpiToolsComputers
  Get-GlpiToolsConfig                          Get-GlpiToolsConfig
+ Get-GlpiToolsConsumableItems                 Get-GlpiToolsConsumableItems
  Get-GlpiToolsDocuments                       Get-GlpiToolsDocuments
  Get-GlpiToolsDropdownsComputerModels         Get-GlpiToolsDropdownsComputerModels
  Get-GlpiToolsDropdownsSoftwareCategory       Get-GlpiToolsDropdownsSoftwareCategory
  Get-GlpiToolsDropdownsStatusesOfItems        Get-GlpiToolsDropdownsStatusesOfItems
  Get-GlpiToolsDropdownsUpdateSources          Get-GlpiToolsDropdownsUpdateSources
+ Get-GlpiToolsEnclosures                      Get-GlpiToolsEnclosures
  Get-GlpiToolsEntities                        Get-GlpiToolsEntities
  Get-GlpiToolsFusionInventoryAgents           Get-GlpiToolsFusionInventoryAgents
  Get-GlpiToolsGroups                          Get-GlpiToolsGroups
  Get-GlpiToolsItemLogs                        Get-GlpiToolsItemLogs
  Get-GlpiToolsListSearchOptions               Get-GlpiToolsListSearchOptions
+ Get-GlpiToolsMonitors                        Get-GlpiToolsMonitors
  Get-GlpiToolsMyProfiles                      Get-GlpiToolsMyProfiles
+ Get-GlpiToolsNetworkEquipments               Get-GlpiToolsNetworkEquipments
+ Get-GlpiToolsPdus                            Get-GlpiToolsPdus
+ Get-GlpiToolsPeripherals                     Get-GlpiToolsPeripherals
+ Get-GlpiToolsPhones                          Get-GlpiToolsPhones
  Get-GlpiToolsPlugins                         Get-GlpiToolsPlugins
- Get-GlpiToolsProfiles                        Get-GlpiToolsProfiles 
+ Get-GlpiToolsPrinters                        Get-GlpiToolsPrinters
+ Get-GlpiToolsProfiles                        Get-GlpiToolsProfiles
+ Get-GlpiToolsRacks                           Get-GlpiToolsRacks
  Get-GlpiToolsSoftware                        Get-GlpiToolsSoftware
  Get-GlpiToolsSystemConfig                    Get-GlpiToolsSystemConfig
  Get-GlpiToolsUsers                           Get-GlpiToolsUsers
