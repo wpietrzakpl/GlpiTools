@@ -51,6 +51,7 @@ Module works on Windows or Linux with PowerShell Core.
  Get-GlpiToolsAppsStructuresComponentType     Get-GlpiToolsAppsStructuresComponentType
  Get-GlpiToolsAppsStructuresComponentUser     Get-GlpiToolsAppsStructuresComponentUser
  Get-GlpiToolsCartridgeItems                  Get-GlpiToolsCartridgeItems
+ Get-GlpiToolsChanges                         Get-GlpiToolsChanges
  Get-GlpiToolsComputers                       Get-GlpiToolsComputers
  Get-GlpiToolsConfig                          Get-GlpiToolsConfig
  Get-GlpiToolsConsumableItems                 Get-GlpiToolsConsumableItems
@@ -73,10 +74,13 @@ Module works on Windows or Linux with PowerShell Core.
  Get-GlpiToolsPhones                          Get-GlpiToolsPhones
  Get-GlpiToolsPlugins                         Get-GlpiToolsPlugins
  Get-GlpiToolsPrinters                        Get-GlpiToolsPrinters
+ Get-GlpiToolsProblems                        Get-GlpiToolsProblems
  Get-GlpiToolsProfiles                        Get-GlpiToolsProfiles
  Get-GlpiToolsRacks                           Get-GlpiToolsRacks
+ Get-GlpiToolsRecurrentTickets                Get-GlpiToolsRecurrentTickets
  Get-GlpiToolsSoftware                        Get-GlpiToolsSoftware
  Get-GlpiToolsSystemConfig                    Get-GlpiToolsSystemConfig
+ Get-GlpiToolsTickets                         Get-GlpiToolsTickets
  Get-GlpiToolsUsers                           Get-GlpiToolsUsers
  Remove-GlpiToolsItems                        Remove-GlpiToolsItems
  Search-GlpiToolsItems                        Search-GlpiToolsItems
