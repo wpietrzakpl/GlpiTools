@@ -60,6 +60,7 @@ function Get-GlpiToolsComputers {
             ParameterSetName = "All")]
         [switch]$All,
 
+
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ParameterSetName = "ComputerId")]
@@ -139,7 +140,8 @@ function Get-GlpiToolsComputers {
     
     process {
         switch ($ChoosenParam) {
-            All { 
+            All {
+                
                 $params = @{
                     headers = @{
                         'Content-Type'  = 'application/json'
@@ -164,6 +166,7 @@ function Get-GlpiToolsComputers {
                 }
                 $ComputerObjectArray
                 $ComputerObjectArray = @()
+                
             }
             ComputerId { 
                 foreach ( $CId in $ComputerId ) {
@@ -194,9 +197,57 @@ function Get-GlpiToolsComputers {
                             $ComputerProperties = $GlpiComputer.PSObject.Properties | Select-Object -Property Name, Value 
                                 
                             foreach ($ComputerProp in $ComputerProperties) {
-
+                                
                                 switch ($ComputerProp.Name) {
-                                    entities_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
+                                    entities_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName 
+                                        }
+                                    }
+                                    users_id_tech { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname }
+                                        }
+                                    } 
+                                    groups_id_tech { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsGroups | Select-Object -ExpandProperty name 
+                                        }
+                                    } 
+                                    autoupdatesystems_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsUpdateSources | Select-Object -ExpandProperty name 
+                                        }
+                                    }
+                                    locations_id {
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsLocations | Select-Object -ExpandProperty name 
+                                        } 
+                                     }
+                                    domains_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsDomains | Select-Object -ExpandProperty name 
+                                        } 
+                                    }
+                                    networks_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsNetworks | Select-Object -ExpandProperty name 
+                                        }
+                                    }
                                     computermodels_id { 
                                         if ($ComputerProp.Value -eq 0) {
                                             $ComputerPropNewValue = $ComputerProp.Value
@@ -204,12 +255,45 @@ function Get-GlpiToolsComputers {
                                             $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerModels | Select-Object -ExpandProperty name 
                                         }
                                     }
-                                    users_id { $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
+                                    computertypes_id {
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsComputerTypes | Select-Object -ExpandProperty name 
+                                        }
+                                    }
+                                    manufacturers_id {
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsManufacturers | Select-Object -ExpandProperty name 
+                                        }
+                                    }
+                                    users_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } 
+                                        }
+                                    }
+                                    groups_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                              $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsGroups | Select-Object -ExpandProperty name
+                                        }
+                                     }
+                                    states_id { 
+                                        if ($ComputerProp.Value -eq 0) {
+                                            $ComputerPropNewValue = $ComputerProp.Value
+                                        } else {
+                                            $ComputerPropNewValue = $ComputerProp.Value | Get-GlpiToolsDropdownsStatusesOfItems | Select-Object -ExpandProperty name 
+                                        }
+                                    }
                                     Default {
                                         $ComputerPropNewValue = $ComputerProp.Value
                                     }
-                                }
-                                
+                                } 
                                 $ComputerHash.Add($ComputerProp.Name, $ComputerPropNewValue)
                             }
                             $object = [pscustomobject]$ComputerHash
