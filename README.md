@@ -40,9 +40,6 @@ Module works on Windows or Linux with PowerShell Core.
  ---                                          -----
  Add-GlpiToolsItems                           Add-GlpiToolsItems
  Get-GlpiToolsActiveProfile                   Get-GlpiToolsActiveProfile
- Get-GlpiToolsAppsStructuresComponent         Get-GlpiToolsAppsStructuresComponent
- Get-GlpiToolsAppsStructuresComponentDb       Get-GlpiToolsAppsStructuresComponentDb
- Get-GlpiToolsAppsStructuresComponentInstance Get-GlpiToolsAppsStructuresComponentInstance
  Get-GlpiToolsAppsStructuresComponentLicense  Get-GlpiToolsAppsStructuresComponentLicense
  Get-GlpiToolsAppsStructuresComponentSla      Get-GlpiToolsAppsStructuresComponentSla
  Get-GlpiToolsAppsStructuresComponentState    Get-GlpiToolsAppsStructuresComponentState
@@ -57,6 +54,11 @@ Module works on Windows or Linux with PowerShell Core.
  Get-GlpiToolsConsumableItems                 Get-GlpiToolsConsumableItems
  Get-GlpiToolsDocuments                       Get-GlpiToolsDocuments
  Get-GlpiToolsDropdownsComputerModels         Get-GlpiToolsDropdownsComputerModels
+ Get-GlpiToolsDropdownsComputerTypes          Get-GlpiToolsDropdownsComputerTypes
+ Get-GlpiToolsDropdownsDomains                Get-GlpiToolsDropdownsDomains
+ Get-GlpiToolsDropdownsLocations              Get-GlpiToolsDropdownsLocations
+ Get-GlpiToolsDropdownsManufacturers          Get-GlpiToolsDropdownsManufacturers
+ Get-GlpiToolsDropdownsNetworks               Get-GlpiToolsDropdownsNetworks
  Get-GlpiToolsDropdownsSoftwareCategory       Get-GlpiToolsDropdownsSoftwareCategory
  Get-GlpiToolsDropdownsStatusesOfItems        Get-GlpiToolsDropdownsStatusesOfItems
  Get-GlpiToolsDropdownsUpdateSources          Get-GlpiToolsDropdownsUpdateSources
