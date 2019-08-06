@@ -68,7 +68,14 @@ function Get-GlpiToolsParameters {
                 $ConvertedValue = $Value | Get-GlpiToolsGroups | Select-Object -ExpandProperty name -ErrorAction Stop
             } elseif ($Parameter -eq "states_id" ) {
                 $ConvertedValue = $Value | Get-GlpiToolsDropdownsStatusesOfItems | Select-Object -ExpandProperty name -ErrorAction Stop 
-            } else {
+            } elseif ($Parameter -eq "softwares_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsSoftware | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "softwareversions_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsSoftwareVersions | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "computers_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsComputers | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } 
+            else {
                 $ConvertedValue = $Value
             }
         } catch {
