@@ -68,7 +68,7 @@ function Get-GlpiToolsComputerSoftwareVersions {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerSoftwareVersionObjectArray = @()
+        $ComputerSoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
 
     }
     
@@ -96,10 +96,10 @@ function Get-GlpiToolsComputerSoftwareVersions {
                                 $ComputerSoftwareVersionHash.Add($ComputerSoftwareVersionProp.Name, $ComputerSoftwareVersionProp.Value)
                             }
                             $object = [pscustomobject]$ComputerSoftwareVersionHash
-                            $ComputerSoftwareVersionObjectArray += $object 
+                            $ComputerSoftwareVersionObjectArray.Add($object)
                 }
                 $ComputerSoftwareVersionObjectArray
-                $ComputerSoftwareVersionObjectArray = @()
+                $ComputerSoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
                 
             }
             ComputerSoftwareVersionId { 
@@ -125,7 +125,7 @@ function Get-GlpiToolsComputerSoftwareVersions {
                                 $ComputerSoftwareVersionHash.Add($ComputerSoftwareVersionProp.Name, $ComputerSoftwareVersionProp.Value)
                             }
                             $object = [pscustomobject]$ComputerSoftwareVersionHash
-                            $ComputerSoftwareVersionObjectArray += $object 
+                            $ComputerSoftwareVersionObjectArray.Add($object)
                         } else {
                             $ComputerSoftwareVersionHash = [ordered]@{ }
                             $ComputerSoftwareVersionProperties = $GlpiComputerSoftwareVersion.PSObject.Properties | Select-Object -Property Name, Value 
@@ -137,7 +137,7 @@ function Get-GlpiToolsComputerSoftwareVersions {
                                 $ComputerSoftwareVersionHash.Add($ComputerSoftwareVersionProp.Name, $ComputerSoftwareVersionPropNewValue)
                             }
                             $object = [pscustomobject]$ComputerSoftwareVersionHash
-                            $ComputerSoftwareVersionObjectArray += $object 
+                            $ComputerSoftwareVersionObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -145,7 +145,7 @@ function Get-GlpiToolsComputerSoftwareVersions {
                         
                     }
                     $ComputerSoftwareVersionObjectArray
-                    $ComputerSoftwareVersionObjectArray = @()
+                    $ComputerSoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             Default {
