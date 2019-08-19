@@ -113,7 +113,7 @@ function Get-GlpiToolsEnclosures {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $EnclosureObjectArray = @()
+        $EnclosureObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsEnclosures {
                                 $EnclosureHash.Add($EnclosureProp.Name, $EnclosureProp.Value)
                             }
                             $object = [pscustomobject]$EnclosureHash
-                            $EnclosureObjectArray += $object 
+                            $EnclosureObjectArray.Add($object)
                 }
                 $EnclosureObjectArray
-                $EnclosureObjectArray = @()
+                $EnclosureObjectArray = [System.Collections.ArrayList]::new()
             }
             EnclosureId { 
                 foreach ( $EId in $EnclosureId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsEnclosures {
                                 $EnclosureHash.Add($EnclosureProp.Name, $EnclosureProp.Value)
                             }
                             $object = [pscustomobject]$EnclosureHash
-                            $EnclosureObjectArray += $object 
+                            $EnclosureObjectArray.Add($object)
                         } else {
                             $EnclosureHash = [ordered]@{ }
                             $EnclosureProperties = $GlpiEnclosure.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsEnclosures {
                                 $EnclosureHash.Add($EnclosureProp.Name, $EnclosurePropNewValue)
                             }
                             $object = [pscustomobject]$EnclosureHash
-                            $EnclosureObjectArray += $object 
+                            $EnclosureObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsEnclosures {
                         
                     }
                     $EnclosureObjectArray
-                    $EnclosureObjectArray = @()
+                    $EnclosureObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             EnclosureName { 

@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsLocations {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $LocationsArray = @()
+        $LocationsArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsLocations {
                         $LocationHash.Add($LocationProp.Name, $LocationProp.Value)
                     }
                     $object = [pscustomobject]$LocationHash
-                    $LocationsArray += $object 
+                    $LocationsArray.Add($object)
                 }
                 $LocationsArray
-                $LocationsArray = @()
+                $LocationsArray = [System.Collections.ArrayList]::new()
             }
             LocationsId { 
                 foreach ( $LId in $LocationsId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsLocations {
                                 $LocationHash.Add($LocationProp.Name, $LocationProp.Value)
                             }
                             $object = [pscustomobject]$LocationHash
-                            $LocationsArray += $object 
+                            $LocationsArray.Add($object)
                         } else {
                             $LocationHash = [ordered]@{ }
                             $LocationProperties = $LocationModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -142,7 +142,7 @@ function Get-GlpiToolsDropdownsLocations {
                                 $LocationHash.Add($LocationProp.Name, $LocationPropNewValue)
                             }
                             $object = [pscustomobject]$LocationHash
-                            $LocationsArray += $object 
+                            $LocationsArray.Add($object)
                         }
                     } Catch {
 
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsLocations {
                         
                     }
                     $LocationsArray
-                    $LocationsArray = @()
+                    $LocationsArray = [System.Collections.ArrayList]::new()
                 }
             }
             LocationsName { 

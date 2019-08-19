@@ -82,7 +82,7 @@ function Get-GlpiToolsGroups {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $GroupObjectArray = @()
+        $GroupObjectArray = [System.Collections.ArrayList]::new()
 
     }
     
@@ -109,10 +109,10 @@ function Get-GlpiToolsGroups {
                                 $GroupHash.Add($GroupProp.Name, $GroupProp.Value)
                             }
                             $object = [pscustomobject]$GroupHash
-                            $GroupObjectArray += $object 
+                            $GroupObjectArray.Add($object)
                 }
                 $GroupObjectArray
-                $GroupObjectArray = @()
+                $GroupObjectArray = [System.Collections.ArrayList]::new()
             }
             GroupId { 
                 foreach ( $GId in $GroupId ) {
@@ -137,7 +137,7 @@ function Get-GlpiToolsGroups {
                                 $GroupHash.Add($GroupProp.Name, $GroupProp.Value)
                             }
                             $object = [pscustomobject]$GroupHash
-                            $GroupObjectArray += $object 
+                            $GroupObjectArray.Add($object)
                         } else {
                             $GroupHash = [ordered]@{ }
                             $GroupProperties = $GlpiGroup.PSObject.Properties | Select-Object -Property Name, Value 
@@ -154,7 +154,7 @@ function Get-GlpiToolsGroups {
                                 $GroupHash.Add($GroupProp.Name, $GroupPropNewValue)
                             }
                             $object = [pscustomobject]$GroupHash
-                            $GroupObjectArray += $object 
+                            $GroupObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -162,7 +162,7 @@ function Get-GlpiToolsGroups {
                         
                     }
                     $GroupObjectArray
-                    $GroupObjectArray = @()
+                    $GroupObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             GroupName { 

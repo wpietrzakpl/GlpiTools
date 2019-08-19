@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerTypeArray = @()
+        $ComputerTypeArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsComputerTypes {
                         $ComputerTypeHash.Add($ComputerTypeProp.Name, $ComputerTypeProp.Value)
                     }
                     $object = [pscustomobject]$ComputerTypeHash
-                    $ComputerTypeArray += $object 
+                    $ComputerTypeArray.Add($object)
                 }
                 $ComputerTypeArray
-                $ComputerTypeArray = @()
+                $ComputerTypeArray = [System.Collections.ArrayList]::new()
             }
             ComputerTypeId { 
                 foreach ( $CTId in $ComputerTypeId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
                                 $ComputerTypeHash.Add($ComputerTypeProp.Name, $ComputerTypeProp.Value)
                             }
                             $object = [pscustomobject]$ComputerTypeHash
-                            $ComputerTypeArray += $object 
+                            $ComputerTypeArray.Add($object)
                         } else {
                             $ComputerTypeHash = [ordered]@{ }
                             $ComputerTypeProperties = $ComputerTypeModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -142,7 +142,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
                                 $ComputerTypeHash.Add($ComputerTypeProp.Name, $ComputerTypePropNewValue)
                             }
                             $object = [pscustomobject]$ComputerTypeHash
-                            $ComputerTypeArray += $object 
+                            $ComputerTypeArray.Add($object)
                         }
                     } Catch {
 
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
                         
                     }
                     $ComputerTypeArray
-                    $ComputerTypeArray = @()
+                    $ComputerTypeArray = [System.Collections.ArrayList]::new()
                 }
             }
             ComputerTypeName { 

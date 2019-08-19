@@ -114,7 +114,7 @@ function Get-GlpiToolsComputers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerObjectArray = @()
+        $ComputerObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -162,10 +162,10 @@ function Get-GlpiToolsComputers {
                                 $ComputerHash.Add($ComputerProp.Name, $ComputerProp.Value)
                             }
                             $object = [pscustomobject]$ComputerHash
-                            $ComputerObjectArray += $object 
+                            $ComputerObjectArray.Add($object) 
                 }
                 $ComputerObjectArray
-                $ComputerObjectArray = @()
+                $ComputerObjectArray = [System.Collections.ArrayList]::new()
                 
             }
             ComputerId { 
@@ -191,7 +191,7 @@ function Get-GlpiToolsComputers {
                                 $ComputerHash.Add($ComputerProp.Name, $ComputerProp.Value)
                             }
                             $object = [pscustomobject]$ComputerHash
-                            $ComputerObjectArray += $object 
+                            $ComputerObjectArray.Add($object)
                         } else {
                             $ComputerHash = [ordered]@{ }
                             $ComputerProperties = $GlpiComputer.PSObject.Properties | Select-Object -Property Name, Value 
@@ -203,7 +203,7 @@ function Get-GlpiToolsComputers {
                                 $ComputerHash.Add($ComputerProp.Name, $ComputerPropNewValue)
                             }
                             $object = [pscustomobject]$ComputerHash
-                            $ComputerObjectArray += $object 
+                            $ComputerObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -211,7 +211,7 @@ function Get-GlpiToolsComputers {
                         
                     }
                     $ComputerObjectArray
-                    $ComputerObjectArray = @()
+                    $ComputerObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             ComputerName { 

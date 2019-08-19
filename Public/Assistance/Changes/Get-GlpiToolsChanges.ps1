@@ -109,7 +109,7 @@ function Get-GlpiToolsChanges {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ChangeObjectArray = @()
+        $ChangeObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -152,10 +152,10 @@ function Get-GlpiToolsChanges {
                                 $ChangeHash.Add($ChangeProp.Name, $ChangeProp.Value)
                             }
                             $object = [pscustomobject]$ChangeHash
-                            $ChangeObjectArray += $object 
+                            $ChangeObjectArray.Add($object)
                 }
                 $ChangeObjectArray
-                $ChangeObjectArray = @()
+                $ChangeObjectArray = [System.Collections.ArrayList]::new()
             }
             ChangeId { 
                 foreach ( $CId in $ChangeId ) {
@@ -180,7 +180,7 @@ function Get-GlpiToolsChanges {
                                 $ChangeHash.Add($ChangeProp.Name, $ChangeProp.Value)
                             }
                             $object = [pscustomobject]$ChangeHash
-                            $ChangeObjectArray += $object 
+                            $ChangeObjectArray.Add($object)
                         } else {
                             $ChangeHash = [ordered]@{ }
                             $ChangeProperties = $GlpiChange.PSObject.Properties | Select-Object -Property Name, Value 
@@ -199,7 +199,7 @@ function Get-GlpiToolsChanges {
                                 $ChangeHash.Add($ChangeProp.Name, $ChangePropNewValue)
                             }
                             $object = [pscustomobject]$ChangeHash
-                            $ChangeObjectArray += $object 
+                            $ChangeObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -207,7 +207,7 @@ function Get-GlpiToolsChanges {
                         
                     }
                     $ChangeObjectArray
-                    $ChangeObjectArray = @()
+                    $ChangeObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             ChangeName { 

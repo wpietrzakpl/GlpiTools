@@ -38,7 +38,7 @@ function Get-GlpiToolsFusionInventoryAgents {
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
 
-        $AgentArray = @()
+        $AgentArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -61,10 +61,10 @@ function Get-GlpiToolsFusionInventoryAgents {
                         $FusionHash.Add($FusionProp.Name, $FusionProp.Value)
                     }
                     $object = [pscustomobject]$FusionHash
-                    $AgentArray += $object 
+                    $AgentArray.Add($object)
         }
         $AgentArray
-        $AgentArray = @()
+        $AgentArray = [System.Collections.ArrayList]::new()
     }
     
     end {

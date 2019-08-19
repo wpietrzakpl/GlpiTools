@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsNetworks {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $NetworkArray = @()
+        $NetworkArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsNetworks {
                         $NetworkHash.Add($NetworkProp.Name, $NetworkProp.Value)
                     }
                     $object = [pscustomobject]$NetworkHash
-                    $NetworkArray += $object 
+                    $NetworkArray.Add($object)
                 }
                 $NetworkArray
-                $NetworkArray = @()
+                $NetworkArray = [System.Collections.ArrayList]::new()
             }
             NetworkId { 
                 foreach ( $NId in $NetworkId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsNetworks {
                                 $NetworkHash.Add($NetworkProp.Name, $NetworkProp.Value)
                             }
                             $object = [pscustomobject]$NetworkHash
-                            $NetworkArray += $object 
+                            $NetworkArray.Add($object)
                         } else {
                             $NetworkHash = [ordered]@{ }
                             $NetworkProperties = $NetworkModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -142,7 +142,7 @@ function Get-GlpiToolsDropdownsNetworks {
                                 $NetworkHash.Add($NetworkProp.Name, $NetworkPropNewValue)
                             }
                             $object = [pscustomobject]$NetworkHash
-                            $NetworkArray += $object 
+                            $NetworkArray.Add($object)
                         }
                     } Catch {
 
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsNetworks {
                         
                     }
                     $NetworkArray
-                    $NetworkArray = @()
+                    $NetworkArray = [System.Collections.ArrayList]::new()
                 }
             }
             NetworkName { 

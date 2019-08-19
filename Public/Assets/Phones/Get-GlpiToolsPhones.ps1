@@ -113,7 +113,7 @@ function Get-GlpiToolsPhones {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PhoneObjectArray = @()
+        $PhoneObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsPhones {
                                 $PhoneHash.Add($PhoneProp.Name, $PhoneProp.Value)
                             }
                             $object = [pscustomobject]$PhoneHash
-                            $PhoneObjectArray += $object 
+                            $PhoneObjectArray.Add($object)
                 }
                 $PhoneObjectArray
-                $PhoneObjectArray = @()
+                $PhoneObjectArray = [System.Collections.ArrayList]::new()
             }
             PhoneId { 
                 foreach ( $PId in $PhoneId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsPhones {
                                 $PhoneHash.Add($PhoneProp.Name, $PhoneProp.Value)
                             }
                             $object = [pscustomobject]$PhoneHash
-                            $PhoneObjectArray += $object 
+                            $PhoneObjectArray.Add($object)
                         } else {
                             $PhoneHash = [ordered]@{ }
                             $PhoneProperties = $GlpiPhone.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsPhones {
                                 $PhoneHash.Add($PhoneProp.Name, $PhonePropNewValue)
                             }
                             $object = [pscustomobject]$PhoneHash
-                            $PhoneObjectArray += $object 
+                            $PhoneObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsPhones {
                         
                     }
                     $PhoneObjectArray
-                    $PhoneObjectArray = @()
+                    $PhoneObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             PhoneName { 

@@ -113,7 +113,7 @@ function Get-GlpiToolsPeripherals {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PeripheralObjectArray = @()
+        $PeripheralObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsPeripherals {
                                 $PeripheralHash.Add($PeripheralProp.Name, $PeripheralProp.Value)
                             }
                             $object = [pscustomobject]$PeripheralHash
-                            $PeripheralObjectArray += $object 
+                            $PeripheralObjectArray.Add($object)
                 }
                 $PeripheralObjectArray
-                $PeripheralObjectArray = @()
+                $PeripheralObjectArray = [System.Collections.ArrayList]::new()
             }
             PeripheralId { 
                 foreach ( $PId in $PeripheralId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsPeripherals {
                                 $PeripheralHash.Add($PeripheralProp.Name, $PeripheralProp.Value)
                             }
                             $object = [pscustomobject]$PeripheralHash
-                            $PeripheralObjectArray += $object 
+                            $PeripheralObjectArray.Add($object)
                         } else {
                             $PeripheralHash = [ordered]@{ }
                             $PeripheralProperties = $GlpiPeripheral.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsPeripherals {
                                 $PeripheralHash.Add($PeripheralProp.Name, $PeripheralPropNewValue)
                             }
                             $object = [pscustomobject]$PeripheralHash
-                            $PeripheralObjectArray += $object 
+                            $PeripheralObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsPeripherals {
                         
                     }
                     $PeripheralObjectArray
-                    $PeripheralObjectArray = @()
+                    $PeripheralObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             PeripheralName { 

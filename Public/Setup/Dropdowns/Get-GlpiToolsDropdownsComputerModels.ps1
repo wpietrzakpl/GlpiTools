@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsComputerModels {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerModelsArray = @()
+        $ComputerModelsArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsComputerModels {
                         $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelProp.Value)
                     }
                     $object = [pscustomobject]$ComputerModelHash
-                    $ComputerModelsArray += $object 
+                    $ComputerModelsArray.Add($object)
                 }
                 $ComputerModelsArray
-                $ComputerModelsArray = @()
+                $ComputerModelsArray = [System.Collections.ArrayList]::new()
             }
             ComputerModelsId { 
                 foreach ( $CMId in $ComputerModelsId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsComputerModels {
                                 $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelProp.Value)
                             }
                             $object = [pscustomobject]$ComputerModelHash
-                            $ComputerModelsArray += $object 
+                            $ComputerModelsArray.Add($object)
                         } else {
                             $ComputerModelHash = [ordered]@{ }
                             $ComputerModelProperties = $GlpiComputerModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -149,7 +149,7 @@ function Get-GlpiToolsDropdownsComputerModels {
                                 $ComputerModelHash.Add($ComputerModelProp.Name, $ComputerModelPropNewValue)
                             }
                             $object = [pscustomobject]$ComputerModelHash
-                            $ComputerModelsArray += $object 
+                            $ComputerModelsArray.Add($object)
                         }
                     } Catch {
 
@@ -157,7 +157,7 @@ function Get-GlpiToolsDropdownsComputerModels {
                         
                     }
                     $ComputerModelsArray
-                    $ComputerModelsArray = @()
+                    $ComputerModelsArray = [System.Collections.ArrayList]::new()
                 }
             }
             ComputerModelsName { 

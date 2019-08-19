@@ -69,7 +69,7 @@ function Get-GlpiToolsDropdownsUpdateSources {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $UpdateSourcesArray = @()
+        $UpdateSourcesArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -95,10 +95,10 @@ function Get-GlpiToolsDropdownsUpdateSources {
                         $UpdateSourcesHash.Add($UpdateSourcesProp.Name, $UpdateSourcesProp.Value)
                     }
                     $object = [pscustomobject]$UpdateSourcesHash
-                    $UpdateSourcesArray += $object 
+                    $UpdateSourcesArray.Add($object)
                 }
                 $UpdateSourcesArray
-                $UpdateSourcesArray = @()
+                $UpdateSourcesArray = [System.Collections.ArrayList]::new()
             }
             UpdateSourcesId { 
                 foreach ( $USId in $UpdateSourcesId ) {
@@ -123,7 +123,7 @@ function Get-GlpiToolsDropdownsUpdateSources {
                             $UpdateSourcesHash.Add($UpdateSourcesProp.Name, $UpdateSourcesProp.Value)
                         }
                         $object = [pscustomobject]$UpdateSourcesHash
-                        $UpdateSourcesArray += $object 
+                        $UpdateSourcesArray.Add($object)
                 
                     } Catch {
 
@@ -131,7 +131,7 @@ function Get-GlpiToolsDropdownsUpdateSources {
                         
                     }
                     $UpdateSourcesArray
-                    $UpdateSourcesArray = @()
+                    $UpdateSourcesArray = [System.Collections.ArrayList]::new()
                 }
             }
             UpdateSourcesName { 

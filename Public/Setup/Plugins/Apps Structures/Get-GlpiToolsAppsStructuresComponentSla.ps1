@@ -67,7 +67,7 @@ function Get-GlpiToolsAppsStructuresComponentSla {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComponentSlaArray = @()
+        $ComponentSlaArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -93,10 +93,10 @@ function Get-GlpiToolsAppsStructuresComponentSla {
                         $ComponentSlaHash.Add($ComponentSlaProp.Name, $ComponentSlaProp.Value)
                     }
                     $object = [pscustomobject]$ComponentSlaHash
-                    $ComponentSlaArray += $object 
+                    $ComponentSlaArray.Add($object)
                 }
                 $ComponentSlaArray
-                $ComponentSlaArray = @()
+                $ComponentSlaArray = [System.Collections.ArrayList]::new()
             }
             AppsStructureComponentSlaId {
                 foreach ($ASCSid in $AppsStructureComponentSlaId) {
@@ -121,10 +121,10 @@ function Get-GlpiToolsAppsStructuresComponentSla {
                                 $ComponentSlaHash.Add($ComponentSlaProp.Name, $ComponentSlaProp.Value)
                             }
                             $object = [pscustomobject]$ComponentSlaHash
-                            $ComponentSlaArray += $object 
+                            $ComponentSlaArray.Add($object)
                         }
                         $ComponentSlaArray
-                        $ComponentSlaArray = @()
+                        $ComponentSlaArray = [System.Collections.ArrayList]::new()
                     
                     }
                     catch {

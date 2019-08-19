@@ -109,7 +109,7 @@ function Get-GlpiToolsMonitors {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $MonitorObjectArray = @()
+        $MonitorObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -152,10 +152,10 @@ function Get-GlpiToolsMonitors {
                                 $MonitorHash.Add($MonitorProp.Name, $MonitorProp.Value)
                             }
                             $object = [pscustomobject]$MonitorHash
-                            $MonitorObjectArray += $object 
+                            $MonitorObjectArray.Add($object)
                 }
                 $MonitorObjectArray
-                $MonitorObjectArray = @()
+                $MonitorObjectArray = [System.Collections.ArrayList]::new()
             }
             MonitorId { 
                 foreach ( $MId in $MonitorId ) {
@@ -180,7 +180,7 @@ function Get-GlpiToolsMonitors {
                                 $MonitorHash.Add($MonitorProp.Name, $MonitorProp.Value)
                             }
                             $object = [pscustomobject]$MonitorHash
-                            $MonitorObjectArray += $object 
+                            $MonitorObjectArray.Add($object)
                         } else {
                             $MonitorHash = [ordered]@{ }
                             $MonitorProperties = $GlpiMonitor.PSObject.Properties | Select-Object -Property Name, Value 
@@ -198,7 +198,7 @@ function Get-GlpiToolsMonitors {
                                 $MonitorHash.Add($MonitorProp.Name, $MonitorPropNewValue)
                             }
                             $object = [pscustomobject]$MonitorHash
-                            $MonitorObjectArray += $object 
+                            $MonitorObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -206,7 +206,7 @@ function Get-GlpiToolsMonitors {
                         
                     }
                     $MonitorObjectArray
-                    $MonitorObjectArray = @()
+                    $MonitorObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             MonitorName { 

@@ -109,7 +109,7 @@ function Get-GlpiToolsRecurrentTickets {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $RecurrentTicketObjectArray = @()
+        $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -152,10 +152,10 @@ function Get-GlpiToolsRecurrentTickets {
                                 $RecurrentTicketHash.Add($RecurrentTicketProp.Name, $RecurrentTicketProp.Value)
                             }
                             $object = [pscustomobject]$RecurrentTicketHash
-                            $RecurrentTicketObjectArray += $object 
+                            $RecurrentTicketObjectArray.Add($object)
                 }
                 $RecurrentTicketObjectArray
-                $RecurrentTicketObjectArray = @()
+                $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
             }
             RecurrentTicketId { 
                 foreach ( $RTId in $RecurrentTicketId ) {
@@ -180,7 +180,7 @@ function Get-GlpiToolsRecurrentTickets {
                                 $RecurrentTicketHash.Add($RecurrentTicketProp.Name, $RecurrentTicketProp.Value)
                             }
                             $object = [pscustomobject]$RecurrentTicketHash
-                            $RecurrentTicketObjectArray += $object 
+                            $RecurrentTicketObjectArray.Add($object)
                         } else {
                             $RecurrentTicketHash = [ordered]@{ }
                             $RecurrentTicketProperties = $GlpiRecurrentTicket.PSObject.Properties | Select-Object -Property Name, Value 
@@ -197,7 +197,7 @@ function Get-GlpiToolsRecurrentTickets {
                                 $RecurrentTicketHash.Add($RecurrentTicketProp.Name, $RecurrentTicketPropNewValue)
                             }
                             $object = [pscustomobject]$RecurrentTicketHash
-                            $RecurrentTicketObjectArray += $object 
+                            $RecurrentTicketObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -205,7 +205,7 @@ function Get-GlpiToolsRecurrentTickets {
                         
                     }
                     $RecurrentTicketObjectArray
-                    $RecurrentTicketObjectArray = @()
+                    $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             RecurrentTicketName { 

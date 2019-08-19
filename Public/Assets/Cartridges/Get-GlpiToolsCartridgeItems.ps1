@@ -113,7 +113,7 @@ function Get-GlpiToolsCartridgeItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $CartridgeItemObjectArray = @()
+        $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsCartridgeItems {
                                 $CartridgeItemHash.Add($CartridgeItemProp.Name, $CartridgeItemProp.Value)
                             }
                             $object = [pscustomobject]$CartridgeItemHash
-                            $CartridgeItemObjectArray += $object 
+                            $CartridgeItemObjectArray.Add($object)
                 }
                 $CartridgeItemObjectArray
-                $CartridgeItemObjectArray = @()
+                $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
             }
             CartridgeItemId { 
                 foreach ( $CIId in $CartridgeItemId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsCartridgeItems {
                                 $CartridgeItemHash.Add($CartridgeItemProp.Name, $CartridgeItemProp.Value)
                             }
                             $object = [pscustomobject]$CartridgeItemHash
-                            $CartridgeItemObjectArray += $object 
+                            $CartridgeItemObjectArray.Add($object)
                         } else {
                             $CartridgeItemHash = [ordered]@{ }
                             $CartridgeItemProperties = $GlpiCartridgeItem.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsCartridgeItems {
                                 $CartridgeItemHash.Add($CartridgeItemProp.Name, $CartridgeItemPropNewValue)
                             }
                             $object = [pscustomobject]$CartridgeItemHash
-                            $CartridgeItemObjectArray += $object 
+                            $CartridgeItemObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsCartridgeItems {
                         
                     }
                     $CartridgeItemObjectArray
-                    $CartridgeItemObjectArray = @()
+                    $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             CartridgeItemName { 

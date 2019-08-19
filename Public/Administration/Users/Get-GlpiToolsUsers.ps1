@@ -90,7 +90,7 @@ function Get-GlpiToolsUsers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $UserObjectArray = @()
+        $UserObjectArray = [System.Collections.ArrayList]::new()
     }
     process {
         switch ($ChoosenParam) {
@@ -115,10 +115,10 @@ function Get-GlpiToolsUsers {
                                 $UserHash.Add($UserProp.Name, $UserProp.Value)
                             }
                             $object = [pscustomobject]$UserHash
-                            $UserObjectArray += $object 
+                            $UserObjectArray.Add($object)
                 }
                 $UserObjectArray
-                $UserObjectArray = @()
+                $UserObjectArray = [System.Collections.ArrayList]::new()
             }
             UserId {
                 foreach ( $UId in $UserId ) {
@@ -143,7 +143,7 @@ function Get-GlpiToolsUsers {
                                 $UserHash.Add($UserProp.Name, $UserProp.Value)
                             }
                             $object = [pscustomobject]$UserHash
-                            $UserObjectArray += $object 
+                            $UserObjectArray.Add($object)
                         } else {
                             $UserHash = [ordered]@{ }
                             $UserProperties = $GlpiUser.PSObject.Properties | Select-Object -Property Name, Value 
@@ -155,7 +155,7 @@ function Get-GlpiToolsUsers {
                                 $UserHash.Add($UserProp.Name, $UserPropNewValue)
                             }
                             $object = [pscustomobject]$UserHash
-                            $UserObjectArray += $object 
+                            $UserObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -163,7 +163,7 @@ function Get-GlpiToolsUsers {
                         
                     }
                     $UserObjectArray
-                    $UserObjectArray = @()
+                    $UserObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             UserName {

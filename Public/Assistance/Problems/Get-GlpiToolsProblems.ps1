@@ -109,7 +109,7 @@ function Get-GlpiToolsProblems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ProblemObjectArray = @()
+        $ProblemObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -152,10 +152,10 @@ function Get-GlpiToolsProblems {
                                 $ProblemHash.Add($ProblemProp.Name, $ProblemProp.Value)
                             }
                             $object = [pscustomobject]$ProblemHash
-                            $ProblemObjectArray += $object 
+                            $ProblemObjectArray.Add($object)
                 }
                 $ProblemObjectArray
-                $ProblemObjectArray = @()
+                $ProblemObjectArray = [System.Collections.ArrayList]::new()
             }
             ProblemId { 
                 foreach ( $PId in $ProblemId ) {
@@ -180,7 +180,7 @@ function Get-GlpiToolsProblems {
                                 $ProblemHash.Add($ProblemProp.Name, $ProblemProp.Value)
                             }
                             $object = [pscustomobject]$ProblemHash
-                            $ProblemObjectArray += $object 
+                            $ProblemObjectArray.Add($object)
                         } else {
                             $ProblemHash = [ordered]@{ }
                             $ProblemProperties = $GlpiProblem.PSObject.Properties | Select-Object -Property Name, Value 
@@ -199,7 +199,7 @@ function Get-GlpiToolsProblems {
                                 $ProblemHash.Add($ProblemProp.Name, $ProblemPropNewValue)
                             }
                             $object = [pscustomobject]$ProblemHash
-                            $ProblemObjectArray += $object 
+                            $ProblemObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -207,7 +207,7 @@ function Get-GlpiToolsProblems {
                         
                     }
                     $ProblemObjectArray
-                    $ProblemObjectArray = @()
+                    $ProblemObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             ProblemName { 

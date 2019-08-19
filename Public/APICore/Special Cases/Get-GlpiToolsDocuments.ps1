@@ -71,7 +71,7 @@ function Get-GlpiToolsDocuments {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $DocumentObjectArray = @()
+        $DocumentObjectArray = [System.Collections.ArrayList]::new()
 
     }
     
@@ -98,10 +98,10 @@ function Get-GlpiToolsDocuments {
                         $DocumentHash.Add($DocumentProp.Name, $DocumentProp.Value)
                     }
                     $object = [pscustomobject]$DocumentHash
-                    $DocumentObjectArray += $object 
+                    $DocumentObjectArray.Add($object)
                 }
                 $DocumentObjectArray
-                $DocumentObjectArray = @()
+                $DocumentObjectArray = [System.Collections.ArrayList]::new()
             }
             DocumentId {
                 foreach ( $DId in $DocumentId ) {
@@ -147,10 +147,10 @@ function Get-GlpiToolsDocuments {
                                 $DocumentHash.Add($DocumentProp.Name, $DocumentProp.Value)
                             }
                             $object = [pscustomobject]$DocumentHash
-                            $DocumentObjectArray += $object 
+                            $DocumentObjectArray.Add($object)
                             
                             $DocumentObjectArray
-                            $DocumentObjectArray = @()
+                            $DocumentObjectArray = [System.Collections.ArrayList]::new()
                         } catch {
                             Write-Verbose -Message "Computer ID = $DId is not found"
                         }
@@ -185,10 +185,10 @@ function Get-GlpiToolsDocuments {
                                 $DocumentHash.Add($DocumentProp.Name, $DocumentPropNewValue)
                             }
                             $object = [pscustomobject]$DocumentHash
-                            $DocumentObjectArray += $object 
+                            $DocumentObjectArray.Add($object)
 
                             $DocumentObjectArray
-                            $DocumentObjectArray = @()
+                            $DocumentObjectArray = [System.Collections.ArrayList]::new()
                         
                         } catch {
                             Write-Verbose -Message "Computer ID = $DId is not found"

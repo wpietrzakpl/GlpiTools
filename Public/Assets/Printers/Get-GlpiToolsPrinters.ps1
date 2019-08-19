@@ -113,7 +113,7 @@ function Get-GlpiToolsPrinters {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PrinterObjectArray = @()
+        $PrinterObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsPrinters {
                                 $PrinterHash.Add($PrinterProp.Name, $PrinterProp.Value)
                             }
                             $object = [pscustomobject]$PrinterHash
-                            $PrinterObjectArray += $object 
+                            $PrinterObjectArray.Add($object)
                 }
                 $PrinterObjectArray
-                $PrinterObjectArray = @()
+                $PrinterObjectArray = [System.Collections.ArrayList]::new()
             }
             PrinterId { 
                 foreach ( $PId in $PrinterId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsPrinters {
                                 $PrinterHash.Add($PrinterProp.Name, $PrinterProp.Value)
                             }
                             $object = [pscustomobject]$PrinterHash
-                            $PrinterObjectArray += $object 
+                            $PrinterObjectArray.Add($object)
                         } else {
                             $PrinterHash = [ordered]@{ }
                             $PrinterProperties = $GlpiPrinter.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsPrinters {
                                 $PrinterHash.Add($PrinterProp.Name, $PrinterPropNewValue)
                             }
                             $object = [pscustomobject]$PrinterHash
-                            $PrinterObjectArray += $object 
+                            $PrinterObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsPrinters {
                         
                     }
                     $PrinterObjectArray
-                    $PrinterObjectArray = @()
+                    $PrinterObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             PrinterName { 

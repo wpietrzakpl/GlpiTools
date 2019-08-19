@@ -113,7 +113,7 @@ function Get-GlpiToolsPdus {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PduObjectArray = @()
+        $PduObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsPdus {
                                 $PduHash.Add($PduProp.Name, $PduProp.Value)
                             }
                             $object = [pscustomobject]$PduHash
-                            $PduObjectArray += $object 
+                            $PduObjectArray.Add($object)
                 }
                 $PduObjectArray
-                $PduObjectArray = @()
+                $PduObjectArray = [System.Collections.ArrayList]::new()
             }
             PduId { 
                 foreach ( $PId in $PduId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsPdus {
                                 $PduHash.Add($PduProp.Name, $PduProp.Value)
                             }
                             $object = [pscustomobject]$PduHash
-                            $PduObjectArray += $object 
+                            $PduObjectArray.Add($object)
                         } else {
                             $PduHash = [ordered]@{ }
                             $PduProperties = $GlpiPdu.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsPdus {
                                 $PduHash.Add($PduProp.Name, $PduPropNewValue)
                             }
                             $object = [pscustomobject]$PduHash
-                            $PduObjectArray += $object 
+                            $PduObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsPdus {
                         
                     }
                     $PduObjectArray
-                    $PduObjectArray = @()
+                    $PduObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             PduName { 

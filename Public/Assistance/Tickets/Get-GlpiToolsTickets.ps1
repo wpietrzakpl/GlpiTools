@@ -109,7 +109,7 @@ function Get-GlpiToolsTickets {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $TicketObjectArray = @()
+        $TicketObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -152,10 +152,10 @@ function Get-GlpiToolsTickets {
                                 $TicketHash.Add($TicketProp.Name, $TicketProp.Value)
                             }
                             $object = [pscustomobject]$TicketHash
-                            $TicketObjectArray += $object 
+                            $TicketObjectArray.Add($object)
                 }
                 $TicketObjectArray
-                $TicketObjectArray = @()
+                $TicketObjectArray = [System.Collections.ArrayList]::new()
             }
             TicketId { 
                 foreach ( $TId in $TicketId ) {
@@ -180,7 +180,7 @@ function Get-GlpiToolsTickets {
                                 $TicketHash.Add($TicketProp.Name, $TicketProp.Value)
                             }
                             $object = [pscustomobject]$TicketHash
-                            $TicketObjectArray += $object 
+                            $TicketObjectArray.Add($object)
                         } else {
                             $TicketHash = [ordered]@{ }
                             $TicketProperties = $GlpiTicket.PSObject.Properties | Select-Object -Property Name, Value 
@@ -199,7 +199,7 @@ function Get-GlpiToolsTickets {
                                 $TicketHash.Add($TicketProp.Name, $TicketPropNewValue)
                             }
                             $object = [pscustomobject]$TicketHash
-                            $TicketObjectArray += $object 
+                            $TicketObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -207,7 +207,7 @@ function Get-GlpiToolsTickets {
                         
                     }
                     $TicketObjectArray
-                    $TicketObjectArray = @()
+                    $TicketObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             TicketName { 

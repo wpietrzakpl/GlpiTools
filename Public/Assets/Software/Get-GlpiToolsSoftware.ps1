@@ -95,7 +95,7 @@ function Get-GlpiToolsSoftware {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $SoftwareObjectArray = @()
+        $SoftwareObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             GetHateoas { $ParamValue = "?get_hateoas=true" }
@@ -136,10 +136,10 @@ function Get-GlpiToolsSoftware {
                         $SoftwareHash.Add($SoftwareProp.Name, $SoftwareProp.Value)
                     }
                     $object = [pscustomobject]$SoftwareHash
-                    $SoftwareObjectArray += $object 
+                    $SoftwareObjectArray.Add($object)
                 }
                 $SoftwareObjectArray
-                $SoftwareObjectArray = @()
+                $SoftwareObjectArray = [System.Collections.ArrayList]::new()
             }
             SoftwareId {
                 foreach ( $SId in $SoftwareId ) {
@@ -164,7 +164,7 @@ function Get-GlpiToolsSoftware {
                                 $SoftwareHash.Add($SoftwareProp.Name, $SoftwareProp.Value)
                             }
                             $object = [pscustomobject]$SoftwareHash
-                            $SoftwareObjectArray += $object 
+                            $SoftwareObjectArray.Add($object)
                         } else {
                             $SoftwareHash = [ordered]@{ }
                             $SoftwareProperties = $GlpiSoftware.PSObject.Properties | Select-Object -Property Name, Value 
@@ -189,7 +189,7 @@ function Get-GlpiToolsSoftware {
                                 $SoftwareHash.Add($SoftwareProp.Name, $SoftwarePropNewValue)
                             }
                             $object = [pscustomobject]$SoftwareHash
-                            $SoftwareObjectArray += $object 
+                            $SoftwareObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -197,7 +197,7 @@ function Get-GlpiToolsSoftware {
                         
                     }
                     $SoftwareObjectArray
-                    $SoftwareObjectArray = @()
+                    $SoftwareObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             SoftwareName {

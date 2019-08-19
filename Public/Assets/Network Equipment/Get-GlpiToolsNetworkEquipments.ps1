@@ -111,7 +111,7 @@ function Get-GlpiToolsNetworkEquipments {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $NetworkEquipmentObjectArray = @()
+        $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -156,10 +156,10 @@ function Get-GlpiToolsNetworkEquipments {
                                 $NetworkEquipmentHash.Add($NetworkEquipmentProp.Name, $NetworkEquipmentProp.Value)
                             }
                             $object = [pscustomobject]$NetworkEquipmentHash
-                            $NetworkEquipmentObjectArray += $object 
+                            $NetworkEquipmentObjectArray.Add($object)
                 }
                 $NetworkEquipmentObjectArray
-                $NetworkEquipmentObjectArray = @()
+                $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
             }
             NetworkEquipmentId { 
                 foreach ( $NEId in $NetworkEquipmentId ) {
@@ -184,7 +184,7 @@ function Get-GlpiToolsNetworkEquipments {
                                 $NetworkEquipmentHash.Add($NetworkEquipmentProp.Name, $NetworkEquipmentProp.Value)
                             }
                             $object = [pscustomobject]$NetworkEquipmentHash
-                            $NetworkEquipmentObjectArray += $object 
+                            $NetworkEquipmentObjectArray.Add($object)
                         } else {
                             $NetworkEquipmentHash = [ordered]@{ }
                             $NetworkEquipmentProperties = $GlpiNetworkEquipment.PSObject.Properties | Select-Object -Property Name, Value 
@@ -202,7 +202,7 @@ function Get-GlpiToolsNetworkEquipments {
                                 $NetworkEquipmentHash.Add($NetworkEquipmentProp.Name, $NetworkEquipmentPropNewValue)
                             }
                             $object = [pscustomobject]$NetworkEquipmentHash
-                            $NetworkEquipmentObjectArray += $object 
+                            $NetworkEquipmentObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -210,7 +210,7 @@ function Get-GlpiToolsNetworkEquipments {
                         
                     }
                     $NetworkEquipmentObjectArray
-                    $NetworkEquipmentObjectArray = @()
+                    $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             NetworkEquipmentName { 

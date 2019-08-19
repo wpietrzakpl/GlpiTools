@@ -236,7 +236,7 @@ function Get-GlpiToolsListSearchOptions {
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession | Select-Object -ExpandProperty SessionToken
 
-        $SearchOptionsArray = @()
+        $SearchOptionsArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -265,7 +265,7 @@ function Get-GlpiToolsListSearchOptions {
                 'Uid' = $list.Value.uid   
             }
             $object = New-Object -TypeName PSCustomObject -Property $OptionsHash
-            $SearchOptionsArray += $object
+            $SearchOptionsArray.Add($object)
         }
         $SearchOptionsArray
     }

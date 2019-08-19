@@ -59,7 +59,7 @@ function Get-GlpiToolsEntities {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $EntitiesArray = @()
+        $EntitiesArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -85,10 +85,10 @@ function Get-GlpiToolsEntities {
                                 $EntityHash.Add($EntityProp.Name, $EntityProp.Value)
                             }
                             $object = [pscustomobject]$EntityHash
-                            $EntitiesArray += $object 
+                            $EntitiesArray.Add($object)
                 }
                 $EntitiesArray
-                $EntitiesArray = @()
+                $EntitiesArray = [System.Collections.ArrayList]::new()
             }
             EntityId {
                 foreach ( $EId in $EntityId ) {
@@ -113,7 +113,7 @@ function Get-GlpiToolsEntities {
                                 $EntityHash.Add($EntityProp.Name, $EntityProp.Value)
                             }
                             $object = [pscustomobject]$EntityHash
-                            $EntitiesArray += $object 
+                            $EntitiesArray.Add($object)
                         } else {
                             $EntityHash = [ordered]@{ }
                             $EntityProperties = $GlpiEntity.PSObject.Properties | Select-Object -Property Name, Value 
@@ -130,7 +130,7 @@ function Get-GlpiToolsEntities {
                                 $EntityHash.Add($EntityProp.Name, $EntityPropNewValue)
                             }
                             $object = [pscustomobject]$EntityHash
-                            $EntitiesArray += $object 
+                            $EntitiesArray.Add($object)
                         }
                     } Catch {
 
@@ -138,7 +138,7 @@ function Get-GlpiToolsEntities {
                         
                     }
                     $EntitiesArray
-                    $EntitiesArray = @()
+                    $EntitiesArray = [System.Collections.ArrayList]::new()
                 }
             }
             EntityName {

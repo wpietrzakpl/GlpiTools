@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsDomains {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $DomainArray = @()
+        $DomainArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsDomains {
                         $DomainHash.Add($DomainProp.Name, $DomainProp.Value)
                     }
                     $object = [pscustomobject]$DomainHash
-                    $DomainArray += $object 
+                    $DomainArray.Add($object)
                 }
                 $DomainArray
-                $DomainArray = @()
+                $DomainArray = [System.Collections.ArrayList]::new()
             }
             DomainId { 
                 foreach ( $DId in $DomainId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsDomains {
                                 $DomainHash.Add($DomainProp.Name, $DomainProp.Value)
                             }
                             $object = [pscustomobject]$DomainHash
-                            $DomainArray += $object 
+                            $DomainArray.Add($object)
                         } else {
                             $DomainHash = [ordered]@{ }
                             $DomainProperties = $DomainModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -142,7 +142,7 @@ function Get-GlpiToolsDropdownsDomains {
                                 $DomainHash.Add($DomainProp.Name, $DomainPropNewValue)
                             }
                             $object = [pscustomobject]$DomainHash
-                            $DomainArray += $object 
+                            $DomainArray.Add($object)
                         }
                     } Catch {
 
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsDomains {
                         
                     }
                     $DomainArray
-                    $DomainArray = @()
+                    $DomainArray = [System.Collections.ArrayList]::new()
                 }
             }
             DomainName { 

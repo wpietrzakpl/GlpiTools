@@ -80,7 +80,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $StatesArray = @()
+        $StatesArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -106,10 +106,10 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                                 $StatesHash.Add($StatesProp.Name, $StatesProp.Value)
                             }
                             $object = [pscustomobject]$StatesHash
-                            $StatesArray += $object 
+                            $StatesArray.Add($object)
                 }
                 $StatesArray
-                $StatesArray = @()
+                $StatesArray = [System.Collections.ArrayList]::new()
             }
             StatesId {
                 foreach ( $SId in $StatesId ) {
@@ -134,7 +134,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                                 $StatesHash.Add($StatesProp.Name, $StatesProp.Value)
                             }
                             $object = [pscustomobject]$StatesHash
-                            $StatesArray += $object 
+                            $StatesArray.Add($object)
                         } else {
                             $StatesHash = [ordered]@{ }
                             $StatesProperties = $GlpiStates.PSObject.Properties | Select-Object -Property Name, Value 
@@ -151,7 +151,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                                 $StatesHash.Add($StatesProp.Name, $StatesPropNewValue)
                             }
                             $object = [pscustomobject]$StatesHash
-                            $StatesArray += $object 
+                            $StatesArray.Add($object)
                         }
                     } Catch {
 
@@ -159,7 +159,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                         
                     }
                     $StatesArray
-                    $StatesArray = @()
+                    $StatesArray = [System.Collections.ArrayList]::new()
                 }
             }
             StatesName {

@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsManufacturers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ManufacturerArray = @()
+        $ManufacturerArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -100,10 +100,10 @@ function Get-GlpiToolsDropdownsManufacturers {
                         $ManufacturerHash.Add($ManufacturerProp.Name, $ManufacturerProp.Value)
                     }
                     $object = [pscustomobject]$ManufacturerHash
-                    $ManufacturerArray += $object 
+                    $ManufacturerArray.Add($object)
                 }
                 $ManufacturerArray
-                $ManufacturerArray = @()
+                $ManufacturerArray = [System.Collections.ArrayList]::new()
             }
             ManufacturerId { 
                 foreach ( $MId in $ManufacturerId ) {
@@ -128,7 +128,7 @@ function Get-GlpiToolsDropdownsManufacturers {
                                 $ManufacturerHash.Add($ManufacturerProp.Name, $ManufacturerProp.Value)
                             }
                             $object = [pscustomobject]$ManufacturerHash
-                            $ManufacturerArray += $object 
+                            $ManufacturerArray.Add($object)
                         } else {
                             $ManufacturerHash = [ordered]@{ }
                             $ManufacturerProperties = $ManufacturerModel.PSObject.Properties | Select-Object -Property Name, Value 
@@ -142,7 +142,7 @@ function Get-GlpiToolsDropdownsManufacturers {
                                 $ManufacturerHash.Add($ManufacturerProp.Name, $ManufacturerPropNewValue)
                             }
                             $object = [pscustomobject]$ManufacturerHash
-                            $ManufacturerArray += $object 
+                            $ManufacturerArray.Add($object)
                         }
                     } Catch {
 
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsManufacturers {
                         
                     }
                     $ManufacturerArray
-                    $ManufacturerArray = @()
+                    $ManufacturerArray = [System.Collections.ArrayList]::new()
                 }
             }
             ManufacturerName { 

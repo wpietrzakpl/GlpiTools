@@ -66,7 +66,7 @@ function Get-GlpiToolsAppsStructuresComponentTechnic {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComponentTechnicArray = @()
+        $ComponentTechnicArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -92,10 +92,10 @@ function Get-GlpiToolsAppsStructuresComponentTechnic {
                         $ComponentTechnicHash.Add($ComponentTechnicProp.Name, $ComponentTechnicProp.Value)
                     }
                     $object = [pscustomobject]$ComponentTechnicHash
-                    $ComponentTechnicArray += $object 
+                    $ComponentTechnicArray.Add($object)
                 }
                 $ComponentTechnicArray
-                $ComponentTechnicArray = @()
+                $ComponentTechnicArray = [System.Collections.ArrayList]::new()
             }
             AppsStructureComponentTechnicId {
                 foreach ($ASCTid in $AppsStructureComponentTechnicId) {
@@ -120,10 +120,10 @@ function Get-GlpiToolsAppsStructuresComponentTechnic {
                                 $ComponentTechnicHash.Add($ComponentTechnicProp.Name, $ComponentTechnicProp.Value)
                             }
                             $object = [pscustomobject]$ComponentTechnicHash
-                            $ComponentTechnicArray += $object 
+                            $ComponentTechnicArray.Add($object)
                         }
                         $ComponentTechnicArray
-                        $ComponentTechnicArray = @()
+                        $ComponentTechnicArray = [System.Collections.ArrayList]::new()
                     
                     }
                     catch {

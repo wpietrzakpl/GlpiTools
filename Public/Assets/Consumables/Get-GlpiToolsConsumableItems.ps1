@@ -113,7 +113,7 @@ function Get-GlpiToolsConsumableItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ConsumableItemObjectArray = @()
+        $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsConsumableItems {
                                 $ConsumableItemHash.Add($ConsumableItemProp.Name, $ConsumableItemProp.Value)
                             }
                             $object = [pscustomobject]$ConsumableItemHash
-                            $ConsumableItemObjectArray += $object 
+                            $ConsumableItemObjectArray.Add($object)
                 }
                 $ConsumableItemObjectArray
-                $ConsumableItemObjectArray = @()
+                $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
             }
             ConsumableItemId { 
                 foreach ( $CIId in $ConsumableItemId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsConsumableItems {
                                 $ConsumableItemHash.Add($ConsumableItemProp.Name, $ConsumableItemProp.Value)
                             }
                             $object = [pscustomobject]$ConsumableItemHash
-                            $ConsumableItemObjectArray += $object 
+                            $ConsumableItemObjectArray.Add($object)
                         } else {
                             $ConsumableItemHash = [ordered]@{ }
                             $ConsumableItemProperties = $GlpiConsumableItem.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsConsumableItems {
                                 $ConsumableItemHash.Add($ConsumableItemProp.Name, $ConsumableItemPropNewValue)
                             }
                             $object = [pscustomobject]$ConsumableItemHash
-                            $ConsumableItemObjectArray += $object 
+                            $ConsumableItemObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsConsumableItems {
                         
                     }
                     $ConsumableItemObjectArray
-                    $ConsumableItemObjectArray = @()
+                    $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             ConsumableItemName { 

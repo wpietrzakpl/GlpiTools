@@ -72,7 +72,7 @@ function Get-GlpiToolsAppsStructuresComponent {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComponentArray = @()
+        $ComponentArray = [System.Collections.ArrayList]::new()
     }
     
     process {
@@ -97,10 +97,10 @@ function Get-GlpiToolsAppsStructuresComponent {
                         $Hash.Add($Prop.Name, $Prop.Value)
                     }
                     $object = [pscustomobject]$Hash
-                    $ComponentArray += $object 
+                    $ComponentArray.Add($object)
                 }
                 $ComponentArray
-                $ComponentArray = @()
+                $ComponentArray = [System.Collections.ArrayList]::new()
             }
             AppsStructureId {
                 foreach ( $ASId in $AppsStructureId ) {
@@ -125,7 +125,7 @@ function Get-GlpiToolsAppsStructuresComponent {
                                 $ComponentHash.Add($ComponentProp.Name, $ComponentProp.Value)
                             }
                             $object = [pscustomobject]$ComponentHash
-                            $ComponentArray += $object 
+                            $ComponentArray.Add($object)
                         } else {
                             $ComponentHash = [ordered]@{ }
                             $ComponentProperties = $GlpiComponent.PSObject.Properties | Select-Object -Property Name, Value 
@@ -153,7 +153,7 @@ function Get-GlpiToolsAppsStructuresComponent {
                                 $ComponentHash.Add($ComponentProp.Name, $ComponentPropNewValue)
                             }
                             $object = [pscustomobject]$ComponentHash
-                            $ComponentArray += $object 
+                            $ComponentArray.Add($object)
                         }
                     } Catch {
 
@@ -161,7 +161,7 @@ function Get-GlpiToolsAppsStructuresComponent {
                         
                     }
                     $ComponentArray
-                    $ComponentArray = @()
+                    $ComponentArray = [System.Collections.ArrayList]::new()
                 }
             }
             Default {

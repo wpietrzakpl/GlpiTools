@@ -113,7 +113,7 @@ function Get-GlpiToolsRacks {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $RackObjectArray = @()
+        $RackObjectArray = [System.Collections.ArrayList]::new()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -160,10 +160,10 @@ function Get-GlpiToolsRacks {
                                 $RackHash.Add($RackProp.Name, $RackProp.Value)
                             }
                             $object = [pscustomobject]$RackHash
-                            $RackObjectArray += $object 
+                            $RackObjectArray.Add($object)
                 }
                 $RackObjectArray
-                $RackObjectArray = @()
+                $RackObjectArray = [System.Collections.ArrayList]::new()
             }
             RackId { 
                 foreach ( $RId in $RackId ) {
@@ -188,7 +188,7 @@ function Get-GlpiToolsRacks {
                                 $RackHash.Add($RackProp.Name, $RackProp.Value)
                             }
                             $object = [pscustomobject]$RackHash
-                            $RackObjectArray += $object 
+                            $RackObjectArray.Add($object)
                         } else {
                             $RackHash = [ordered]@{ }
                             $RackProperties = $GlpiRack.PSObject.Properties | Select-Object -Property Name, Value 
@@ -206,7 +206,7 @@ function Get-GlpiToolsRacks {
                                 $RackHash.Add($RackProp.Name, $RackPropNewValue)
                             }
                             $object = [pscustomobject]$RackHash
-                            $RackObjectArray += $object 
+                            $RackObjectArray.Add($object)
                         }
                     } Catch {
 
@@ -214,7 +214,7 @@ function Get-GlpiToolsRacks {
                         
                     }
                     $RackObjectArray
-                    $RackObjectArray = @()
+                    $RackObjectArray = [System.Collections.ArrayList]::new()
                 }
             }
             RackName { 
