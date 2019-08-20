@@ -95,7 +95,7 @@ function Get-GlpiToolsSoftware {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $SoftwareObjectArray = [System.Collections.ArrayList]::new()
+        $SoftwareObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             GetHateoas { $ParamValue = "?get_hateoas=true" }
@@ -139,7 +139,7 @@ function Get-GlpiToolsSoftware {
                     $SoftwareObjectArray.Add($object)
                 }
                 $SoftwareObjectArray
-                $SoftwareObjectArray = [System.Collections.ArrayList]::new()
+                $SoftwareObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             SoftwareId {
                 foreach ( $SId in $SoftwareId ) {
@@ -197,7 +197,7 @@ function Get-GlpiToolsSoftware {
                         
                     }
                     $SoftwareObjectArray
-                    $SoftwareObjectArray = [System.Collections.ArrayList]::new()
+                    $SoftwareObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             SoftwareName {

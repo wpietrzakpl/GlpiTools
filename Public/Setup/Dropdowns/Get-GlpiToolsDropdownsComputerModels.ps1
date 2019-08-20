@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsComputerModels {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerModelsArray = [System.Collections.ArrayList]::new()
+        $ComputerModelsArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsComputerModels {
                     $ComputerModelsArray.Add($object)
                 }
                 $ComputerModelsArray
-                $ComputerModelsArray = [System.Collections.ArrayList]::new()
+                $ComputerModelsArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ComputerModelsId { 
                 foreach ( $CMId in $ComputerModelsId ) {
@@ -157,7 +157,7 @@ function Get-GlpiToolsDropdownsComputerModels {
                         
                     }
                     $ComputerModelsArray
-                    $ComputerModelsArray = [System.Collections.ArrayList]::new()
+                    $ComputerModelsArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ComputerModelsName { 

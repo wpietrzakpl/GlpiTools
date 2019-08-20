@@ -113,7 +113,7 @@ function Get-GlpiToolsPdus {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PduObjectArray = [System.Collections.ArrayList]::new()
+        $PduObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsPdus {
                             $PduObjectArray.Add($object)
                 }
                 $PduObjectArray
-                $PduObjectArray = [System.Collections.ArrayList]::new()
+                $PduObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             PduId { 
                 foreach ( $PId in $PduId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsPdus {
                         
                     }
                     $PduObjectArray
-                    $PduObjectArray = [System.Collections.ArrayList]::new()
+                    $PduObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             PduName { 

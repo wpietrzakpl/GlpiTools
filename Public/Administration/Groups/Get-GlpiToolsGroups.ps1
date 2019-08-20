@@ -82,7 +82,7 @@ function Get-GlpiToolsGroups {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $GroupObjectArray = [System.Collections.ArrayList]::new()
+        $GroupObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
     }
     
@@ -112,7 +112,7 @@ function Get-GlpiToolsGroups {
                             $GroupObjectArray.Add($object)
                 }
                 $GroupObjectArray
-                $GroupObjectArray = [System.Collections.ArrayList]::new()
+                $GroupObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             GroupId { 
                 foreach ( $GId in $GroupId ) {
@@ -162,7 +162,7 @@ function Get-GlpiToolsGroups {
                         
                     }
                     $GroupObjectArray
-                    $GroupObjectArray = [System.Collections.ArrayList]::new()
+                    $GroupObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             GroupName { 

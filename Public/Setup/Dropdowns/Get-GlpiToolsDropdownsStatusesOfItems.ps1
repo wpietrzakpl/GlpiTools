@@ -80,7 +80,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $StatesArray = [System.Collections.ArrayList]::new()
+        $StatesArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -109,7 +109,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                             $StatesArray.Add($object)
                 }
                 $StatesArray
-                $StatesArray = [System.Collections.ArrayList]::new()
+                $StatesArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             StatesId {
                 foreach ( $SId in $StatesId ) {
@@ -159,7 +159,7 @@ function Get-GlpiToolsDropdownsStatusesOfItems {
                         
                     }
                     $StatesArray
-                    $StatesArray = [System.Collections.ArrayList]::new()
+                    $StatesArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             StatesName {

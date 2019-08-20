@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerTypeArray = [System.Collections.ArrayList]::new()
+        $ComputerTypeArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
                     $ComputerTypeArray.Add($object)
                 }
                 $ComputerTypeArray
-                $ComputerTypeArray = [System.Collections.ArrayList]::new()
+                $ComputerTypeArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ComputerTypeId { 
                 foreach ( $CTId in $ComputerTypeId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsComputerTypes {
                         
                     }
                     $ComputerTypeArray
-                    $ComputerTypeArray = [System.Collections.ArrayList]::new()
+                    $ComputerTypeArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ComputerTypeName { 

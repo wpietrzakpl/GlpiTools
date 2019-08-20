@@ -109,7 +109,7 @@ function Get-GlpiToolsProblems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ProblemObjectArray = [System.Collections.ArrayList]::new()
+        $ProblemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -155,7 +155,7 @@ function Get-GlpiToolsProblems {
                             $ProblemObjectArray.Add($object)
                 }
                 $ProblemObjectArray
-                $ProblemObjectArray = [System.Collections.ArrayList]::new()
+                $ProblemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ProblemId { 
                 foreach ( $PId in $ProblemId ) {
@@ -207,7 +207,7 @@ function Get-GlpiToolsProblems {
                         
                     }
                     $ProblemObjectArray
-                    $ProblemObjectArray = [System.Collections.ArrayList]::new()
+                    $ProblemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ProblemName { 

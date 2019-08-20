@@ -109,7 +109,7 @@ function Get-GlpiToolsChanges {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ChangeObjectArray = [System.Collections.ArrayList]::new()
+        $ChangeObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -155,7 +155,7 @@ function Get-GlpiToolsChanges {
                             $ChangeObjectArray.Add($object)
                 }
                 $ChangeObjectArray
-                $ChangeObjectArray = [System.Collections.ArrayList]::new()
+                $ChangeObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ChangeId { 
                 foreach ( $CId in $ChangeId ) {
@@ -207,7 +207,7 @@ function Get-GlpiToolsChanges {
                         
                     }
                     $ChangeObjectArray
-                    $ChangeObjectArray = [System.Collections.ArrayList]::new()
+                    $ChangeObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ChangeName { 

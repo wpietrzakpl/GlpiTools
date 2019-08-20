@@ -71,7 +71,7 @@ function Get-GlpiToolsDocuments {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $DocumentObjectArray = [System.Collections.ArrayList]::new()
+        $DocumentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
     }
     
@@ -101,7 +101,7 @@ function Get-GlpiToolsDocuments {
                     $DocumentObjectArray.Add($object)
                 }
                 $DocumentObjectArray
-                $DocumentObjectArray = [System.Collections.ArrayList]::new()
+                $DocumentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             DocumentId {
                 foreach ( $DId in $DocumentId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDocuments {
                             $DocumentObjectArray.Add($object)
                             
                             $DocumentObjectArray
-                            $DocumentObjectArray = [System.Collections.ArrayList]::new()
+                            $DocumentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                         } catch {
                             Write-Verbose -Message "Computer ID = $DId is not found"
                         }
@@ -188,7 +188,7 @@ function Get-GlpiToolsDocuments {
                             $DocumentObjectArray.Add($object)
 
                             $DocumentObjectArray
-                            $DocumentObjectArray = [System.Collections.ArrayList]::new()
+                            $DocumentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                         
                         } catch {
                             Write-Verbose -Message "Computer ID = $DId is not found"

@@ -113,7 +113,7 @@ function Get-GlpiToolsPeripherals {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PeripheralObjectArray = [System.Collections.ArrayList]::new()
+        $PeripheralObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsPeripherals {
                             $PeripheralObjectArray.Add($object)
                 }
                 $PeripheralObjectArray
-                $PeripheralObjectArray = [System.Collections.ArrayList]::new()
+                $PeripheralObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             PeripheralId { 
                 foreach ( $PId in $PeripheralId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsPeripherals {
                         
                     }
                     $PeripheralObjectArray
-                    $PeripheralObjectArray = [System.Collections.ArrayList]::new()
+                    $PeripheralObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             PeripheralName { 

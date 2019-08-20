@@ -109,7 +109,7 @@ function Get-GlpiToolsRecurrentTickets {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
+        $RecurrentTicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -155,7 +155,7 @@ function Get-GlpiToolsRecurrentTickets {
                             $RecurrentTicketObjectArray.Add($object)
                 }
                 $RecurrentTicketObjectArray
-                $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
+                $RecurrentTicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             RecurrentTicketId { 
                 foreach ( $RTId in $RecurrentTicketId ) {
@@ -205,7 +205,7 @@ function Get-GlpiToolsRecurrentTickets {
                         
                     }
                     $RecurrentTicketObjectArray
-                    $RecurrentTicketObjectArray = [System.Collections.ArrayList]::new()
+                    $RecurrentTicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             RecurrentTicketName { 

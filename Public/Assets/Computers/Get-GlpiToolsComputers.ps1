@@ -114,7 +114,7 @@ function Get-GlpiToolsComputers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComputerObjectArray = [System.Collections.ArrayList]::new()
+        $ComputerObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -165,7 +165,7 @@ function Get-GlpiToolsComputers {
                             $ComputerObjectArray.Add($object) 
                 }
                 $ComputerObjectArray
-                $ComputerObjectArray = [System.Collections.ArrayList]::new()
+                $ComputerObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 
             }
             ComputerId { 
@@ -211,7 +211,7 @@ function Get-GlpiToolsComputers {
                         
                     }
                     $ComputerObjectArray
-                    $ComputerObjectArray = [System.Collections.ArrayList]::new()
+                    $ComputerObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ComputerName { 

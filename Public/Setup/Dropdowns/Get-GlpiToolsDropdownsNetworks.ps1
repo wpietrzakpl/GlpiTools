@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsNetworks {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $NetworkArray = [System.Collections.ArrayList]::new()
+        $NetworkArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsNetworks {
                     $NetworkArray.Add($object)
                 }
                 $NetworkArray
-                $NetworkArray = [System.Collections.ArrayList]::new()
+                $NetworkArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             NetworkId { 
                 foreach ( $NId in $NetworkId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsNetworks {
                         
                     }
                     $NetworkArray
-                    $NetworkArray = [System.Collections.ArrayList]::new()
+                    $NetworkArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             NetworkName { 

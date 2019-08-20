@@ -49,7 +49,7 @@ function Get-GlpiToolsProfiles {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
         
-        $ProfileObjectArray = [System.Collections.ArrayList]::new()
+        $ProfileObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
     }
     
@@ -80,7 +80,7 @@ function Get-GlpiToolsProfiles {
                     $ProfileObjectArray.Add($object)
                 }
                 $ProfileObjectArray
-                $ProfileObjectArray = [System.Collections.ArrayList]::new()
+                $ProfileObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ProfileName { 
                 Search-GlpiToolsItems -SearchFor Profile -SearchType contains -SearchValue $ProfileName

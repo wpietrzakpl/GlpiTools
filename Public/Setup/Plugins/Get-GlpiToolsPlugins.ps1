@@ -36,7 +36,7 @@ function Get-GlpiToolsPlugins {
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
 
-        $PluginsArray = [System.Collections.ArrayList]::new()
+        $PluginsArray = [System.Collections.Generic.List[PSObject]]::New()
 
     }
     
@@ -90,7 +90,7 @@ function Get-GlpiToolsPlugins {
         }
 
         $PluginsArray
-        $PluginsArray = [System.Collections.ArrayList]::new()
+        $PluginsArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     end {

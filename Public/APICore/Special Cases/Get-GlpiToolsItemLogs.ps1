@@ -57,7 +57,7 @@ function Get-GlpiToolsItemLogs {
         $PathToGlpi = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession -Verbose:$false | Select-Object -ExpandProperty SessionToken
 
-        $LogObjectArray = [System.Collections.ArrayList]::new()
+        $LogObjectArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -84,7 +84,7 @@ function Get-GlpiToolsItemLogs {
                     $LogObjectArray.Add($object)
         }
         $LogObjectArray
-        $LogObjectArray = [System.Collections.ArrayList]::new()
+        $LogObjectArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     end {

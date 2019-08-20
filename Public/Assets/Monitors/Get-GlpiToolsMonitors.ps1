@@ -109,7 +109,7 @@ function Get-GlpiToolsMonitors {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $MonitorObjectArray = [System.Collections.ArrayList]::new()
+        $MonitorObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -155,7 +155,7 @@ function Get-GlpiToolsMonitors {
                             $MonitorObjectArray.Add($object)
                 }
                 $MonitorObjectArray
-                $MonitorObjectArray = [System.Collections.ArrayList]::new()
+                $MonitorObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             MonitorId { 
                 foreach ( $MId in $MonitorId ) {
@@ -206,7 +206,7 @@ function Get-GlpiToolsMonitors {
                         
                     }
                     $MonitorObjectArray
-                    $MonitorObjectArray = [System.Collections.ArrayList]::new()
+                    $MonitorObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             MonitorName { 

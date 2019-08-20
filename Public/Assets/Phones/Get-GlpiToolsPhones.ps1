@@ -113,7 +113,7 @@ function Get-GlpiToolsPhones {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PhoneObjectArray = [System.Collections.ArrayList]::new()
+        $PhoneObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsPhones {
                             $PhoneObjectArray.Add($object)
                 }
                 $PhoneObjectArray
-                $PhoneObjectArray = [System.Collections.ArrayList]::new()
+                $PhoneObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             PhoneId { 
                 foreach ( $PId in $PhoneId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsPhones {
                         
                     }
                     $PhoneObjectArray
-                    $PhoneObjectArray = [System.Collections.ArrayList]::new()
+                    $PhoneObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             PhoneName { 

@@ -238,7 +238,7 @@ function Search-GlpiToolsItems {
     )
     
     begin {
-        $SearchArray = [System.Collections.ArrayList]::new()
+        $SearchArray = [System.Collections.Generic.List[PSObject]]::New()
 
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
@@ -302,7 +302,7 @@ function Search-GlpiToolsItems {
         }
 
         $SearchArray
-        $SearchArray = [System.Collections.ArrayList]::new()
+        $SearchArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     end {

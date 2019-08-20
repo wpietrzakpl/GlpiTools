@@ -59,7 +59,7 @@ function Get-GlpiToolsEntities {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $EntitiesArray = [System.Collections.ArrayList]::new()
+        $EntitiesArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -88,7 +88,7 @@ function Get-GlpiToolsEntities {
                             $EntitiesArray.Add($object)
                 }
                 $EntitiesArray
-                $EntitiesArray = [System.Collections.ArrayList]::new()
+                $EntitiesArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             EntityId {
                 foreach ( $EId in $EntityId ) {
@@ -138,7 +138,7 @@ function Get-GlpiToolsEntities {
                         
                     }
                     $EntitiesArray
-                    $EntitiesArray = [System.Collections.ArrayList]::new()
+                    $EntitiesArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             EntityName {

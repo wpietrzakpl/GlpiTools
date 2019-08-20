@@ -113,7 +113,7 @@ function Get-GlpiToolsEnclosures {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $EnclosureObjectArray = [System.Collections.ArrayList]::new()
+        $EnclosureObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsEnclosures {
                             $EnclosureObjectArray.Add($object)
                 }
                 $EnclosureObjectArray
-                $EnclosureObjectArray = [System.Collections.ArrayList]::new()
+                $EnclosureObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             EnclosureId { 
                 foreach ( $EId in $EnclosureId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsEnclosures {
                         
                     }
                     $EnclosureObjectArray
-                    $EnclosureObjectArray = [System.Collections.ArrayList]::new()
+                    $EnclosureObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             EnclosureName { 

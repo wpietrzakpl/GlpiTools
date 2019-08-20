@@ -113,7 +113,7 @@ function Get-GlpiToolsConsumableItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
+        $ConsumableItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsConsumableItems {
                             $ConsumableItemObjectArray.Add($object)
                 }
                 $ConsumableItemObjectArray
-                $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
+                $ConsumableItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ConsumableItemId { 
                 foreach ( $CIId in $ConsumableItemId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsConsumableItems {
                         
                     }
                     $ConsumableItemObjectArray
-                    $ConsumableItemObjectArray = [System.Collections.ArrayList]::new()
+                    $ConsumableItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ConsumableItemName { 

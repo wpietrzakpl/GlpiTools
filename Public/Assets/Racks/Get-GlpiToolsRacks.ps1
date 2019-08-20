@@ -113,7 +113,7 @@ function Get-GlpiToolsRacks {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $RackObjectArray = [System.Collections.ArrayList]::new()
+        $RackObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsRacks {
                             $RackObjectArray.Add($object)
                 }
                 $RackObjectArray
-                $RackObjectArray = [System.Collections.ArrayList]::new()
+                $RackObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             RackId { 
                 foreach ( $RId in $RackId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsRacks {
                         
                     }
                     $RackObjectArray
-                    $RackObjectArray = [System.Collections.ArrayList]::new()
+                    $RackObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             RackName { 

@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsManufacturers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ManufacturerArray = [System.Collections.ArrayList]::new()
+        $ManufacturerArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsManufacturers {
                     $ManufacturerArray.Add($object)
                 }
                 $ManufacturerArray
-                $ManufacturerArray = [System.Collections.ArrayList]::new()
+                $ManufacturerArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             ManufacturerId { 
                 foreach ( $MId in $ManufacturerId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsManufacturers {
                         
                     }
                     $ManufacturerArray
-                    $ManufacturerArray = [System.Collections.ArrayList]::new()
+                    $ManufacturerArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             ManufacturerName { 

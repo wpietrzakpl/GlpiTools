@@ -90,7 +90,7 @@ function Get-GlpiToolsUsers {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $UserObjectArray = [System.Collections.ArrayList]::new()
+        $UserObjectArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     process {
         switch ($ChoosenParam) {
@@ -118,7 +118,7 @@ function Get-GlpiToolsUsers {
                             $UserObjectArray.Add($object)
                 }
                 $UserObjectArray
-                $UserObjectArray = [System.Collections.ArrayList]::new()
+                $UserObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             UserId {
                 foreach ( $UId in $UserId ) {
@@ -163,7 +163,7 @@ function Get-GlpiToolsUsers {
                         
                     }
                     $UserObjectArray
-                    $UserObjectArray = [System.Collections.ArrayList]::new()
+                    $UserObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             UserName {

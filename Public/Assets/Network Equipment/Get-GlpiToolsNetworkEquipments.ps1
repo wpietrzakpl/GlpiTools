@@ -111,7 +111,7 @@ function Get-GlpiToolsNetworkEquipments {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
+        $NetworkEquipmentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -159,7 +159,7 @@ function Get-GlpiToolsNetworkEquipments {
                             $NetworkEquipmentObjectArray.Add($object)
                 }
                 $NetworkEquipmentObjectArray
-                $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
+                $NetworkEquipmentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             NetworkEquipmentId { 
                 foreach ( $NEId in $NetworkEquipmentId ) {
@@ -210,7 +210,7 @@ function Get-GlpiToolsNetworkEquipments {
                         
                     }
                     $NetworkEquipmentObjectArray
-                    $NetworkEquipmentObjectArray = [System.Collections.ArrayList]::new()
+                    $NetworkEquipmentObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             NetworkEquipmentName { 

@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsDomains {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $DomainArray = [System.Collections.ArrayList]::new()
+        $DomainArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsDomains {
                     $DomainArray.Add($object)
                 }
                 $DomainArray
-                $DomainArray = [System.Collections.ArrayList]::new()
+                $DomainArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             DomainId { 
                 foreach ( $DId in $DomainId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsDomains {
                         
                     }
                     $DomainArray
-                    $DomainArray = [System.Collections.ArrayList]::new()
+                    $DomainArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             DomainName { 

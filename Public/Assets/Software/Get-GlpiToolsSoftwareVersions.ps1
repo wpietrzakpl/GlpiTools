@@ -68,7 +68,7 @@ function Get-GlpiToolsSoftwareVersions {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $SoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
+        $SoftwareVersionObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
     }
     
@@ -99,7 +99,7 @@ function Get-GlpiToolsSoftwareVersions {
                             $SoftwareVersionObjectArray.Add($object)
                 }
                 $SoftwareVersionObjectArray
-                $SoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
+                $SoftwareVersionObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 
             }
             SoftwareVersionId { 
@@ -145,7 +145,7 @@ function Get-GlpiToolsSoftwareVersions {
                         
                     }
                     $SoftwareVersionObjectArray
-                    $SoftwareVersionObjectArray = [System.Collections.ArrayList]::new()
+                    $SoftwareVersionObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             Default {

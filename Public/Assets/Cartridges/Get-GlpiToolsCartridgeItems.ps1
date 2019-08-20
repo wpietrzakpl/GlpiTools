@@ -113,7 +113,7 @@ function Get-GlpiToolsCartridgeItems {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
+        $CartridgeItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsCartridgeItems {
                             $CartridgeItemObjectArray.Add($object)
                 }
                 $CartridgeItemObjectArray
-                $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
+                $CartridgeItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             CartridgeItemId { 
                 foreach ( $CIId in $CartridgeItemId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsCartridgeItems {
                         
                     }
                     $CartridgeItemObjectArray
-                    $CartridgeItemObjectArray = [System.Collections.ArrayList]::new()
+                    $CartridgeItemObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             CartridgeItemName { 

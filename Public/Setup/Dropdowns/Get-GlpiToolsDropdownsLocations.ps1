@@ -74,7 +74,7 @@ function Get-GlpiToolsDropdownsLocations {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $LocationsArray = [System.Collections.ArrayList]::new()
+        $LocationsArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -103,7 +103,7 @@ function Get-GlpiToolsDropdownsLocations {
                     $LocationsArray.Add($object)
                 }
                 $LocationsArray
-                $LocationsArray = [System.Collections.ArrayList]::new()
+                $LocationsArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             LocationsId { 
                 foreach ( $LId in $LocationsId ) {
@@ -150,7 +150,7 @@ function Get-GlpiToolsDropdownsLocations {
                         
                     }
                     $LocationsArray
-                    $LocationsArray = [System.Collections.ArrayList]::new()
+                    $LocationsArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             LocationsName { 

@@ -113,7 +113,7 @@ function Get-GlpiToolsPrinters {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $PrinterObjectArray = [System.Collections.ArrayList]::new()
+        $PrinterObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -163,7 +163,7 @@ function Get-GlpiToolsPrinters {
                             $PrinterObjectArray.Add($object)
                 }
                 $PrinterObjectArray
-                $PrinterObjectArray = [System.Collections.ArrayList]::new()
+                $PrinterObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             PrinterId { 
                 foreach ( $PId in $PrinterId ) {
@@ -214,7 +214,7 @@ function Get-GlpiToolsPrinters {
                         
                     }
                     $PrinterObjectArray
-                    $PrinterObjectArray = [System.Collections.ArrayList]::new()
+                    $PrinterObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             PrinterName { 

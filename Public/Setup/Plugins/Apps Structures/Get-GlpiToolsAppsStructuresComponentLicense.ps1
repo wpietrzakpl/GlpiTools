@@ -67,7 +67,7 @@ function Get-GlpiToolsAppsStructuresComponentLicense {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $ComponentLicenseArray = [System.Collections.ArrayList]::new()
+        $ComponentLicenseArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -96,7 +96,7 @@ function Get-GlpiToolsAppsStructuresComponentLicense {
                     $ComponentLicenseArray.Add($object)
                 }
                 $ComponentLicenseArray
-                $ComponentLicenseArray = [System.Collections.ArrayList]::new()
+                $ComponentLicenseArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             AppsStructureComponentLicenseId {
                 foreach ($ASCLid in $AppsStructureComponentLicenseId) {
@@ -124,7 +124,7 @@ function Get-GlpiToolsAppsStructuresComponentLicense {
                             $ComponentLicenseArray.Add($object)
                         }
                         $ComponentLicenseArray
-                        $ComponentLicenseArray = [System.Collections.ArrayList]::new()
+                        $ComponentLicenseArray = [System.Collections.Generic.List[PSObject]]::New()
                     
                     }
                     catch {

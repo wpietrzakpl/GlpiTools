@@ -109,7 +109,7 @@ function Get-GlpiToolsTickets {
 
         $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
-        $TicketObjectArray = [System.Collections.ArrayList]::new()
+        $TicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
 
         switch ($Parameter) {
             ExpandDropdowns { $ParamValue = "?expand_dropdowns=true" }
@@ -155,7 +155,7 @@ function Get-GlpiToolsTickets {
                             $TicketObjectArray.Add($object)
                 }
                 $TicketObjectArray
-                $TicketObjectArray = [System.Collections.ArrayList]::new()
+                $TicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
             TicketId { 
                 foreach ( $TId in $TicketId ) {
@@ -207,7 +207,7 @@ function Get-GlpiToolsTickets {
                         
                     }
                     $TicketObjectArray
-                    $TicketObjectArray = [System.Collections.ArrayList]::new()
+                    $TicketObjectArray = [System.Collections.Generic.List[PSObject]]::New()
                 }
             }
             TicketName { 
