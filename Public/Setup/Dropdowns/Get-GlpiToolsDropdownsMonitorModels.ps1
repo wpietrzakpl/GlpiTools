@@ -12,9 +12,9 @@
 .PARAMETER Raw
     Parameter which you can use with MonitorModelId Parameter.
     MonitorModelId has converted parameters from default, parameter Raw allows not convert this parameters.
-.PARAMETER MonitorModelId
-    This parameter can take pipline input, either, you can use this function with -MonitorModelId keyword.
-    Provide to this param MonitorModel Name from GLPI MonitorModel Bookmark
+.PARAMETER MonitorModelName
+    Example will return glpi Monitor Model, but what is the most important, Monitor model will be shown exacly as you see in glpi Monitor models tab.
+    If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
 .EXAMPLE
     PS C:\> Get-GlpiToolsDropdownsMonitorModels -All
     Example will return all MonitorModel from Glpi
@@ -31,7 +31,7 @@
     PS C:\> Get-GlpiToolsDropdownsMonitorModels -MonitorModelId 326, 321
     Function gets MonitorModelId from GLPI which is provided through -MonitorModelId keyword after Function type (u can provide many ID's like that), and return MonitorModel object
 .EXAMPLE
-    PS C:\> Get-GlpiToolsDropdownsMonitorModels -MonitorModelId Fusion
+    PS C:\> Get-GlpiToolsDropdownsMonitorModels -MonitorModelName Fusion
     Example will return glpi MonitorModel, but what is the most important, MonitorModel will be shown exactly as you see in glpi dropdown MonitorModel.
     If you want to add parameter, you have to modify "default items to show". This is the "key/tool" icon near search.
 .INPUTS
