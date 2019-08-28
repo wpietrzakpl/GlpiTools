@@ -36,15 +36,15 @@ Module works on Windows or Linux with PowerShell Core.
  ## Available commands
 
  ```
- Key                                                  Value
- ---                                                  -----
- Set-GlpiToolsConfig 	                                Set-GlpiToolsConfig 
- Get-GlpiToolsConfig	                                Get-GlpiToolsConfig
- Set-GlpiToolsInitSession	                            Set-GlpiToolsInitSession
- Set-GlpiToolsKillSession	                            Set-GlpiToolsKillSession
- Get-GlpiToolsComputers	                              Get-GlpiToolsComputers
- Get-GlpiToolsEntities	                              Get-GlpiToolsEntities
- Get-GlpiToolsUsers	                                  Get-GlpiToolsUsers
+ Key                                              Value
+ ---                                              -----
+ Set-GlpiToolsConfig 	                            Set-GlpiToolsConfig 
+ Get-GlpiToolsConfig	                            Get-GlpiToolsConfig
+ Set-GlpiToolsInitSession	                        Set-GlpiToolsInitSession
+ Set-GlpiToolsKillSession	                        Set-GlpiToolsKillSession
+ Get-GlpiToolsComputers	                          Get-GlpiToolsComputers
+ Get-GlpiToolsEntities	                          Get-GlpiToolsEntities
+ Get-GlpiToolsUsers	                              Get-GlpiToolsUsers
  Get-GlpiToolsFusionInventoryAgents	                  Get-GlpiToolsFusionInventoryAgents
  Get-GlpiToolsDropdownsStatusesOfItems	              Get-GlpiToolsDropdownsStatusesOfItems
  Search-GlpiToolsItems	                              Search-GlpiToolsItems
