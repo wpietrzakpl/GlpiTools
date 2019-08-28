@@ -49,7 +49,7 @@ function Get-GlpiToolsParameters {
             } elseif ($Parameter -eq "groups_id_tech" ) {
                 $ConvertedValue = $Value | Get-GlpiToolsGroups | Select-Object -ExpandProperty name -ErrorAction Stop
             } elseif ($Parameter -eq "autoupdatesystems_id"  ) {
-                $ConvertedValue = $Value | Get-GlpiToolsDropdownsUpdateSources | Select-Object -ExpandProperty name -ErrorAction Stop
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsOSUpdateSources | Select-Object -ExpandProperty name -ErrorAction Stop
             } elseif ( $Parameter -eq "locations_id"  ) {
                 $ConvertedValue = $Value | Get-GlpiToolsDropdownsLocations | Select-Object -ExpandProperty name -ErrorAction Stop
             } elseif ($Parameter -eq "domains_id" ) {
