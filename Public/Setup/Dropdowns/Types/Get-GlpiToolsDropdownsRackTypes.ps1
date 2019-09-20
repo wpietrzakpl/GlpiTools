@@ -7,23 +7,23 @@
 .PARAMETER All
     This parameter will return all Rack Types from GLPI
 .PARAMETER RackTypeId
-    This parameter can take pipRack input, either, you can use this function with -RackTypeId keyword.
+    This parameter can take pipeline input, either, you can use this function with -RackTypeId keyword.
     Provide to this param RackTypeId from GLPI Rack Types Bookmark
 .PARAMETER Raw
     Parameter which you can use with RackTypeId Parameter.
     RackTypeId has converted parameters from default, parameter Raw allows not convert this parameters.
 .PARAMETER RackTypeName
-    This parameter can take pipRack input, either, you can use this function with -RackTypeId keyword.
+    This parameter can take pipeline input, either, you can use this function with -RackTypeId keyword.
     Provide to this param Rack Types Name from GLPI Rack Types Bookmark
 .EXAMPLE
     PS C:\> Get-GlpiToolsDropdownsRackTypes -All
     Example will return all Rack Types from Glpi
 .EXAMPLE
     PS C:\> 326 | Get-GlpiToolsDropdownsRackTypes
-    Function gets RackTypeId from GLPI from PipRack, and return Rack Types object
+    Function gets RackTypeId from GLPI from pipeline, and return Rack Types object
 .EXAMPLE
     PS C:\> 326, 321 | Get-GlpiToolsDropdownsRackTypes
-    Function gets RackTypeId from GLPI from PipRack (u can pass many ID's like that), and return Rack Types object
+    Function gets RackTypeId from GLPI from pipeline (u can pass many ID's like that), and return Rack Types object
 .EXAMPLE
     PS C:\> Get-GlpiToolsDropdownsRackTypes -RackTypeId 326
     Function gets RackTypeId from GLPI which is provided through -RackTypeId after Function type, and return Rack Types object
