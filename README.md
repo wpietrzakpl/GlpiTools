@@ -5,6 +5,11 @@
     <img src="https://img.shields.io/discord/235574673155293194.svg?style=flat&label=Discord&logo=discord"
       alt="Discord - Chat" title="Discord - Chat" />
   </a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <!-- Slack -->
+  <a href="https://join.slack.com/t/powershell-poland/shared_invite/enQtNDYxNjYzNjYwMjcyLTFmZGU1N2IyODY3ZDI0ZmJjYjM3OTYwMjkwYjQ5ZTU1MzM1ZTIwYjRmOGFhM2M3MjE1Zjk4NDY4MDRjNTBlOWQ">
+    <img src="https://img.shields.io/badge/chat-on%20slack-orange.svg?style=flat&logo=slack"
+      alt="Slack - Chat" title="Slack - Chat" />
+  </a>&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## Abstract
