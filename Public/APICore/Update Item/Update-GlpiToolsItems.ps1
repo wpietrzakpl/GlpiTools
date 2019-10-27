@@ -4,7 +4,7 @@
 .DESCRIPTION
     Function Update an object (or multiple objects) into GLPI. You can choose between every items in Asset Tab.\
 .PARAMETER UpdateTo
-    Parameter specify where you want to update object. 
+    Parameter specify where you want to update object. You can add your custom parameter options to Parameters.json file located in Private folder 
 .PARAMETER JsonPayload
     Parameter specify a JsonPayload with id of item to be updated, and others fields. You can get values to use, when you run Get-GlpiToolsComputer function.
 .PARAMETER ItemId
@@ -47,19 +47,6 @@ function Update-GlpiToolsItems {
     param (
         [parameter(Mandatory = $true)]
         [alias('UT')]
-        [ValidateSet("Computer",
-            "Monitor",
-            "Software",
-            "NetworkEquipment",
-            "Peripherial",
-            "Printer",
-            "CartridgeItem",
-            "ConsumableItem",
-            "Phone",
-            "Rack",
-            "Enclosure",
-            "Pdu",
-            "Allassets")]
         [string]$UpdateTo,
 
         [parameter(Mandatory = $true,
@@ -136,3 +123,10 @@ function Update-GlpiToolsItems {
         Set-GlpiToolsKillSession -SessionToken $SessionToken
     }
 }
+
+$UpdateToValidate = {
+    param ($commandName, $parameterName, $stringMatch, $fakeBoundParameter)
+    $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
+}
+Register-ArgumentCompleter -CommandName Update-GlpiToolsItems -ParameterName UpdateTo -ScriptBlock $UpdateToValidate
