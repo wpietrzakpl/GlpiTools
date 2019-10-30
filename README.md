@@ -36,6 +36,11 @@ Module works on Windows or Linux with PowerShell Core.
  * Or if you want to install module you have to use command ` Install-Module GlpiTools `
  * Configure Module to later use with command `Set-GlpiToolsConfig`, pass to the command tokens and url which you have from Prerequisites section
 
+ Or, Install from PowerShell Gallery
+ ```
+ Install-Module -Name GlpiTools 
+ ```
+
  After those steps, you can start to use module
 
  ## Available commands
