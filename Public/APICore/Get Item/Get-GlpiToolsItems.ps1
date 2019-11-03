@@ -23,8 +23,6 @@
 .PARAMETER ExtraParameter
     String append to the query for extra option. Refer to apirest.php.
     Ex. "&only_id=true" or "&with_infocoms", etc..
-
-
 .EXAMPLE
     PS C:\> Get-GlpiToolsItems -ItemType "Group_Ticket"
     Function gets all items from Group_Ticket
