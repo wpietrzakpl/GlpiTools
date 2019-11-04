@@ -216,7 +216,11 @@ FunctionsToExport = @(
     'Get-GlpiToolsDropdownsWifiNetworks',
     'Get-GlpiToolsDropdownsNetworkNames',
     'Get-GlpiToolsGroupsMembers',
-    'Get-GlpiToolsItems'
+    'Get-GlpiToolsItems',
+    'Get-GlpiToolsProjects',
+    'Get-GlpiToolsReminders',
+    'Get-GlpiToolsRssFeeds',
+    'Get-GlpiToolsKnowledgeBase'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
