@@ -220,7 +220,15 @@ FunctionsToExport = @(
     'Get-GlpiToolsProjects',
     'Get-GlpiToolsReminders',
     'Get-GlpiToolsRssFeeds',
-    'Get-GlpiToolsKnowledgeBase'
+    'Get-GlpiToolsKnowledgeBase',
+    'Get-GlpiToolsSoftwareLicenses',
+    'Get-GlpiToolsBudgets',
+    'Get-GlpiToolsSuppliers',
+    'Get-GlpiToolsContacts',
+    'Get-GlpiToolsContracts',
+    'Get-GlpiToolsLines',
+    'Get-GlpiToolsCertificates',
+    'Get-GlpiToolsDataCenters'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
