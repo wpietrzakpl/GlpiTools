@@ -52,8 +52,7 @@ function Get-GlpiToolsAppsStructuresComponentInstance {
 
         if (Check-GlpiToolsPluginExist -InvocationCommand $InvocationCommand) {
 
-        }
-        else {
+        } else {
             throw "You don't have this plugin Enabled in GLPI"
         }
 
