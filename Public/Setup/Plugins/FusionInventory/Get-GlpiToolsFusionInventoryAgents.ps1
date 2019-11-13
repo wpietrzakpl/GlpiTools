@@ -4,7 +4,7 @@
 .DESCRIPTION
     Function to show Fusion Agents from GLPI. Function will show Agents, which are in GLPI, not on Fusions
 .EXAMPLE
-    PS C:\> Get-GlpiToolsFusionAgents
+    PS C:\> Get-GlpiToolsFusionInventoryAgents
     Function will show all agents which are available in GLPI
 .INPUTS
     Inputs (if any)
