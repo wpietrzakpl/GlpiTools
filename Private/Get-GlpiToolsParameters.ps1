@@ -67,6 +67,30 @@ function Get-GlpiToolsParameters {
                 $ConvertedValue = $Value | Get-GlpiToolsSoftwareVersions -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
             } elseif ($Parameter -eq "computers_id") {
                 $ConvertedValue = $Value | Get-GlpiToolsComputers -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "profiles_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsProfiles -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "usertitles_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsUserTitles -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "usercategories_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsUserCategories -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "softwarecategories_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsSoftwareCategory | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "phonemodels_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsPhoneModels -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "phonepowersupplies_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsPhonesPowerSupplyTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "phonetypes_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsPhonesTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "monitormodels_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsMonitorModels -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "monitortypes_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsMonitorTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "printertypes_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsPrinterTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "printermodels_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsPrinterModels -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "cartridgeitemtypes_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsCartridgeTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
             } else {
                 $ConvertedValue = $Value
             }
