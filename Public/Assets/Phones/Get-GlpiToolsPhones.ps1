@@ -195,15 +195,9 @@ function Get-GlpiToolsPhones {
                                 
                             foreach ($PhoneProp in $PhoneProperties) {
 
-                                switch ($PhoneProp.Name) {
-                                    entities_id { $PhonePropNewValue = $PhoneProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $PhonePropNewValue = $PhoneProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $PhonePropNewValue = $PhoneProp.Value
-                                    }
-                                }
-                                
+                                $PhonePropNewValue = Get-GlpiToolsParameters -Parameter $PhoneProp.Name -Value $PhoneProp.Value
                                 $PhoneHash.Add($PhoneProp.Name, $PhonePropNewValue)
+
                             }
                             $object = [pscustomobject]$PhoneHash
                             $PhoneObjectArray.Add($object)
