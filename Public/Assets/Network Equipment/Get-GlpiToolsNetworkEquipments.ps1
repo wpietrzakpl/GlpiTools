@@ -191,14 +191,8 @@ function Get-GlpiToolsNetworkEquipments {
                                 
                             foreach ($NetworkEquipmentProp in $NetworkEquipmentProperties) {
 
-                                switch ($NetworkEquipmentProp.Name) {
-                                    entities_id { $NetworkEquipmentPropNewValue = $NetworkEquipmentProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $NetworkEquipmentPropNewValue = $NetworkEquipmentProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $NetworkEquipmentPropNewValue = $NetworkEquipmentProp.Value
-                                    }
-                                }
-                                
+                                $NetworkEquipmentPropNewValue = Get-GlpiToolsParameters -Parameter $NetworkEquipmentProp.Name -Value $NetworkEquipmentProp.Value
+
                                 $NetworkEquipmentHash.Add($NetworkEquipmentProp.Name, $NetworkEquipmentPropNewValue)
                             }
                             $object = [pscustomobject]$NetworkEquipmentHash
