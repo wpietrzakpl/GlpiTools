@@ -187,15 +187,8 @@ function Get-GlpiToolsProblems {
                                 
                             foreach ($ProblemProp in $ProblemProperties) {
 
-                                switch ($ProblemProp.Name) {
-                                    entities_id { $ProblemPropNewValue = $ProblemProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id_recipient { $ProblemPropNewValue = $ProblemProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    users_id_lastupdater { $ProblemPropNewValue = $ProblemProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $ProblemPropNewValue = $ProblemProp.Value
-                                    }
-                                }
-                                
+                                $ProblemPropNewValue = Get-GlpiToolsParameters -Parameter $ProblemProp.Name -Value $ProblemProp.Value
+
                                 $ProblemHash.Add($ProblemProp.Name, $ProblemPropNewValue)
                             }
                             $object = [pscustomobject]$ProblemHash
