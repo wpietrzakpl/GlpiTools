@@ -101,6 +101,14 @@ function Get-GlpiToolsParameters {
                 $ConvertedValue = $Value | Get-GlpiToolsDropdownsPduModels -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
             } elseif ($Parameter -eq "pdutypes_id") {
                 $ConvertedValue = $Value | Get-GlpiToolsDropdownsPduTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "rackmodels_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsRackModels -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "racktypes_id") {
+                $ConvertedValue = $Value | Get-GlpiToolsDropdownsRackTypes -Raw | Select-Object -ExpandProperty name -ErrorAction Stop 
+            } elseif ($Parameter -eq "users_id_recipient") {
+                $ConvertedValue = $Value | Get-GlpiToolsUsers -Raw | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } -ErrorAction Stop
+            } elseif ($Parameter -eq "users_id_lastupdater") {
+                $ConvertedValue = $Value | Get-GlpiToolsUsers -Raw | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } -ErrorAction Stop
             } else {
                 $ConvertedValue = $Value
             }
