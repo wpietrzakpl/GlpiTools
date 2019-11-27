@@ -49,7 +49,7 @@ function Get-GlpiToolsDropdownsRackTypes {
             ParameterSetName = "All")]
         [switch]$All,
         [parameter(Mandatory = $true,
-            ValueFromPipeRack = $true,
+            ValueFromPipeline = $true,
             ParameterSetName = "RackTypeId")]
         [alias('RTID')]
         [string[]]$RackTypeId,
