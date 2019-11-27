@@ -187,15 +187,8 @@ function Get-GlpiToolsTickets {
                                 
                             foreach ($TicketProp in $TicketProperties) {
 
-                                switch ($TicketProp.Name) {
-                                    entities_id { $TicketPropNewValue = $TicketProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id_recipient { $TicketPropNewValue = $TicketProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    users_id_lastupdater { $TicketPropNewValue = $TicketProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $TicketPropNewValue = $TicketProp.Value
-                                    }
-                                }
-                                
+                                $TicketPropNewValue = Get-GlpiToolsParameters -Parameter $TicketProp.Name -Value $TicketProp.Value
+
                                 $TicketHash.Add($TicketProp.Name, $TicketPropNewValue)
                             }
                             $object = [pscustomobject]$TicketHash
