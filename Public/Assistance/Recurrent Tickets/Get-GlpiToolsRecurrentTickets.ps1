@@ -187,13 +187,8 @@ function Get-GlpiToolsRecurrentTickets {
                                 
                             foreach ($RecurrentTicketProp in $RecurrentTicketProperties) {
 
-                                switch ($RecurrentTicketProp.Name) {
-                                    entities_id { $RecurrentTicketPropNewValue = $RecurrentTicketProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    Default {
-                                        $RecurrentTicketPropNewValue = $RecurrentTicketProp.Value
-                                    }
-                                }
-                                
+                                $RecurrentTicketPropNewValue = Get-GlpiToolsParameters -Parameter $RecurrentTicketProp.Name -Value $RecurrentTicketProp.Value
+
                                 $RecurrentTicketHash.Add($RecurrentTicketProp.Name, $RecurrentTicketPropNewValue)
                             }
                             $object = [pscustomobject]$RecurrentTicketHash
