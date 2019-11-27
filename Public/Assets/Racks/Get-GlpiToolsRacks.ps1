@@ -195,14 +195,8 @@ function Get-GlpiToolsRacks {
                                 
                             foreach ($RackProp in $RackProperties) {
 
-                                switch ($RackProp.Name) {
-                                    entities_id { $RackPropNewValue = $RackProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $RackPropNewValue = $RackProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $RackPropNewValue = $RackProp.Value
-                                    }
-                                }
-                                
+                                $RackPropNewValue = Get-GlpiToolsParameters -Parameter $RackProp.Name -Value $RackProp.Value
+
                                 $RackHash.Add($RackProp.Name, $RackPropNewValue)
                             }
                             $object = [pscustomobject]$RackHash
