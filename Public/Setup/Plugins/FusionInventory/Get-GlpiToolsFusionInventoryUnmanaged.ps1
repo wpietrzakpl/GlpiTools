@@ -38,7 +38,7 @@ function Get-GlpiToolsFusionInventoryUnmanaged {
         $AppToken = Get-GlpiToolsConfig | Select-Object -ExpandProperty AppToken
         $PathToGlpi = Get-GlpiToolsConfig | Select-Object -ExpandProperty PathToGlpi
 
-        $UnmanagedArray = @()
+        $UnmanagedArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -61,10 +61,10 @@ function Get-GlpiToolsFusionInventoryUnmanaged {
                         $FusionHash.Add($FusionProp.Name, $FusionProp.Value)
                     }
                     $object = [pscustomobject]$FusionHash
-                    $UnmanagedArray += $object 
+                    $UnmanagedArray.Add($object)
         }
         $UnmanagedArray
-        $UnmanagedArray = @()
+        $UnmanagedArray = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     end {
