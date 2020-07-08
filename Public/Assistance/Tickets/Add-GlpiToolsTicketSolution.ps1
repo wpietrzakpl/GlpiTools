@@ -1,44 +1,21 @@
 <#
 .SYNOPSIS
-    Function is creating new ticket in GLPI
+    Add a solution to a ticket
 .DESCRIPTION
-    This will create new ticket
-    Returns object with property's of new Ticket
+    Add a solution to a ticket, this will change the status to solved
 
-    Parameter which you can use with TicketId Parameter. 
-    If you want to get additional parameter of Ticket object like, disks, or logs, use this parameter.
-.PARAMETER name
-    [REQUIRED] Provide the name/subject of the new ticket
-    Alias: Subject
+.PARAMETER ticket_id
+    The ticket id this item will be added to
 .PARAMETER content
-    [REQUIRED] Provide the body/content of the new ticket
-    Alias: Body
-.PARAMETER itilcategories_id
-    Provide the ID of the itil category
-.PARAMETER requesttypes_id
-    Provide the ID of the request type
-.PARAMETER urgency
-    Specify the urgency.
-    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
-.PARAMETER impact
-    Specify the impact.
-    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
-.PARAMETER priority
-    Specify the priority.
-    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
-.PARAMETER Incident
-    [REQUIRED] Specify the ticket as Incident
-.PARAMETER Request
-    [REQUIRED] Specify the ticket as Request
-
-.PARAMETER technician_id
-Specify the id of the technician
+    Provide the body/content of the new ticket
 
 
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
-    Ron Peeters 20200708
+    Author:     Ron Peeters 
+    Date:       20200708
+    Version:    1.0.0
 #>
 
 function Add-GlpiToolsTicketSolution {
@@ -64,7 +41,7 @@ function Add-GlpiToolsTicketSolution {
         $PathToGlpi = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession -Verbose:$false | Select-Object -ExpandProperty SessionToken
 
-        $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
+        #$ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
 
         $Output = [System.Collections.Generic.List[PSObject]]::New()
