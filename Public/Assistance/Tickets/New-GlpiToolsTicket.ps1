@@ -8,29 +8,35 @@
     Parameter which you can use with TicketId Parameter. 
     If you want to get additional parameter of Ticket object like, disks, or logs, use this parameter.
 .PARAMETER name
-Provide the name/subject of the new ticket
+    [REQUIRED] Provide the name/subject of the new ticket
+    Alias: Subject
 .PARAMETER content
-Provide the body/content of the new ticket
+    [REQUIRED] Provide the body/content of the new ticket
+    Alias: Body
 .PARAMETER itilcategories_id
-Provide the ID of the itil category
+    Provide the ID of the itil category
 .PARAMETER requesttypes_id
-Provide the ID of the request type
+    Provide the ID of the request type
 .PARAMETER urgency
-Specify the ID of the urgency
+    Specify the urgency.
+    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
 .PARAMETER impact
-SPecifiy the ID of the impact
+    Specify the impact.
+    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
 .PARAMETER priority
-Specify the ID of the priority
-.PARAMETER type
-Specify the ticket type
-1 = Incident
-2 = Request
+    Specify the priority.
+    Possible values are "Very low", "Low", "Medium", "High" and "Very High"
+.PARAMETER Incident
+    [REQUIRED] Specify the ticket as Incident
+.PARAMETER Request
+    [REQUIRED] Specify the ticket as Request
+
 .PARAMETER technician_id
 Specify the id of the technician
 
 
 .OUTPUTS
-    Function returns PSCustomObject with property's of Tickets from GLPI
+    Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
     Ron Peeters 20200708
 #>
@@ -78,14 +84,32 @@ function New-GlpiToolsTicket {
             ParameterSetName = "Request")]
         [int]$requesttypes_id,
 
+        [parameter(Mandatory = $false,
+        ParameterSetName = "Request")]
+        [switch]$ValidationNeeded,
+
         [parameter(Mandatory = $false)]
         [int]$item_id = $null,
 
         [parameter(Mandatory = $false)]
+        [ValidateScript({
+            $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+            $Values = (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents
+            If ($Values -notcontains $_) {
+                Write-Warning -Message "Invalid item type specified. Possible values for item_type are:  $Values"
+                throw "Invalid item type specified."
+                
+            } else {
+                $true
+            }
+        })]
         [string]$item_type = $null,
         
         [parameter(Mandatory = $false)]
-        [int]$technician_id
+        [int]$technician_id,
+
+        [parameter(Mandatory = $false)]
+        [int]$requester_id = 2
 
     )
     
@@ -138,14 +162,23 @@ function New-GlpiToolsTicket {
         $hashNewTicket = @{
             name              = $name
             content           = $content
-            itilcategories_id = $itilcategories_id
-            # requesttypes_id   = 4
-            # "_itil_requester" = @{"_type" = " 0"}
             urgency           = $urgency_id
             impact            = $impact_id
             priority          = $priority_id
             type              = $type_id
-            technician        = $technician_id #3031 # The ID of the GLPI SelfServicePortal User account
+        }
+
+        If ($ValidationNeeded) {
+            $hashNewTicket["global_validation"] = 2
+        }
+        If ($requester_id) {
+            $hashNewTicket["_users_id_requester"] = $requester_id
+        }
+        If ($technician_id) {
+            $hashNewTicket["technician"] = $technician_id #3031 # The ID of the GLPI SelfServicePortal User account
+        }
+        If ($itilcategories_id) {
+            $hashNewTicket["itilcategories_id"] = $itilcategories_id
         }
 
         $GlpiUpload = $hashNewTicket | ConvertTo-Json
