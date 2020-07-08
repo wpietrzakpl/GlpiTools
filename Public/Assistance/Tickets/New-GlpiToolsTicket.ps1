@@ -39,26 +39,26 @@ function New-GlpiToolsTicket {
     [CmdletBinding()]
     param (
         [parameter(Mandatory = $true)]
-            [alias('Subject')]
+        [alias('Subject')]
         [string]$name,
         
         [parameter(Mandatory = $true)]
-            [alias('Body')]
+        [alias('Body')]
         [string]$content,
         
         [parameter(Mandatory = $false)]
         [int]$itilcategories_id,
         
         [parameter(Mandatory = $false)]
-            [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
+        [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$urgency = "Low",
         
         [parameter(Mandatory = $false)]
-            [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
+        [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$impact = "Low",
         
         [parameter(Mandatory = $false)]
-            [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
+        [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$priority = "Low",
         
         # [parameter(Mandatory = $false,
@@ -77,6 +77,12 @@ function New-GlpiToolsTicket {
         [parameter(Mandatory = $false,
             ParameterSetName = "Request")]
         [int]$requesttypes_id,
+
+        [parameter(Mandatory = $false)]
+        [int]$item_id = $null,
+
+        [parameter(Mandatory = $false)]
+        [string]$item_type = $null,
         
         [parameter(Mandatory = $false)]
         [int]$technician_id
@@ -97,33 +103,34 @@ function New-GlpiToolsTicket {
 
         switch ($urgency) {
             "Very low" { $urgency_id = 1 }
-            "Low" {  $urgency_id = 2 }
-            "Medium" {  $urgency_id = 3 }
-            "High" {  $urgency_id = 4 }
-            "Very High" {  $urgency_id = 5 }
+            "Low" { $urgency_id = 2 }
+            "Medium" { $urgency_id = 3 }
+            "High" { $urgency_id = 4 }
+            "Very High" { $urgency_id = 5 }
             Default { $urgency_id = 2 }
         }
         switch ($impact) {
             "Very low" { $impact_id = 1 }
-            "Low" {  $impact_id = 2 }
-            "Medium" {  $impact_id = 3 }
-            "High" {  $impact_id = 4 }
-            "Very High" {  $impact_id = 5 }
+            "Low" { $impact_id = 2 }
+            "Medium" { $impact_id = 3 }
+            "High" { $impact_id = 4 }
+            "Very High" { $impact_id = 5 }
             Default { $impact_id = 2 }
         }
         switch ($priority) {
             "Very low" { $priority_id = 1 }
-            "Low" {  $priority_id = 2 }
-            "Medium" {  $priority_id = 3 }
-            "High" {  $priority_id = 4 }
-            "Very High" {  $priority_id = 5 }
+            "Low" { $priority_id = 2 }
+            "Medium" { $priority_id = 3 }
+            "High" { $priority_id = 4 }
+            "Very High" { $priority_id = 5 }
             Default { $priority_id = 2 }
         }
 
-        If ($Incident)  { $type_id = 1 }
-        ElseIf ($Request)  { $type_id = 2 }
+        If ($Incident) { $type_id = 1 }
+        ElseIf ($Request) { $type_id = 2 }
         Else { $type_id = 1 }
 
+        $Output = [System.Collections.Generic.List[PSObject]]::New()
     }
     
     process {
@@ -156,16 +163,82 @@ function New-GlpiToolsTicket {
         }
 
         Try {
+            Write-Verbose "Invoking API to create new ticket"
             $GlpiTicket = Invoke-RestMethod @params -ErrorAction Stop
 
+            If ($GlpiTicket -match "</body>") {
+                $GLPITicket = $GlpiTicket.split(">")[-1] | ConvertFrom-JSON
+            } else {
+                #Do nothing
+            }
+
+            $Output.Add($GLPITicket)
+
+            Write-Verbose "New ticket created with ID $($GLPITicket.id)"
+            
+            If ($Item_id -ne 0) {
+               
+                Try {
+                    Write-Verbose "Invoking API to add Item with id $($Item_id) to newly created ticket"
+                    # "items_id":'.$Itemid.',"itemtype":"Item","tickets_id":'.$ticketid.'}
+
+                    $hashAddItemtoTicket = @{
+                        items_id   = $item_id
+                        itemtype   = $item_type
+                        tickets_id = $GlpiTicket.id
+                
+                    }
+                    $GlpiUpload = $hashAddItemtoTicket | ConvertTo-Json
+                    $Upload = '{ "input" : ' + $GlpiUpload + '}'
+
+                    $params = @{
+                        headers = @{
+                            'Content-Type'  = 'application/json'
+                            'App-Token'     = $AppToken
+                            'Session-Token' = $SessionToken
+                        }
+                        method  = 'post'
+                        uri     = "$($PathToGlpi)/Ticket/$($GlpiTicket.id)/Item_ticket/"
+                        body    = ([System.Text.Encoding]::UTF8.GetBytes($Upload))
+                    }
+
+                    $GlpiTicketAddItem = Invoke-RestMethod @params -ErrorAction Stop
+                    Write-Verbose $GlpiTicketAddItem
+
+                    If ($GlpiTicketAddItem -match "</body>") {
+                        $GlpiTicketAddItem = $GlpiTicketAddItem.split(">")[-1] | ConvertFrom-JSON
+                    } else {
+                        #Do nothing
+                    }
+
+                    $Output.Add($GlpiTicketAddItem)
+
+
+                } Catch {
+                    Write-Error "Unable to add Item to ticket"
+                    Write-Error $_
+                    # Write-Error ($params.GetEnumerator() | Out-string)
+                    # Write-Error $Upload
+                }
+            }
 
 
         } Catch {
+            Write-Error -Message "Unable to create new ticket."
             Write-Error $_
         }
     }
     
     end {
+        $Output
+        $Output = [System.Collections.Generic.List[PSObject]]::New()
         Set-GlpiToolsKillSession -SessionToken $SessionToken -Verbose:$false
     }
 }
+
+$ItemTypeValidate = {
+    param ($commandName, $parameterName, $stringMatch)
+    $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
+}
+Register-ArgumentCompleter -CommandName New-GlpiToolsTicket -ParameterName item_type -ScriptBlock $ItemTypeValidate
