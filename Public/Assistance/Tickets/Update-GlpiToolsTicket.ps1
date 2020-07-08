@@ -1,44 +1,70 @@
 <#
 .SYNOPSIS
-    Function is creating new ticket in GLPI
+    Function will update ticket in GLPI
 .DESCRIPTION
-    This will create new ticket
-    Returns object with property's of new Ticket
+    This will update existing ticket
 
-    Parameter which you can use with TicketId Parameter. 
-    If you want to get additional parameter of Ticket object like, disks, or logs, use this parameter.
+.PARAMETER ticket_id
+    The id of the ticket that will be updated
+
 .PARAMETER name
-    [REQUIRED] Provide the name/subject of the new ticket
-    Alias: Subject
+    Provide the name/subject of the new ticket
+
 .PARAMETER content
-    [REQUIRED] Provide the body/content of the new ticket
-    Alias: Body
+    Provide the body/content of the new ticket
+
 .PARAMETER itilcategories_id
     Provide the ID of the itil category
-.PARAMETER requesttypes_id
-    Provide the ID of the request type
+
 .PARAMETER urgency
     Specify the urgency.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
+
 .PARAMETER impact
     Specify the impact.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
+
 .PARAMETER priority
     Specify the priority.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
-.PARAMETER Incident
-    [REQUIRED] Specify the ticket as Incident
-.PARAMETER Request
-    [REQUIRED] Specify the ticket as Request
+
+.PARAMETER ApprovalRequired
+    Sets the request as waiting for Approval.
+    Only valid on type Request
 
 .PARAMETER technician_id
-Specify the id of the technician
+    Specify the id of the technician
 
+.PARAMETER requesttypes_id
+    Provide the ID of the request type
+    ***** I need to figure this one out *****
+
+.PARAMETER item_id
+    Provide the id of an item to be associated to this ticket
+    Requires item_type to be also specified.
+
+.PARAMETER item_type
+    The item type that is added.
+    These are the default types GLPI provides
+
+.EXAMPLE
+    PS C:\> Update-GlpiToolsTicket -ticket_id 123 -Priority High -Impact Low
+    Example updates a incident ticket with High Priority and low Impact
+
+.EXAMPLE
+    PS C:\> Update-GlpiToolsTicket -ticket_id 123 -Name 'New ticket subject' -Content 'Ticket text'
+    Example updates a incident ticket and associates changes subject and body
+
+.EXAMPLE
+    PS C:\> Update-GlpiToolsTicket -ticket_id 123 -Type Request -ApprovalRequired 
+    Example changes a incident ticket to request ticket waiting on validation
 
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
-    Ron Peeters 20200708
+    Author:     Ron Peeters 
+    Date:       20200708
+    Version:    1.0.0
 #>
 
 function Update-GlpiToolsTicket {
@@ -81,8 +107,12 @@ function Update-GlpiToolsTicket {
         # [string]$type = "Incident",
 
         [parameter(Mandatory = $false,
-            ParameterSetName = "Incident")]
-        [switch]$Incident,
+            #ParameterSetName = "Request",
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Ticket type"
+        )]
+        [ValidateSet("Incident", "Request")]
+        [string]$Type = "Incident",
         
         # [parameter(Mandatory = $false,
         #     ParameterSetName = "Request")]
@@ -115,7 +145,7 @@ function Update-GlpiToolsTicket {
         $PathToGlpi = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession -Verbose:$false | Select-Object -ExpandProperty SessionToken
 
-        $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
+        #$ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
         switch ($Validation) {
             "None" { $validation_id = 1 }
@@ -131,9 +161,10 @@ function Update-GlpiToolsTicket {
             Default { $status_id = 1 }
         }
 
-        If ($Incident) { $type_id = 1 }
-        ElseIf ($Request) { $type_id = 2 }
-        Else { $type_id = 1 }
+        switch ($Type) {
+            "Incident" { $type_id = 1 }
+            "Request" { $type_id = 2 }
+        }
 
         $Output = [System.Collections.Generic.List[PSObject]]::New()
     }
@@ -141,6 +172,10 @@ function Update-GlpiToolsTicket {
     process {
 
         $hashNewTicket = @{
+        }
+
+        If ($PSBoundParameters['Type']) {
+            $hashNewTicket["type"] = $type_id
         }
 
         If ($PSBoundParameters['Status']) {
@@ -213,4 +248,4 @@ function Update-GlpiToolsTicket {
 #     $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
 #     (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
 # }
-# Register-ArgumentCompleter -CommandName New-GlpiToolsTicket -ParameterName item_type -ScriptBlock $ItemTypeValidate
+# Register-ArgumentCompleter -CommandName Update-GlpiToolsTicket -ParameterName item_type -ScriptBlock $ItemTypeValidate

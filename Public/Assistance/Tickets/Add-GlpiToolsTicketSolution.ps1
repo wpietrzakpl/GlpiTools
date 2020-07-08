@@ -5,10 +5,9 @@
     Add a solution to a ticket, this will change the status to solved
 
 .PARAMETER ticket_id
-    The ticket id this item will be added to
+    The ticket id this solution will be added to
 .PARAMETER content
-    Provide the body/content of the new ticket
-
+    Provide the body/content of the solution
 
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
@@ -21,11 +20,21 @@
 function Add-GlpiToolsTicketSolution {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)]
+        [parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "ticket id from GLPI"
+        )]
         [alias('TID')]
         [int]$ticket_id,
         
-        [parameter(Mandatory = $true)]
+        [parameter(
+            Mandatory = $true,
+            Position = 1,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "content"
+        )]
         [alias('Body')]
         [string]$content
  

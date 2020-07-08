@@ -3,67 +3,117 @@
     Function is creating new ticket in GLPI
 .DESCRIPTION
     This will create new ticket
-    Returns object with property's of new Ticket
 
-    Parameter which you can use with TicketId Parameter. 
-    If you want to get additional parameter of Ticket object like, disks, or logs, use this parameter.
 .PARAMETER name
-    [REQUIRED] Provide the name/subject of the new ticket
-    Alias: Subject
+    Provide the name/subject of the new ticket
+
 .PARAMETER content
-    [REQUIRED] Provide the body/content of the new ticket
-    Alias: Body
+    Provide the body/content of the new ticket
+
+.PARAMETER Type
+    Specifies if the ticket will be an Incident or a Request.
+    Defaults to Incident
+
 .PARAMETER itilcategories_id
     Provide the ID of the itil category
-.PARAMETER requesttypes_id
-    Provide the ID of the request type
+
 .PARAMETER urgency
     Specify the urgency.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
+
 .PARAMETER impact
     Specify the impact.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
+
 .PARAMETER priority
     Specify the priority.
     Possible values are "Very low", "Low", "Medium", "High" and "Very High"
-.PARAMETER Incident
-    [REQUIRED] Specify the ticket as Incident
-.PARAMETER Request
-    [REQUIRED] Specify the ticket as Request
+
+.PARAMETER ApprovalRequired
+    Sets the request as waiting for Approval.
+    Only valid on type Request
 
 .PARAMETER technician_id
-Specify the id of the technician
+    Specify the id of the technician
 
+.PARAMETER requesttypes_id
+    Provide the ID of the request type
+    ***** I need to figure this one out *****
+
+.PARAMETER item_id
+    Provide the id of an item to be associated to this ticket
+    Requires item_type to be also specified.
+
+.PARAMETER item_type
+    The item type that is added.
+    These are the default types GLPI provides
+
+.EXAMPLE
+    PS C:\> New-GlpiToolsTicket -Name 'New ticket subject' -Content 'Ticket text' -Priority High -Impact Low
+    Example creates a incident ticket with High Priority and low Impact
+
+.EXAMPLE
+    PS C:\> New-GlpiToolsTicket -Name 'New ticket subject' -Content 'Ticket text' -item_id 4609 -item_type Computer
+    Example creates a incident ticket and associates computer 4609
+
+.EXAMPLE
+    PS C:\> New-GlpiToolsTicket -Name 'New ticket subject' -Content 'Ticket text' -Type Request -ApprovalRequired -Requester_id 2
+    Example creates a request ticket waiting on validation for the user with id 2
 
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
-    Ron Peeters 20200708
+    Author:     Ron Peeters 
+    Date:       20200708
+    Version:    1.0.0
 #>
 
 function New-GlpiToolsTicket {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)]
+        [parameter(
+            Mandatory = $true,
+            Position = 0,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "ticket subject")]
         [alias('Subject')]
         [string]$name,
         
-        [parameter(Mandatory = $true)]
+        [parameter(
+            Mandatory = $true,
+            Position = 1,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "ticket content")]
         [alias('Body')]
         [string]$content,
         
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "ticket id from GLPI")]
         [int]$itilcategories_id,
         
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Ticket urgency value"
+            )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$urgency = "Low",
         
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Ticket impact value"
+            )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$impact = "Low",
         
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Ticket priority value"
+            )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$priority = "Low",
         
@@ -71,49 +121,82 @@ function New-GlpiToolsTicket {
         #     ParameterSetName = "Default")]
         #     [ValidateSet("Incident", "Request")]
         # [string]$type = "Incident",
-
-        [parameter(Mandatory = $true,
-            ParameterSetName = "Incident")]
-        [switch]$Incident,
         
-        [parameter(Mandatory = $true,
-            ParameterSetName = "Request")]
-        [switch]$Request,
-
         [parameter(Mandatory = $false,
-            ParameterSetName = "Request")]
+            #ParameterSetName = "Request",
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Ticket type"
+        )]
+        [ValidateSet("Incident", "Request")]
+        [string]$Type = "Incident",
+
+        [parameter(
+            Mandatory = $false,
+            #ParameterSetName = "Request",
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "request type id"
+            )]
         [int]$requesttypes_id,
 
-        [parameter(Mandatory = $false,
-        ParameterSetName = "Request")]
-        [switch]$ValidationNeeded,
+        [parameter(
+            Mandatory = $false,
+            #ParameterSetName = "Request",
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Approval required. Defaults to False"
+            )]
+        [switch]$ApprovalRequired,
 
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Item ID to be linked to this new ticket"
+        )]
         [int]$item_id = $null,
 
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Item type to be added."
+            )]
         [ValidateScript({
             $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
             $Values = (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents
             If ($Values -notcontains $_) {
                 Write-Warning -Message "Invalid item type specified. Possible values for item_type are:  $Values"
                 throw "Invalid item type specified."
-                
             } else {
                 $true
             }
         })]
         [string]$item_type = $null,
         
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "user id of the technician to be assigned"
+        )]
         [int]$technician_id,
 
-        [parameter(Mandatory = $false)]
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "user id of the requester"
+            )]
         [int]$requester_id = 2
 
     )
     
     begin {
+
+        If ($null -ne $PSBoundParameters['Item_id'] -and $null -eq $PSBoundParameters['Item_type']) {
+            Write-Warning "[INVALID PARAMETERS] If item_id is specified, item_type needs to be specified accordingly"
+            Exit
+        }
+        If ($PSBoundParameters['Type'] -ne 'Request' -and $PSBoundParameters['ApprovalRequired']) {
+            Write-Warning "[INVALID PARAMETERS] Approval required specified but type is not a request."
+            Exit
+        }
+
 
         $AppToken = $Script:AppToken
         $PathToGlpi = $Script:PathToGlpi
@@ -123,7 +206,7 @@ function New-GlpiToolsTicket {
         $PathToGlpi = Get-GlpiToolsConfig -Verbose:$false | Select-Object -ExpandProperty PathToGlpi
         $SessionToken = Set-GlpiToolsInitSession -Verbose:$false | Select-Object -ExpandProperty SessionToken
 
-        $ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
+        #$ChoosenParam = ($PSCmdlet.MyInvocation.BoundParameters).Keys
 
         switch ($urgency) {
             "Very low" { $urgency_id = 1 }
@@ -150,9 +233,11 @@ function New-GlpiToolsTicket {
             Default { $priority_id = 2 }
         }
 
-        If ($Incident) { $type_id = 1 }
-        ElseIf ($Request) { $type_id = 2 }
-        Else { $type_id = 1 }
+        switch ($Type) {
+            "Incident" { $type_id = 1 }
+            "Request" { $type_id = 2 }
+        }
+
 
         $Output = [System.Collections.Generic.List[PSObject]]::New()
     }
@@ -162,22 +247,31 @@ function New-GlpiToolsTicket {
         $hashNewTicket = @{
             name              = $name
             content           = $content
-            urgency           = $urgency_id
-            impact            = $impact_id
-            priority          = $priority_id
             type              = $type_id
         }
 
-        If ($ValidationNeeded) {
+        If ($PSBoundParameters['Urgency']) {
+            $hashNewTicket["urgency"] = $urgency_id
+        }
+        If ($PSBoundParameters['Impact']) {
+            $hashNewTicket["impact"] = $impact_id
+        }
+        If ($PSBoundParameters['Priority']) {
+            $hashNewTicket["priority"] = $priority_id
+        }
+        If ($PSBoundParameters['ApprovalRequired']) {
             $hashNewTicket["global_validation"] = 2
         }
-        If ($requester_id) {
+        If ($PSBoundParameters['Type'] -eq 'Request' -and $PSBoundParameters['ApprovalRequired']) {
+            $hashNewTicket["global_validation"] = 2
+        }
+        If ($PSBoundParameters['requester_id']) {
             $hashNewTicket["_users_id_requester"] = $requester_id
         }
-        If ($technician_id) {
+        If ($PSBoundParameters['technician_id']) {
             $hashNewTicket["technician"] = $technician_id #3031 # The ID of the GLPI SelfServicePortal User account
         }
-        If ($itilcategories_id) {
+        If ($PSBoundParameters['itilcategories_id']) {
             $hashNewTicket["itilcategories_id"] = $itilcategories_id
         }
 
@@ -209,7 +303,7 @@ function New-GlpiToolsTicket {
 
             Write-Verbose "New ticket created with ID $($GLPITicket.id)"
             
-            If ($Item_id -ne 0) {
+            If ($PSBoundParameters['Item_id'] -and $PSBoundParameters['Item_type']) {
                
                 Try {
                     Write-Verbose "Invoking API to add Item with id $($Item_id) to newly created ticket"

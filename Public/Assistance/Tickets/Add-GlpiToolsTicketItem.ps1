@@ -9,6 +9,7 @@
 
 .PARAMETER item_id
     The item id 
+    Requires item_type to be specified
 
 .PARAMETER item_type
     The item type that is added.
@@ -23,7 +24,9 @@
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
-    Ron Peeters 20200708
+    Author:     Ron Peeters 
+    Date:       20200708
+    Version:    1.0.0
 #>
 
 function Add-GlpiToolsTicketItem {
