@@ -144,12 +144,7 @@ function Get-GlpiToolsGroups {
                                 
                             foreach ($GroupProp in $GroupProperties) {
 
-                                switch ($GroupProp.Name) {
-                                    entities_id { $GroupPropNewValue = $GroupProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    Default {
-                                        $GroupPropNewValue = $GroupProp.Value
-                                    }
-                                }
+                                $GroupPropNewValue = Get-GlpiToolsParameters -Parameter $GroupProp.Name -Value $GroupProp.Value
 
                                 $GroupHash.Add($GroupProp.Name, $GroupPropNewValue)
                             }

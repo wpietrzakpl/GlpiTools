@@ -5,6 +5,7 @@
     Remove an object existing in GLPI. You can choose between every items in Asset Tab.
 .PARAMETER RemoveFrom
     Parameter specify where you want to Remove object. 
+    You can add your custom parameter options to Parameters.json file located in Private folder
 .PARAMETER ItemId
     Paremter which indicate on item id to Remove. 
 .PARAMETER HashtableToAdd
@@ -51,19 +52,6 @@ function Remove-GlpiToolsItems {
     param (
         [parameter(Mandatory = $true)]
         [alias('DF')]
-        [ValidateSet("Computer",
-            "Monitor",
-            "Software",
-            "NetworkEquipment",
-            "Peripherial",
-            "Printer",
-            "CartridgeItem",
-            "ConsumableItem",
-            "Phone",
-            "Rack",
-            "Enclosure",
-            "Pdu",
-            "Allassets")]
         [string]$RemoveFrom,
 
         [parameter(Mandatory = $true,
@@ -153,3 +141,10 @@ function Remove-GlpiToolsItems {
         Set-GlpiToolsKillSession -SessionToken $SessionToken
     }
 }
+
+$RemoveFromValidate = {
+    param ($commandName, $parameterName, $stringMatch)
+    $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
+}
+Register-ArgumentCompleter -CommandName Remove-GlpiToolsItems -ParameterName RemoveFrom -ScriptBlock $RemoveFromValidate

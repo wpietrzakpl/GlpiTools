@@ -187,15 +187,10 @@ function Get-GlpiToolsMonitors {
                                 
                             foreach ($MonitorProp in $MonitorProperties) {
 
-                                switch ($MonitorProp.Name) {
-                                    entities_id { $MonitorPropNewValue = $MonitorProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $MonitorPropNewValue = $MonitorProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $MonitorPropNewValue = $MonitorProp.Value
-                                    }
-                                }
-                                
+                                $MonitorPropNewValue = Get-GlpiToolsParameters -Parameter $MonitorProp.Name -Value $MonitorProp.Value
+
                                 $MonitorHash.Add($MonitorProp.Name, $MonitorPropNewValue)
+
                             }
                             $object = [pscustomobject]$MonitorHash
                             $MonitorObjectArray.Add($object)

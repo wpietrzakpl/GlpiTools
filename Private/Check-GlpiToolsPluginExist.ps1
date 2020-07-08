@@ -32,12 +32,18 @@ function Check-GlpiToolsPluginExist {
     process {
 
         foreach ($Plugin in $GlpiAvailablePlugins) {
-            
-            if ($InvocationCommand -match $Plugin.Name) {
-                $true
+            $name = $Plugin.name -replace " ",""
+            if ($InvocationCommand -match $name) {
+                $check = " "
             } else {
-                $false
+                
             }
+        }
+
+        if ($check) {
+            return $true
+        } else {
+            return $false
         }
     }
     

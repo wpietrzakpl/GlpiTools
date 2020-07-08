@@ -5,6 +5,11 @@
     <img src="https://img.shields.io/discord/235574673155293194.svg?style=flat&label=Discord&logo=discord"
       alt="Discord - Chat" title="Discord - Chat" />
   </a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <!-- Slack -->
+  <a href="https://join.slack.com/t/powershell-poland/shared_invite/enQtNDYxNjYzNjYwMjcyLTFmZGU1N2IyODY3ZDI0ZmJjYjM3OTYwMjkwYjQ5ZTU1MzM1ZTIwYjRmOGFhM2M3MjE1Zjk4NDY4MDRjNTBlOWQ">
+    <img src="https://img.shields.io/badge/chat-on%20slack-orange.svg?style=flat&logo=slack"
+      alt="Slack - Chat" title="Slack - Chat" />
+  </a>&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## Abstract
@@ -30,6 +35,11 @@ Module works on Windows or Linux with PowerShell Core.
  * To import module into active powershell session you have to use command ` Import-Module GlpiTools `
  * Or if you want to install module you have to use command ` Install-Module GlpiTools `
  * Configure Module to later use with command `Set-GlpiToolsConfig`, pass to the command tokens and url which you have from Prerequisites section
+
+ Or, Install from PowerShell Gallery
+ ```
+ Install-Module -Name GlpiTools 
+ ```
 
  After those steps, you can start to use module
 

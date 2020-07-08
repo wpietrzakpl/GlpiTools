@@ -42,6 +42,9 @@ function Get-GlpiToolsEntities {
             ParameterSetName = "EntityId")]
         [alias('EID')]
         [string[]]$EntityId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "EntityId")]
+        [switch]$Raw,
         [parameter(Mandatory = $true,
             ParameterSetName = "EntityName")]
         [alias('EN')]
@@ -120,12 +123,7 @@ function Get-GlpiToolsEntities {
                                 
                             foreach ($EntityProp in $EntityProperties) {
 
-                                switch ($EntityProp.Name) {
-                                    profiles_id { $EntityPropNewValue = Get-GlpiToolsProfiles -All | Where-Object {$_.id -eq $EntityProp.Value } | Select-Object -ExpandProperty name }
-                                    Default {
-                                        $EntityPropNewValue = $EntityProp.Value
-                                    }
-                                }
+                                $EntityPropNewValue = Get-GlpiToolsParameters -Parameter $EntityProp.Name -Value $EntityProp.Value
 
                                 $EntityHash.Add($EntityProp.Name, $EntityPropNewValue)
                             }

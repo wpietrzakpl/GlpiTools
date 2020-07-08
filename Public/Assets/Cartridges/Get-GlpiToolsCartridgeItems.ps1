@@ -195,15 +195,9 @@ function Get-GlpiToolsCartridgeItems {
                                 
                             foreach ($CartridgeItemProp in $CartridgeItemProperties) {
 
-                                switch ($CartridgeItemProp.Name) {
-                                    entities_id { $CartridgeItemPropNewValue = $CartridgeItemProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $CartridgeItemPropNewValue = $CartridgeItemProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $CartridgeItemPropNewValue = $CartridgeItemProp.Value
-                                    }
-                                }
-                                
-                                $CartridgeItemHash.Add($CartridgeItemProp.Name, $CartridgeItemPropNewValue)
+                                $CartridgePropNewValue = Get-GlpiToolsParameters -Parameter $CartridgeItemProp.Name -Value $CartridgeItemProp.Value
+                                $CartridgeItemHash.Add($CartridgeItemProp.Name, $CartridgePropNewValue)
+
                             }
                             $object = [pscustomobject]$CartridgeItemHash
                             $CartridgeItemObjectArray.Add($object)

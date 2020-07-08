@@ -195,14 +195,8 @@ function Get-GlpiToolsPdus {
                                 
                             foreach ($PduProp in $PduProperties) {
 
-                                switch ($PduProp.Name) {
-                                    entities_id { $PduPropNewValue = $PduProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $PduPropNewValue = $PduProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $PduPropNewValue = $PduProp.Value
-                                    }
-                                }
-                                
+                                $PduPropNewValue = Get-GlpiToolsParameters -Parameter $PduProp.Name -Value $PduProp.Value
+
                                 $PduHash.Add($PduProp.Name, $PduPropNewValue)
                             }
                             $object = [pscustomobject]$PduHash

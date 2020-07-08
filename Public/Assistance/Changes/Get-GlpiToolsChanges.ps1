@@ -187,15 +187,8 @@ function Get-GlpiToolsChanges {
                                 
                             foreach ($ChangeProp in $ChangeProperties) {
 
-                                switch ($ChangeProp.Name) {
-                                    entities_id { $ChangePropNewValue = $ChangeProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id_recipient { $ChangePropNewValue = $ChangeProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    users_id_lastupdater { $ChangePropNewValue = $ChangeProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $ChangePropNewValue = $ChangeProp.Value
-                                    }
-                                }
-                                
+                                $ChangePropNewValue = Get-GlpiToolsParameters -Parameter $ChangeProp.Name -Value $ChangeProp.Value
+
                                 $ChangeHash.Add($ChangeProp.Name, $ChangePropNewValue)
                             }
                             $object = [pscustomobject]$ChangeHash

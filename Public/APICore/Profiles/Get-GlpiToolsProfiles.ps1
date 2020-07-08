@@ -6,6 +6,12 @@
     Returns object with property's of Profile
 .PARAMETER All
     This parameter will return all Profiles from GLPI
+.PARAMETER ProfileId
+    This parameter can take pipline input, either, you can use this function with -ProfileId keyword.
+    Provide to this param Profile ID from GLPI Profile Bookmark
+.PARAMETER Raw
+    Parameter which you can use with ProfileId Parameter.
+    ProfileId has converted parameters from default, parameter Raw allows not convert this parameters.
 .PARAMETER ProfileName
     This parameter can take pipline input, either, you can use this function with -ProfileName keyword.
     Provide to this param Profile Name from GLPI Profiles Bookmark
@@ -30,6 +36,15 @@ function Get-GlpiToolsProfiles {
         [parameter(Mandatory = $false,
             ParameterSetName = "All")]
         [switch]$All,
+		
+		[parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
+            ParameterSetName = "ProfileId")]
+        [alias('PID')]
+        [string[]]$ProfileId,
+        [parameter(Mandatory = $false,
+            ParameterSetName = "ProfileId")]
+        [switch]$Raw,
 
         [parameter(Mandatory = $true,
             ParameterSetName = "ProfileName")]
@@ -82,6 +97,52 @@ function Get-GlpiToolsProfiles {
                 $ProfileObjectArray
                 $ProfileObjectArray = [System.Collections.Generic.List[PSObject]]::New()
             }
+			ProfileId { 
+                foreach ( $PId in $ProfileId ) {
+                    $params = @{
+                        headers = @{
+                            'Content-Type'  = 'application/json'
+                            'App-Token'     = $AppToken
+                            'Session-Token' = $SessionToken
+                        }
+                        method  = 'get'
+                        uri     = "$($PathToGlpi)/Profile/$($PId)"
+                    }
+
+                    Try {
+                        $GlpiProfile = Invoke-RestMethod @params -ErrorAction Stop
+
+                        if ($Raw) {
+                            $ProfileHash = [ordered]@{ }
+                            $ProfileProperties = $GlpiProfile.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ProfileProp in $ProfileProperties) {
+                                $ProfileHash.Add($ProfileProp.Name, $ProfileProp.Value)
+                            }
+                            $object = [pscustomobject]$ProfileHash
+                            $ProfileObjectArray.Add($object)
+                        } else {
+                            $ProfileHash = [ordered]@{ }
+                            $ProfileProperties = $GlpiProfile.PSObject.Properties | Select-Object -Property Name, Value 
+                                
+                            foreach ($ProfileProp in $ProfileProperties) {
+                                
+                                $ProfilePropNewValue = Get-GlpiToolsParameters -Parameter $ProfileProp.Name -Value $ProfileProp.Value
+
+                                $ProfileHash.Add($ProfileProp.Name, $ProfilePropNewValue)
+                            }
+                            $object = [pscustomobject]$ProfileHash
+                            $ProfileObjectArray.Add($object)
+                        }
+                    } Catch {
+
+                        Write-Verbose -Message "Profile ID = $PId is not found"
+                        
+                    }
+                    $ProfileObjectArray
+                    $ProfileObjectArray = [System.Collections.Generic.List[PSObject]]::New()
+                }
+            }
             ProfileName { 
                 Search-GlpiToolsItems -SearchFor Profile -SearchType contains -SearchValue $ProfileName
             }
@@ -89,8 +150,6 @@ function Get-GlpiToolsProfiles {
                 
             }
         }
-
-
     }
     
     end {

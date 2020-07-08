@@ -195,14 +195,7 @@ function Get-GlpiToolsPrinters {
                                 
                             foreach ($PrinterProp in $PrinterProperties) {
 
-                                switch ($PrinterProp.Name) {
-                                    entities_id { $PrinterPropNewValue = $PrinterProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $PrinterPropNewValue = $PrinterProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $PrinterPropNewValue = $PrinterProp.Value
-                                    }
-                                }
-                                
+                                $PrinterPropNewValue = Get-GlpiToolsParameters -Parameter $PrinterProp.Name -Value $PrinterProp.Value
                                 $PrinterHash.Add($PrinterProp.Name, $PrinterPropNewValue)
                             }
                             $object = [pscustomobject]$PrinterHash

@@ -112,6 +112,7 @@
         "Rackmodel",
         "Enclosuremodel",
         "Pdumodel",
+        "Pdutype",
         "Virtualmachinetype",
         "Virtualmachinesystem",
         "Virtualmachinestate",

@@ -195,14 +195,8 @@ function Get-GlpiToolsEnclosures {
                                 
                             foreach ($EnclosureProp in $EnclosureProperties) {
 
-                                switch ($EnclosureProp.Name) {
-                                    entities_id { $EnclosurePropNewValue = $EnclosureProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $EnclosurePropNewValue = $EnclosureProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $EnclosurePropNewValue = $EnclosureProp.Value
-                                    }
-                                }
-                                
+                                $EnclosurePropNewValue = Get-GlpiToolsParameters -Parameter $EnclosureProp.Name -Value $EnclosureProp.Value
+
                                 $EnclosureHash.Add($EnclosureProp.Name, $EnclosurePropNewValue)
                             }
                             $object = [pscustomobject]$EnclosureHash

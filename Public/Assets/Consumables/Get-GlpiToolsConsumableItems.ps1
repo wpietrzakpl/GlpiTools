@@ -195,15 +195,9 @@ function Get-GlpiToolsConsumableItems {
                                 
                             foreach ($ConsumableItemProp in $ConsumableItemProperties) {
 
-                                switch ($ConsumableItemProp.Name) {
-                                    entities_id { $ConsumableItemPropNewValue = $ConsumableItemProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $ConsumableItemPropNewValue = $ConsumableItemProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $ConsumableItemPropNewValue = $ConsumableItemProp.Value
-                                    }
-                                }
-                                
-                                $ConsumableItemHash.Add($ConsumableItemProp.Name, $ConsumableItemPropNewValue)
+                                $ConsumablePropNewValue = Get-GlpiToolsParameters -Parameter $ConsumableItemProp.Name -Value $ConsumableItemProp.Value
+
+                                $ConsumableItemHash.Add($ConsumableItemProp.Name, $ConsumablePropNewValue)
                             }
                             $object = [pscustomobject]$ConsumableItemHash
                             $ConsumableItemObjectArray.Add($object)

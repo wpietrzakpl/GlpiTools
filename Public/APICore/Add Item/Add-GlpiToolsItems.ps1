@@ -4,7 +4,8 @@
 .DESCRIPTION
     Function Add an object (or multiple objects) into GLPI. You can choose between every items in Asset Tab.
 .PARAMETER AddTo
-    Parameter specify where you want to add new object. 
+    Parameter specify where you want to add new object.
+    You can add your custom parameter options to Parameters.json file located in Private folder 
 .PARAMETER HashtableToAdd
     Parameter specify a hashtable with fields of itemtype to be inserted.
 .PARAMETER JsonPayload
@@ -50,19 +51,6 @@ function Add-GlpiToolsItems {
     param (
         [parameter(Mandatory = $true)]
         [alias('AT')]
-        [ValidateSet("Computer",
-            "Monitor",
-            "Software",
-            "NetworkEquipment",
-            "Peripherial",
-            "Printer",
-            "CartridgeItem",
-            "ConsumableItem",
-            "Phone",
-            "Rack",
-            "Enclosure",
-            "Pdu",
-            "Allassets")]
         [string]$AddTo,
 
         [parameter(Mandatory = $true,
@@ -130,3 +118,10 @@ function Add-GlpiToolsItems {
         Set-GlpiToolsKillSession -SessionToken $SessionToken
     }
 }
+
+$AddToValidate = {
+    param ($commandName, $parameterName, $stringMatch)
+    $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
+}
+Register-ArgumentCompleter -CommandName Add-GlpiToolsItems -ParameterName AddTo -ScriptBlock $AddToValidate

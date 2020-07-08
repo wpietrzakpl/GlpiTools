@@ -195,14 +195,8 @@ function Get-GlpiToolsPeripherals {
                                 
                             foreach ($PeripheralProp in $PeripheralProperties) {
 
-                                switch ($PeripheralProp.Name) {
-                                    entities_id { $PeripheralPropNewValue = $PeripheralProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $PeripheralPropNewValue = $PeripheralProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    Default {
-                                        $PeripheralPropNewValue = $PeripheralProp.Value
-                                    }
-                                }
-                                
+                                $PeripheralPropNewValue = Get-GlpiToolsParameters -Parameter $PeripheralProp.Name -Value $PeripheralProp.Value
+
                                 $PeripheralHash.Add($PeripheralProp.Name, $PeripheralPropNewValue)
                             }
                             $object = [pscustomobject]$PeripheralHash

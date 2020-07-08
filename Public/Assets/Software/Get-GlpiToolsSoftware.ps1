@@ -170,21 +170,7 @@ function Get-GlpiToolsSoftware {
                             $SoftwareProperties = $GlpiSoftware.PSObject.Properties | Select-Object -Property Name, Value 
                                 
                             foreach ($SoftwareProp in $SoftwareProperties) {
-
-                                switch ($SoftwareProp.Name) {
-                                    entities_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsEntities | Select-Object -ExpandProperty CompleteName }
-                                    users_id { $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsUsers | Select-Object realname, firstname | ForEach-Object { "{0} {1}" -f $_.firstname,$_.realname } }
-                                    softwarecategories_id {
-                                        if ($SoftwareProp.Value -eq 0) {
-                                            $SoftwarePropNewValue = ''
-                                        } else {
-                                            $SoftwarePropNewValue = $SoftwareProp.Value | Get-GlpiToolsDropdownsSoftwareCategory | Select-Object -ExpandProperty name 
-                                        }
-                                    }
-                                    Default {
-                                        $SoftwarePropNewValue = $SoftwareProp.Value
-                                    }
-                                }
+                                $SoftwarePropNewValue = Get-GlpiToolsParameters -Parameter $SoftwareProp.Name -Value $SoftwareProp.Value
 
                                 $SoftwareHash.Add($SoftwareProp.Name, $SoftwarePropNewValue)
                             }
