@@ -33,8 +33,15 @@
     Sets the request as waiting for Approval.
     Only valid on type Request
 
+.PARAMETER requester_id
+    The user ID that is the requester
+
 .PARAMETER technician_id
     Specify the id of the technician
+
+.PARAMETER DisableNotification
+    Disables notification
+    Defaults to False
 
 .PARAMETER requesttypes_id
     Provide the ID of the request type
@@ -180,6 +187,13 @@ function New-GlpiToolsTicket {
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Disables notification"
+            )]
+        [switch]$DisableNotification = $false,
+
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
             HelpMessage = "user id of the requester"
             )]
         [int]$requester_id = 2
@@ -273,6 +287,9 @@ function New-GlpiToolsTicket {
         }
         If ($PSBoundParameters['itilcategories_id']) {
             $hashNewTicket["itilcategories_id"] = $itilcategories_id
+        }
+        If ($PSBoundParameters['DisableNotification'] -and $DisableNotification -eq $true) {
+            $hashNewTicket["_disablenotif"] = $true
         }
 
         $GlpiUpload = $hashNewTicket | ConvertTo-Json
