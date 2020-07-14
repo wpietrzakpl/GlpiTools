@@ -280,7 +280,13 @@ function New-GlpiToolsTicket {
             $hashNewTicket["global_validation"] = 2
         }
         If ($PSBoundParameters['requester_id']) {
-            $hashNewTicket["_users_id_requester"] = $requester_id
+            #$hashNewTicket["_users_id_requester"] = $requester_id
+            $hashAddRequester = @{
+                tickets_id              = $null
+                users_id           = $requester_id
+                type              = 1 # 1 = requester, 2 = assign, 3 = observer
+                use_notification = 1
+            }
         }
         If ($PSBoundParameters['technician_id']) {
             $hashNewTicket["technician"] = $technician_id #3031 # The ID of the GLPI SelfServicePortal User account
@@ -289,8 +295,16 @@ function New-GlpiToolsTicket {
             $hashNewTicket["itilcategories_id"] = $itilcategories_id
         }
         If ($PSBoundParameters['DisableNotification'] -and $DisableNotification -eq $true) {
-            $hashNewTicket["_disablenotif"] = $true
+            $hashNewTicket["_disablenotif"] = 'true'
+            #$hashNewTicket["_users_id_requester_notif[use_notification][0]"] = 0
+            #$hashNewTicket["use_notif"] = 0    
+
+            if ($hashAddRequester) {
+                $hashAddRequester["use_notification"] = 0
+            }
         }
+
+        Write-Verbose ($hashNewTicket | Out-String)
 
         $GlpiUpload = $hashNewTicket | ConvertTo-Json
         $Upload = '{ "input" : ' + $GlpiUpload + '}'
@@ -319,6 +333,31 @@ function New-GlpiToolsTicket {
             $Output.Add($GLPITicket)
 
             Write-Verbose "New ticket created with ID $($GLPITicket.id)"
+
+            #Adding requester if specified
+            If ($PSBoundParameters['requester_id']) {
+                $hashAddRequester["tickets_id"] = $GlpiTicket.ID
+
+                Write-Verbose "Invoking API to add requester with ID $requester_id to newly created ticket $($glpiticket.ID)"
+                $GlpiUpload = $hashAddRequester | ConvertTo-Json
+                    $Upload = '{ "input" : ' + $GlpiUpload + '}'
+
+                    $params = @{
+                        headers = @{
+                            'Content-Type'  = 'application/json'
+                            'App-Token'     = $AppToken
+                            'Session-Token' = $SessionToken
+                        }
+                        method  = 'post'
+                        uri     = "$($PathToGlpi)/Ticket/$($GlpiTicket.id)/Ticket_User/"
+                        body    = ([System.Text.Encoding]::UTF8.GetBytes($Upload))
+                    }
+
+                    $GlpiTicketAddRequester = Invoke-RestMethod @params -ErrorAction Stop
+                    Write-Verbose $GlpiTicketAddRequester
+
+            }
+
             
             If ($PSBoundParameters['Item_id'] -and $PSBoundParameters['Item_type']) {
                

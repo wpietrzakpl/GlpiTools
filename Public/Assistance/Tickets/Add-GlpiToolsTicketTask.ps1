@@ -12,6 +12,9 @@
 .PARAMETER Status
     Specify the task status
 
+.PARAMETER Duration
+    Specify the task duration in seconds
+
 .OUTPUTS
     Function returns PSCustomObject with id's and messages from the GLPI API
 .NOTES
@@ -48,7 +51,14 @@ function Add-GlpiToolsTicketTask {
             HelpMessage = "task status"
         )]
         [ValidateSet("Todo", "Information", "Done")]
-        [string]$Status
+        [string]$Status,
+
+        [parameter(
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "task duration in seconds"
+        )]
+        [int]$duration
  
     )
     
@@ -86,6 +96,10 @@ function Add-GlpiToolsTicketTask {
 
         If ($PSBoundParameters['Status']) {
             $hashNewTask["state"] = $state_id
+        }
+
+        If ($PSBoundParameters['Duration']) {
+            $hashNewTask["actiontime"] = $duration
         }
 
         $GlpiUpload = $hashNewTask | ConvertTo-Json
