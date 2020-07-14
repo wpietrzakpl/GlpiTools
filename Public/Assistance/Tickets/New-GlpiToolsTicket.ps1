@@ -104,7 +104,7 @@ function New-GlpiToolsTicket {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Ticket urgency value"
-            )]
+        )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$urgency = "Low",
         
@@ -112,7 +112,7 @@ function New-GlpiToolsTicket {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Ticket impact value"
-            )]
+        )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$impact = "Low",
         
@@ -120,7 +120,7 @@ function New-GlpiToolsTicket {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Ticket priority value"
-            )]
+        )]
         [ValidateSet("Very low", "Low", "Medium", "High", "Very High")]
         [string]$priority = "Low",
         
@@ -142,7 +142,7 @@ function New-GlpiToolsTicket {
             #ParameterSetName = "Request",
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "request type id"
-            )]
+        )]
         [int]$requesttypes_id,
 
         [parameter(
@@ -150,7 +150,7 @@ function New-GlpiToolsTicket {
             #ParameterSetName = "Request",
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Approval required. Defaults to False"
-            )]
+        )]
         [switch]$ApprovalRequired,
 
         [parameter(
@@ -164,17 +164,17 @@ function New-GlpiToolsTicket {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Item type to be added."
-            )]
-        [ValidateScript({
-            $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
-            $Values = (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents
-            If ($Values -notcontains $_) {
-                Write-Warning -Message "Invalid item type specified. Possible values for item_type are:  $Values"
-                throw "Invalid item type specified."
-            } else {
-                $true
-            }
-        })]
+        )]
+        [ValidateScript( {
+                $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
+                $Values = (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents
+                If ($Values -notcontains $_) {
+                    Write-Warning -Message "Invalid item type specified. Possible values for item_type are:  $Values"
+                    throw "Invalid item type specified."
+                } else {
+                    $true
+                }
+            })]
         [string]$item_type = $null,
         
         [parameter(
@@ -188,14 +188,14 @@ function New-GlpiToolsTicket {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Disables notification"
-            )]
+        )]
         [switch]$DisableNotification = $false,
 
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "user id of the requester"
-            )]
+        )]
         [int]$requester_id = 2
 
     )
@@ -259,9 +259,10 @@ function New-GlpiToolsTicket {
     process {
 
         $hashNewTicket = @{
-            name              = $name
-            content           = $content
-            type              = $type_id
+            name                = $name
+            content             = $content
+            type                = $type_id
+            _users_id_requester = 0
         }
 
         If ($PSBoundParameters['Urgency']) {
@@ -273,18 +274,18 @@ function New-GlpiToolsTicket {
         If ($PSBoundParameters['Priority']) {
             $hashNewTicket["priority"] = $priority_id
         }
-        If ($PSBoundParameters['ApprovalRequired']) {
-            $hashNewTicket["global_validation"] = 2
-        }
+        # If ($PSBoundParameters['ApprovalRequired']) {
+        #     $hashNewTicket["global_validation"] = 2
+        # }
         If ($PSBoundParameters['Type'] -eq 'Request' -and $PSBoundParameters['ApprovalRequired']) {
             $hashNewTicket["global_validation"] = 2
         }
         If ($PSBoundParameters['requester_id']) {
             #$hashNewTicket["_users_id_requester"] = $requester_id
             $hashAddRequester = @{
-                tickets_id              = $null
-                users_id           = $requester_id
-                type              = 1 # 1 = requester, 2 = assign, 3 = observer
+                tickets_id       = $null
+                users_id         = $requester_id
+                type             = 1 # 1 = requester, 2 = assign, 3 = observer
                 use_notification = 1
             }
         }
@@ -340,21 +341,21 @@ function New-GlpiToolsTicket {
 
                 Write-Verbose "Invoking API to add requester with ID $requester_id to newly created ticket $($glpiticket.ID)"
                 $GlpiUpload = $hashAddRequester | ConvertTo-Json
-                    $Upload = '{ "input" : ' + $GlpiUpload + '}'
+                $Upload = '{ "input" : ' + $GlpiUpload + '}'
 
-                    $params = @{
-                        headers = @{
-                            'Content-Type'  = 'application/json'
-                            'App-Token'     = $AppToken
-                            'Session-Token' = $SessionToken
-                        }
-                        method  = 'post'
-                        uri     = "$($PathToGlpi)/Ticket/$($GlpiTicket.id)/Ticket_User/"
-                        body    = ([System.Text.Encoding]::UTF8.GetBytes($Upload))
+                $params = @{
+                    headers = @{
+                        'Content-Type'  = 'application/json'
+                        'App-Token'     = $AppToken
+                        'Session-Token' = $SessionToken
                     }
+                    method  = 'post'
+                    uri     = "$($PathToGlpi)/Ticket/$($GlpiTicket.id)/Ticket_User/"
+                    body    = ([System.Text.Encoding]::UTF8.GetBytes($Upload))
+                }
 
-                    $GlpiTicketAddRequester = Invoke-RestMethod @params -ErrorAction Stop
-                    Write-Verbose $GlpiTicketAddRequester
+                $GlpiTicketAddRequester = Invoke-RestMethod @params -ErrorAction Stop
+                Write-Verbose $GlpiTicketAddRequester
 
             }
 
@@ -422,6 +423,6 @@ function New-GlpiToolsTicket {
 $ItemTypeValidate = {
     param ($commandName, $parameterName, $stringMatch)
     $ModulePath = Split-Path (Get-Module -Name GlpiTools).Path -Parent
-    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object {$_ -match "$stringMatch"}
+    (Get-Content "$($ModulePath)\Private\Parameters.json" | ConvertFrom-Json).GlpiComponents | Where-Object { $_ -match "$stringMatch" }
 }
 Register-ArgumentCompleter -CommandName New-GlpiToolsTicket -ParameterName item_type -ScriptBlock $ItemTypeValidate
