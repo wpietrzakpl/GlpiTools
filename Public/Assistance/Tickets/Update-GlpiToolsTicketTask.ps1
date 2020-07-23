@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Add a task to a ticket
+    Updates a ticket task
 .DESCRIPTION
-    Add a task to a ticket, this will change the status to solved
+    Updates a ticket task
 
 .PARAMETER ticket_id
     The ticket id this task will be added to
