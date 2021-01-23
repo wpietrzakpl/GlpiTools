@@ -12,7 +12,7 @@
 # RootModule = ''
 
 # Version number of this module.
-ModuleVersion = '1.5.0'
+ModuleVersion = '1.6.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -121,6 +121,14 @@ FunctionsToExport = @(
     'Get-GlpiToolsEnclosures',
     'Get-GlpiToolsPdus',
     'Get-GlpiToolsTickets',
+    'Add-GlpiToolsTicketFollowup',
+    'Add-GlpiToolsTicketItem',
+    'Add-GlpiToolsTicketSolution',
+    'Add-GlpiToolsTicketTask',
+    'Get-GlpiToolsTicketTask',
+    'New-GlpiToolsTicket',
+    'Update-GlpiToolsTicket',
+    'Update-GlpiToolsTicketTask',
     'Get-GlpiToolsProblems',
     'Get-GlpiToolsChanges',
     'Get-GlpiToolsRecurrentTickets',
@@ -230,6 +238,7 @@ FunctionsToExport = @(
     'Get-GlpiToolsCertificates',
     'Get-GlpiToolsDataCenters',
     'Get-GlpiToolsFusionInventoryAgentModules',
+    'Get-GlpiToolsFusionInventoryUnmanaged',
     'Get-GlpiToolsFusionInventoryConfig',
     'Get-GlpiToolsDropdownsPduTypes'
 )
