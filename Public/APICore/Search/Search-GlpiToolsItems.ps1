@@ -35,7 +35,11 @@
     PS C:\> Search-GlpiToolsItems -SearchFor Computer -SearchType contains -SearchValue DC -SearchField 1 -SearchInTrash
     Example will show every asset which contains value "DC" in the Name from Asset->Computers.
     SearchFiled can be retrieved from Get-GlpiToolsListSearchOptions cmdlet, you can provide it throught pipeline.
-    SearchInTrash will allow you to search for assets from trash.    
+    SearchInTrash will allow you to search for assets from trash.
+.EXAMPLE
+    PS C:\>  Search-GlpiToolsItems -SearchFor Computer -SearchType contains, contains -SearchField 1, 40 -SearchValue c, virtual -SearchLink AND+NOT
+    Example will get 2 or more fields and filter them with the conditions.
+    Allow to put more options for search, regarding Links (AND. AND+NOT...)
 .INPUTS
     Only for -SearchValue, and -SearchField.
 .OUTPUTS
@@ -53,20 +57,25 @@ function Search-GlpiToolsItems {
         [parameter(Mandatory = $true)]
         [ValidateSet("contains",
             "equals",
-            "notequals",
-            "lessthan",
-            "morethan",
-            "under",
-            "notunder")]
-        [String]$SearchType,
+            "notequals")]
+        [String[]]$SearchType,
 
         [parameter(Mandatory = $false,
             ValueFromPipeline = $true)]
-        [String]$SearchField = 1,
+        [String[]]$SearchField = 1,
 
         [parameter(Mandatory = $true,
             ValueFromPipeline = $true)]
-        [String]$SearchValue,
+        [String[]]$SearchValue,
+
+        [parameter(Mandatory = $false,
+        ValueFromPipeline = $true)]
+        [ValidateScript({$_ -ge 2})]
+        [ValidateSet("AND",
+            "OR",
+            "AND+NOT",
+            "OR+NOT")]
+        [String[]]$SearchLink = 'AND',
 
         [parameter(Mandatory = $false)]
         [ValidateSet("Yes", "No")]
@@ -95,7 +104,15 @@ function Search-GlpiToolsItems {
     }
     
     process {
-        
+        $SearchCounter = $SearchField.Count   
+        for ($counter = 0; $counter -lt $SearchCounter; $counter++) {
+            if ($counter -eq ($SearchCounter - 1)) {
+                $Link = "&criteria[$counter][field]=$($SearchField[$counter])&criteria[$counter][searchtype]=$($SearchType[$counter])&criteria[$counter][value]=$($SearchValue[$counter])"
+            } else {
+                $Link = "&criteria[$counter][field]=$($SearchField[$counter])&criteria[$counter][searchtype]=$($SearchType[$counter])&criteria[$counter][value]=$($SearchValue[$counter])&criteria[$($counter+1)][link]=$($SearchLink[$counter])"
+            }   
+            $SearchPath = $SearchPath + $Link
+        }
         $params = @{
             headers = @{
                 'Content-Type'  = 'application/json'
@@ -103,7 +120,7 @@ function Search-GlpiToolsItems {
                 'Session-Token' = $SessionToken
             }
             method  = 'get'
-            uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0&criteria[0][field]=$($SearchField)&criteria[0][searchtype]=$($SearchType)&criteria[0][value]=$($SearchValue)&search=Search&itemtype=$($SearchFor)&range=0-9999999999999"
+            uri     = "$($PathToGlpi)/search/$($SearchFor)?is_deleted=$($Trash)&as_map=0$SearchPath&search=Search&itemtype=$($SearchFor)&range=0-9999999999999"
         }
             
         $SearchResult = Invoke-RestMethod @params
@@ -139,6 +156,7 @@ function Search-GlpiToolsItems {
 
         $SearchArray
         $SearchArray = [System.Collections.Generic.List[PSObject]]::New()
+        
     }
     
     end {
